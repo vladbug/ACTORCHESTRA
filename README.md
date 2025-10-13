@@ -94,7 +94,7 @@ dune exec bin/main.exe
 This is only needed for the monitor generation, not the interaction with the Erlang system. 
 
 ### Instructions
-`ACTORCHESTRA` has some system examples in the ´examples´ folder to run and check the tool. In order to test the examples follow the instructions
+`ACTORCHESTRA` has some system examples in the `examples` folder to run and check the tool. In order to test the examples follow the instructions
 in each one of them. Essentially, the tool will inject automatically code into all the `Erlang` modules that import the following instruction:
 
 ```
