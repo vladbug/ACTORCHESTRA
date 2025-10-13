@@ -10,11 +10,11 @@ parse_transform(Forms, _Opts) ->
                 record ->
                     io:format("PARSE_TRANSFORM: Using record-based approach for ~p~n", [ModuleName]),
                     Forms1 = ensure_context_in_state_record(Forms),
-                    Forms2 = inject_with_context_handler_only_record(Forms1),
+                    Forms2 = inject_context_handlers_record(Forms1, ModuleName),
                     rewrite_process_calls_record(Forms2, ModuleName);
                 map ->
                     io:format("PARSE_TRANSFORM: Using map-based approach for ~p~n", [ModuleName]),
-                    Forms1 = inject_with_context_handler_only_map(Forms),
+                    Forms1 = inject_context_handlers_map(Forms, ModuleName),
                     rewrite_process_calls_map(Forms1, ModuleName)
             end;
         false ->
@@ -22,73 +22,81 @@ parse_transform(Forms, _Opts) ->
             Forms
     end.
 
-%%── Extract module name from Forms
-extract_module_name(Forms) ->
-    extract_module_name(Forms, undefined).
+%%—————————————————————————————————————————————————————————————————————————————————————————————————————
+%%— UTILITY FUNCTIONS
+%%—————————————————————————————————————————————————————————————————————————————————————————————————————
 
-extract_module_name([], ModuleName) ->
+extract_module_name([{attribute, _, module, ModuleName} | _]) ->
     ModuleName;
-extract_module_name([{attribute, _, module, ModuleName} | _], _) ->
-    ModuleName;
-extract_module_name([_ | Rest], Acc) ->
-    extract_module_name(Rest, Acc).
+extract_module_name([_ | Rest]) ->
+    extract_module_name(Rest);
+extract_module_name([]) ->
+    undefined.
 
-%%── Check for -behaviour(gen_server)
 is_gen_server(Forms) ->
     lists:any(fun
         ({attribute,_,behaviour,gen_server}) -> true;
-        ({attribute,_,behavior,gen_server}) -> true;  % American spelling
+        ({attribute,_,behavior,gen_server}) -> true;
         (_) -> false
     end, Forms).
 
-%%── Detect whether to use record or map approach
 detect_state_approach(Forms) ->
     case find_state_record(Forms) of
-        {found, _} -> 
-            io:format("PARSE_TRANSFORM: Found state record, using record approach~n"),
-            record;
-        not_found -> 
-            io:format("PARSE_TRANSFORM: No state record found, using map approach~n"),
-            map
+        {found, _} -> record;
+        not_found -> map
     end.
 
-%%────────────────────────────────────────────────────────────────────────────
-%%── RECORD-BASED APPROACH
-%%────────────────────────────────────────────────────────────────────────────
+is_client_module(client) -> true;
+is_client_module(_) -> false.
+
+find_state_record([{attribute, _Line, record, {state, _Fields}} = Record | _]) ->
+    {found, Record};
+find_state_record([_ | Rest]) ->
+    find_state_record(Rest);
+find_state_record([]) ->
+    not_found.
+
+separate_clauses(Clauses) ->
+    lists:partition(fun(Clause) -> is_injected_clause(Clause) end, Clauses).
+
+is_injected_clause({clause, _, [{tuple, _, [{atom, _, with_context}, _, _]}, _, _], _, _}) ->
+    true;
+is_injected_clause({clause, _, [{atom, _, get_current_context}, _, _], _, _}) ->
+    true;
+is_injected_clause({clause, _, [{tuple, _, [{atom, _, context}, _]}, _, _], _, _}) ->
+    true;
+is_injected_clause(_) ->
+    false.
+
+%% Check if body contains any gen_server:call expressions
+has_gen_server_call([]) ->
+    false;
+has_gen_server_call([{match, _, _, {call, _, {remote, _, {atom,_,gen_server}, {atom,_,call}}, _}} | _]) ->
+    true;
+has_gen_server_call([_ | Rest]) ->
+    has_gen_server_call(Rest).
+
+%%—————————————————————————————————————————————————————————————————————————————————————————————————————
+%%— RECORD-BASED APPROACH
+%%—————————————————————————————————————————————————————————————————————————————————————————————————————
 
 ensure_context_in_state_record(Forms) ->
     case find_state_record(Forms) of
-        {found, _RecordForm} ->
-            io:format("PARSE_TRANSFORM: Found existing state record, checking for context field~n"),
+        {found, _} ->
             modify_forms_for_context(Forms);
         not_found ->
-            io:format("PARSE_TRANSFORM: No state record found, injecting new one~n"),
             inject_state_record(Forms)
     end.
-
-find_state_record(Forms) ->
-    find_state_record(Forms, not_found).
-
-find_state_record([], Acc) -> 
-    Acc;
-find_state_record([{attribute, _Line, record, {state, _Fields}} = Record | _], _) ->
-    {found, Record};
-find_state_record([_ | Rest], Acc) ->
-    find_state_record(Rest, Acc).
 
 modify_forms_for_context(Forms) ->
     lists:map(fun
         ({attribute, Line, record, {state, Fields}} = _Form) ->
             case has_context_field(Fields) of
                 true ->
-                    io:format("PARSE_TRANSFORM: context field already exists in state record~n"),
                     {attribute, Line, record, {state, Fields}};
                 false ->
-                    io:format("PARSE_TRANSFORM: Adding context field to existing state record~n"),
                     ContextField = {record_field, Line, {atom, Line, context}, {atom, Line, undefined}},
-                    NewFields = Fields ++ [ContextField],
-                    io:format("PARSE_TRANSFORM: Record now has ~p fields~n", [length(NewFields)]),
-                    {attribute, Line, record, {state, NewFields}}
+                    {attribute, Line, record, {state, Fields ++ [ContextField]}}
             end;
         (Other) ->
             Other
@@ -109,52 +117,35 @@ inject_state_record([], Acc) ->
         {record_field, 1, {atom, 1, context}, {atom, 1, undefined}}
     ]}},
     lists:reverse([RecordDef | Acc]);
-
 inject_state_record([{attribute, Line, module, _ModName} = ModAttr | Rest], Acc) ->
     RecordDef = {attribute, Line, record, {state, [
         {record_field, Line, {atom, Line, context}, {atom, Line, undefined}}
     ]}},
     lists:reverse(Acc) ++ [ModAttr, RecordDef | Rest];
-
 inject_state_record([Form | Rest], Acc) ->
     inject_state_record(Rest, [Form | Acc]).
 
-%%── Inject ONLY with_context handler for record-based approach (no {context, Context} handler)
-inject_with_context_handler_only_record(Forms) ->
-    ModuleName = extract_module_name(Forms),
+inject_context_handlers_record(Forms, ModuleName) ->
     lists:map(fun
         ({function, Line, handle_call, 3, Clauses}) ->
-            io:format("PARSE_TRANSFORM: Injecting with_context handler into handle_call/3 (record)~n"),
-            
-            WithContextClause = {clause, Line,
-               [ {tuple,Line,[{atom,Line,with_context},{var,Line,'Context'},{var,Line,'Msg'}]},
-                 {var,Line,'From'},
-                 {var,Line,'State'}
-               ],
-               [],
-               [ {match,Line,{var,Line,'ReceiveTime'},
-                   {call,Line,{remote,Line,{atom,Line,erlang},{atom,Line,system_time}},
-                       [{atom,Line,millisecond}]}},
-                 {call,Line,{remote,Line,{atom,Line,io},{atom,Line,format}},
-                     [{string,Line,"[~p ms] [~p] RECEIVED with_context: ctx=~p, msg=~p~n"},
-                      {cons,Line,{var,Line,'ReceiveTime'},
-                          {cons,Line,{atom,Line,ModuleName},
-                              {cons,Line,{var,Line,'Context'},
-                                  {cons,Line,{var,Line,'Msg'},{nil,Line}}}}}]},
-                 {match,Line,{var,Line,'StateWithContext'},
-                     {record,Line,{var,Line,'State'},state,
-                         [{record_field,Line,{atom,Line,context},{var,Line,'Context'}}]}},
-                 {call,Line,{remote,Line,{atom,Line,io},{atom,Line,format}},
-                     [{string,Line,"[~p ms] [~p] Context ~p injected, delegating message ~p~n"},
-                      {cons,Line,{var,Line,'ReceiveTime'},
-                          {cons,Line,{atom,Line,ModuleName},
-                              {cons,Line,{var,Line,'Context'},
-                                  {cons,Line,{var,Line,'Msg'},{nil,Line}}}}}]},
-                 {call,Line,{remote,Line,{atom,Line,ModuleName},{atom,Line,handle_call}},
-                     [{var,Line,'Msg'},{var,Line,'From'},{var,Line,'StateWithContext'}]}
-               ]},
-
-            {function, Line, handle_call, 3, [WithContextClause | Clauses]};
+            io:format("PARSE_TRANSFORM: Injecting context handlers into handle_call/3 (record)~n"),
+            NewClauses = case is_client_module(ModuleName) of
+                true ->
+                    Clauses;
+                false ->
+                    %% For non-client modules, add with_context handler
+                    WithContextClause = {clause, Line,
+                       [{tuple,Line,[{atom,Line,with_context},{var,Line,'Context'},{var,Line,'Msg'}]},
+                        {var,Line,'From'}, {var,Line,'State'}],
+                       [],
+                       [{match,Line,{var,Line,'StateWithContext'},
+                            {record,Line,{var,Line,'State'},state,
+                                [{record_field,Line,{atom,Line,context},{var,Line,'Context'}}]}},
+                        {call,Line,{remote,Line,{atom,Line,ModuleName},{atom,Line,handle_call}},
+                            [{var,Line,'Msg'},{var,Line,'From'},{var,Line,'StateWithContext'}]}]},
+                    [WithContextClause | Clauses]
+            end,
+            {function, Line, handle_call, 3, NewClauses};
         (Other) ->
             Other
     end, Forms).
@@ -165,53 +156,243 @@ rewrite_process_calls_record(Forms, ModuleName) ->
         ({function, Line, handle_call, 3, Clauses}) ->
             {InjectedClauses, OriginalClauses} = separate_clauses(Clauses),
             NewOriginalClauses = lists:map(fun(Clause) -> 
-                rewrite_clause_record_with_tuples(Clause, ModuleName) 
+                rewrite_clause_record(Clause, ModuleName) 
             end, OriginalClauses),
-            NewClauses = InjectedClauses ++ NewOriginalClauses,
-            {function, Line, handle_call, 3, NewClauses};
+            {function, Line, handle_call, 3, InjectedClauses ++ NewOriginalClauses};
         (Other) ->
             Other
     end, Forms).
 
-%%────────────────────────────────────────────────────────────────────────────
-%%── MAP-BASED APPROACH
-%%────────────────────────────────────────────────────────────────────────────
+rewrite_clause_record({clause, Line, Patterns, Guards, Body}, ModuleName) ->
+    io:format("PARSE_TRANSFORM: Rewriting clause for ~p~n", [ModuleName]),
+    
+    %% Always add context extraction as first statement
+    ContextExtraction = {match, Line, {var, Line, 'Context'}, 
+                        {record_field, Line, {var, Line, 'State'}, state, {atom, Line, context}}},
+    
+    %% Transform body based on module type
+    NewBody = case is_client_module(ModuleName) of
+        true ->
+            io:format("PARSE_TRANSFORM: CLIENT - transforming with tuple handling~n"),
+            transform_client_body_record(Body);
+        false ->
+            transform_regular_body_record(Body, ModuleName)
+    end,
+    
+    {clause, Line, Patterns, Guards, [ContextExtraction | NewBody]}.
 
-inject_with_context_handler_only_map(Forms) ->
-    ModuleName = extract_module_name(Forms),
+transform_client_body_record(Body) ->
+    %% Check if there are any gen_server:call expressions in the body
+    case has_gen_server_call(Body) of
+        true ->
+            %% Has wrapper calls - transform everything
+            transform_client_body_record_with_context(Body, []);
+        false ->
+            %% No wrapper calls - return body unchanged
+            Body
+    end.
+
+transform_client_body_record_with_context([], Acc) ->
+    lists:reverse(Acc);
+transform_client_body_record_with_context([Expr | Rest], Acc) ->
+    case Expr of
+        %% Pattern: Variable = gen_server:call(...)
+        {match, _MLine, {var, VLine, VarName}, 
+         {call, CLine, {remote, _RLine, {atom,_,gen_server}, {atom,_,call}}, [Target, Msg]}} ->
+            TupleMatch = {match, VLine,
+                         {tuple, VLine, [{var, VLine, VarName}, {var, VLine, 'NewContext'}]},
+                         {call, CLine, {remote, CLine, {atom,CLine,simple_wrapper}, {atom,CLine,call}},
+                          [Target, Msg, {var, CLine, 'Context'}, {atom, CLine, client}]}},
+            transform_client_body_record_with_context(Rest, [TupleMatch | Acc]);
+        
+        %% Pattern: {reply, _, _} - Transform to include context update  
+        {tuple, Line, [{atom, _, reply}, ReplyVar, StateVar]} ->
+            NewStateTuple = {tuple, Line, [
+                {atom, Line, reply},
+                ReplyVar,
+                {record, Line, StateVar, state,
+                 [{record_field, Line, {atom, Line, context}, {var, Line, 'NewContext'}}]}
+            ]},
+            transform_client_body_record_with_context(Rest, [NewStateTuple | Acc]);
+        
+        %% Other expressions - keep unchanged
+        _ ->
+            transform_client_body_record_with_context(Rest, [Expr | Acc])
+    end.
+
+transform_regular_body_record(Body, ModuleName) ->
+    lists:map(fun(Expr) -> transform_expr_record(Expr, ModuleName) end, Body).
+
+transform_expr_record(Expr, ModuleName) ->
+    case Expr of
+        %% Direct gen_server:call - transform to simple_wrapper:call
+        {call, CLine, {remote, RLine, {atom,_,gen_server}, {atom,_,call}}, [Target, Msg]} ->
+            {call, CLine, {remote, RLine, {atom,RLine,simple_wrapper}, {atom,RLine,call}},
+             [Target, Msg, {var, CLine, 'Context'}, {atom, CLine, ModuleName}]};
+        
+        %% Assignment: Var = gen_server:call(...) - ONLY for CLIENT modules use tuple destructuring
+        {match, MLine, Var, {call, CLine, {remote, RLine, {atom,_,gen_server}, {atom,_,call}}, [Target, Msg]}} ->
+            WrapperCall = {call, CLine, {remote, RLine, {atom,RLine,simple_wrapper}, {atom,RLine,call}},
+                          [Target, Msg, {var, CLine, 'Context'}, {atom, CLine, ModuleName}]},
+            case is_client_module(ModuleName) of
+                true ->
+                    %% For client: {Result, NewContext} = simple_wrapper:call(...)
+                    TuplePattern = {tuple, MLine, [Var, {var, MLine, '_NewContext'}]},
+                    {match, MLine, TuplePattern, WrapperCall};
+                false ->
+                    %% For non-client: Result = simple_wrapper:call(...) (keep original pattern)
+                    {match, MLine, Var, WrapperCall}
+            end;
+        
+        %% Handle all function calls recursively
+        {call, Line, Fun, Args} ->
+            NewFun = transform_expr_record(Fun, ModuleName),
+            NewArgs = lists:map(fun(Arg) -> transform_expr_record(Arg, ModuleName) end, Args),
+            {call, Line, NewFun, NewArgs};
+        
+        %% Handle spawn calls specially
+        {call, Line, {atom, _, spawn}, [Fun]} ->
+            {call, Line, {atom, Line, spawn}, [transform_expr_record(Fun, ModuleName)]};
+        
+        %% Handle spawn/3 calls
+        {call, Line, {atom, _, spawn}, [Module, Function, Args]} ->
+            NewArgs = lists:map(fun(Arg) -> transform_expr_record(Arg, ModuleName) end, Args),
+            {call, Line, {atom, Line, spawn}, [Module, Function, NewArgs]};
+        
+        %% Handle other compound expressions recursively
+        {match, Line, Pattern, SubExpr} ->
+            {match, Line, Pattern, transform_expr_record(SubExpr, ModuleName)};
+        
+        %% Handle try blocks with ALL possible structures
+        {'try', Line, TryBody, CatchExpr, CatchClauses, AfterBody} ->
+            NewTryBody = lists:map(fun(E) -> transform_expr_record(E, ModuleName) end, TryBody),
+            NewCatchClauses = lists:map(fun({clause, CLine, Patterns, Guards, ClauseBody}) ->
+                {clause, CLine, Patterns, Guards, lists:map(fun(E) -> transform_expr_record(E, ModuleName) end, ClauseBody)}
+            end, CatchClauses),
+            NewAfterBody = case AfterBody of
+                [] -> [];
+                _ -> lists:map(fun(E) -> transform_expr_record(E, ModuleName) end, AfterBody)
+            end,
+            {'try', Line, NewTryBody, CatchExpr, NewCatchClauses, NewAfterBody};
+        
+        %% Handle case expressions
+        {'case', Line, CaseExpr, CaseClauses} ->
+            NewCaseExpr = transform_expr_record(CaseExpr, ModuleName),
+            NewCaseClauses = lists:map(fun({clause, CLine, Patterns, Guards, ClauseBody}) ->
+                {clause, CLine, Patterns, Guards, lists:map(fun(E) -> transform_expr_record(E, ModuleName) end, ClauseBody)}
+            end, CaseClauses),
+            {'case', Line, NewCaseExpr, NewCaseClauses};
+        
+        %% Handle if expressions
+        {'if', Line, IfClauses} ->
+            NewIfClauses = lists:map(fun({clause, CLine, [], Guards, ClauseBody}) ->
+                {clause, CLine, [], Guards, lists:map(fun(E) -> transform_expr_record(E, ModuleName) end, ClauseBody)}
+            end, IfClauses),
+            {'if', Line, NewIfClauses};
+        
+        %% Handle receive expressions
+        {'receive', Line, ReceiveClauses} ->
+            NewReceiveClauses = lists:map(fun({clause, CLine, Patterns, Guards, ClauseBody}) ->
+                {clause, CLine, Patterns, Guards, lists:map(fun(E) -> transform_expr_record(E, ModuleName) end, ClauseBody)}
+            end, ReceiveClauses),
+            {'receive', Line, NewReceiveClauses};
+        
+        %% Handle receive with timeout
+        {'receive', Line, ReceiveClauses, Timeout, TimeoutBody} ->
+            NewReceiveClauses = lists:map(fun({clause, CLine, Patterns, Guards, ClauseBody}) ->
+                {clause, CLine, Patterns, Guards, lists:map(fun(E) -> transform_expr_record(E, ModuleName) end, ClauseBody)}
+            end, ReceiveClauses),
+            NewTimeout = transform_expr_record(Timeout, ModuleName),
+            NewTimeoutBody = lists:map(fun(E) -> transform_expr_record(E, ModuleName) end, TimeoutBody),
+            {'receive', Line, NewReceiveClauses, NewTimeout, NewTimeoutBody};
+        
+        %% Handle fun expressions
+        {'fun', Line, {clauses, FunClauses}} ->
+            NewFunClauses = lists:map(fun({clause, CLine, Patterns, Guards, ClauseBody}) ->
+                {clause, CLine, Patterns, Guards, lists:map(fun(E) -> transform_expr_record(E, ModuleName) end, ClauseBody)}
+            end, FunClauses),
+            {'fun', Line, {clauses, NewFunClauses}};
+        
+        %% Handle list comprehensions
+        {lc, Line, Template, Qualifiers} ->
+            NewTemplate = transform_expr_record(Template, ModuleName),
+            NewQualifiers = lists:map(fun
+                ({generate, QLine, Pattern, QExpr}) ->
+                    {generate, QLine, Pattern, transform_expr_record(QExpr, ModuleName)};
+                ({b_generate, QLine, Pattern, QExpr}) ->
+                    {b_generate, QLine, Pattern, transform_expr_record(QExpr, ModuleName)};
+                (QExpr) when is_tuple(QExpr) ->
+                    transform_expr_record(QExpr, ModuleName);
+                (Other) ->
+                    Other
+            end, Qualifiers),
+            {lc, Line, NewTemplate, NewQualifiers};
+        
+        %% Handle binary comprehensions
+        {bc, Line, Template, Qualifiers} ->
+            NewTemplate = transform_expr_record(Template, ModuleName),
+            NewQualifiers = lists:map(fun
+                ({generate, QLine, Pattern, QExpr}) ->
+                    {generate, QLine, Pattern, transform_expr_record(QExpr, ModuleName)};
+                ({b_generate, QLine, Pattern, QExpr}) ->
+                    {b_generate, QLine, Pattern, transform_expr_record(QExpr, ModuleName)};
+                (QExpr) when is_tuple(QExpr) ->
+                    transform_expr_record(QExpr, ModuleName);
+                (Other) ->
+                    Other
+            end, Qualifiers),
+            {bc, Line, NewTemplate, NewQualifiers};
+        
+        %% Handle tuples
+        {tuple, Line, Elements} ->
+            NewElements = lists:map(fun(Elem) -> transform_expr_record(Elem, ModuleName) end, Elements),
+            {tuple, Line, NewElements};
+        
+        %% Handle lists
+        {cons, Line, Head, Tail} ->
+            NewHead = transform_expr_record(Head, ModuleName),
+            NewTail = transform_expr_record(Tail, ModuleName),
+            {cons, Line, NewHead, NewTail};
+        
+        %% Handle blocks
+        {block, Line, BlockBody} ->
+            NewBlockBody = lists:map(fun(E) -> transform_expr_record(E, ModuleName) end, BlockBody),
+            {block, Line, NewBlockBody};
+        
+        %% Handle catch expressions
+        {'catch', Line, CatchExpr} ->
+            {'catch', Line, transform_expr_record(CatchExpr, ModuleName)};
+        
+        %% Default case - return as is
+        _ ->
+            Expr
+    end.
+
+%%—————————————————————————————————————————————————————————————————————————————————————————————————————
+%%— MAP-BASED APPROACH
+%%—————————————————————————————————————————————————————————————————————————————————————————————————————
+
+inject_context_handlers_map(Forms, ModuleName) ->
     lists:map(fun
         ({function, Line, handle_call, 3, Clauses}) ->
-            io:format("PARSE_TRANSFORM: Injecting with_context handler into handle_call/3 (map)~n"),
-            
-            WithContextClause = {clause, Line,
-               [ {tuple,Line,[{atom,Line,with_context},{var,Line,'Context'},{var,Line,'Msg'}]},
-                 {var,Line,'From'},
-                 {var,Line,'State'}
-               ],
-               [],
-               [ {match,Line,{var,Line,'ReceiveTime'},
-                   {call,Line,{remote,Line,{atom,Line,erlang},{atom,Line,system_time}},
-                       [{atom,Line,millisecond}]}},
-                 {call,Line,{remote,Line,{atom,Line,io},{atom,Line,format}},
-                     [{string,Line,"[~p ms] [~p] RECEIVED with_context: ctx=~p, msg=~p~n"},
-                      {cons,Line,{var,Line,'ReceiveTime'},
-                          {cons,Line,{atom,Line,ModuleName},
-                              {cons,Line,{var,Line,'Context'},
-                                  {cons,Line,{var,Line,'Msg'},{nil,Line}}}}}]},
-                 {match,Line,{var,Line,'StateWithContext'},
-                     {call,Line,{remote,Line,{atom,Line,maps},{atom,Line,put}},
-                         [{atom,Line,context},{var,Line,'Context'},{var,Line,'State'}]}},
-                 {call,Line,{remote,Line,{atom,Line,io},{atom,Line,format}},
-                     [{string,Line,"[~p ms] [~p] Context ~p injected, delegating message ~p~n"},
-                      {cons,Line,{var,Line,'ReceiveTime'},
-                          {cons,Line,{atom,Line,ModuleName},
-                              {cons,Line,{var,Line,'Context'},
-                                  {cons,Line,{var,Line,'Msg'},{nil,Line}}}}}]},
-                 {call,Line,{remote,Line,{atom,Line,ModuleName},{atom,Line,handle_call}},
-                     [{var,Line,'Msg'},{var,Line,'From'},{var,Line,'StateWithContext'}]}
-               ]},
-
-            {function, Line, handle_call, 3, [WithContextClause | Clauses]};
+            io:format("PARSE_TRANSFORM: Injecting context handlers into handle_call/3 (map)~n"),
+            NewClauses = case is_client_module(ModuleName) of
+                true ->
+                    Clauses;
+                false ->
+                    %% For non-client modules, add with_context handler
+                    WithContextClause = {clause, Line,
+                       [{tuple,Line,[{atom,Line,with_context},{var,Line,'Context'},{var,Line,'Msg'}]},
+                        {var,Line,'From'}, {var,Line,'State'}],
+                       [],
+                       [{match,Line,{var,Line,'StateWithContext'},
+                            {call,Line,{remote,Line,{atom,Line,maps},{atom,Line,put}},
+                                [{atom,Line,context},{var,Line,'Context'},{var,Line,'State'}]}},
+                        {call,Line,{remote,Line,{atom,Line,ModuleName},{atom,Line,handle_call}},
+                            [{var,Line,'Msg'},{var,Line,'From'},{var,Line,'StateWithContext'}]}]},
+                    [WithContextClause | Clauses]
+            end,
+            {function, Line, handle_call, 3, NewClauses};
         (Other) ->
             Other
     end, Forms).
@@ -222,223 +403,215 @@ rewrite_process_calls_map(Forms, ModuleName) ->
         ({function, Line, handle_call, 3, Clauses}) ->
             {InjectedClauses, OriginalClauses} = separate_clauses(Clauses),
             NewOriginalClauses = lists:map(fun(Clause) -> 
-                rewrite_clause_map_with_tuples(Clause, ModuleName) 
+                rewrite_clause_map(Clause, ModuleName) 
             end, OriginalClauses),
-            NewClauses = InjectedClauses ++ NewOriginalClauses,
-            {function, Line, handle_call, 3, NewClauses};
+            {function, Line, handle_call, 3, InjectedClauses ++ NewOriginalClauses};
         (Other) ->
             Other
     end, Forms).
 
-%%────────────────────────────────────────────────────────────────────────────
-%%── SHARED UTILITIES
-%%────────────────────────────────────────────────────────────────────────────
-
-separate_clauses(Clauses) ->
-    lists:partition(fun(Clause) -> is_injected_clause(Clause) end, Clauses).
-
-is_injected_clause({clause, _, [{tuple, _, [{atom, _, with_context}, _, _]}, _, _], _, _}) ->
-    true;
-is_injected_clause(_) ->
-    false.
-
-%%── NEW: Clause rewriting with tuple destructuring for record approach
-rewrite_clause_record_with_tuples({clause, Line, Patterns, Guards, Body}, ModuleName) ->
-    io:format("PARSE_TRANSFORM: Rewriting record clause with tuple destructuring for ~p~n", [ModuleName]),
+rewrite_clause_map({clause, Line, Patterns, Guards, Body}, ModuleName) ->
+    io:format("PARSE_TRANSFORM: Rewriting clause for ~p~n", [ModuleName]),
     
-    %% Add context extraction at the beginning
-    ContextExtraction = {match, Line, {var, Line, 'Context'}, 
-                        {record_field, Line, {var, Line, 'State'}, state, {atom, Line, context}}},
-    
-    %% Process body to create tuple destructuring and state updates
-    {TransformedBody, _FinalState} = process_body_with_tuple_destructuring(Body, ModuleName, record, 1, 'State'),
-    
-    {clause, Line, Patterns, Guards, [ContextExtraction | TransformedBody]}.
-
-%%── NEW: Clause rewriting with tuple destructuring for map approach
-rewrite_clause_map_with_tuples({clause, Line, Patterns, Guards, Body}, ModuleName) ->
-    io:format("PARSE_TRANSFORM: Rewriting map clause with tuple destructuring for ~p~n", [ModuleName]),
-    
-    %% Add context extraction at the beginning
+    %% Always add context extraction as first statement
     ContextExtraction = {match, Line, {var, Line, 'Context'}, 
                         {call,Line,{remote,Line,{atom,Line,maps},{atom,Line,get}},
                          [{atom,Line,context},{var,Line,'State'},{atom,Line,undefined}]}},
     
-    %% Process body to create tuple destructuring and state updates
-    {TransformedBody, _FinalState} = process_body_with_tuple_destructuring(Body, ModuleName, map, 1, 'State'),
+    %% Transform body based on module type
+    NewBody = case is_client_module(ModuleName) of
+        true ->
+            io:format("PARSE_TRANSFORM: CLIENT - transforming with tuple handling~n"),
+            transform_client_body_map(Body);
+        false ->
+            transform_regular_body_map(Body, ModuleName)
+    end,
     
-    {clause, Line, Patterns, Guards, [ContextExtraction | TransformedBody]}.
+    {clause, Line, Patterns, Guards, [ContextExtraction | NewBody]}.
 
-%%── Process clause body creating tuple destructuring for gen_server:call patterns
-process_body_with_tuple_destructuring(Body, ModuleName, StateType, Counter, CurrentStateVar) ->
-    process_body_with_tuple_destructuring(Body, ModuleName, StateType, Counter, CurrentStateVar, []).
-
-process_body_with_tuple_destructuring([], _ModuleName, _StateType, _Counter, FinalStateVar, Acc) ->
-    {lists:reverse(Acc), FinalStateVar};
-
-process_body_with_tuple_destructuring([Expr | Rest], ModuleName, StateType, Counter, CurrentStateVar, Acc) ->
-    case Expr of
-        %% Pattern: VarName = gen_server:call(Target, Msg)
-        {match, Line, {var, _, VarName}, {call, _, {remote, _, {atom,_,gen_server}, {atom,_,call}}, [Target, Msg]}} ->
-            io:format("PARSE_TRANSFORM: Found gen_server:call assignment to ~p in ~p~n", [VarName, ModuleName]),
-            
-            %% Generate unique variables
-            ContextVar = list_to_atom("Context" ++ integer_to_list(Counter)),
-            NewStateVar = list_to_atom("State" ++ integer_to_list(Counter)),
-            
-            %% Create tuple match: {VarName, Context1} = simple_wrapper:call(...)
-            TupleMatch = {match, Line,
-                         {tuple, Line, [{var, Line, VarName}, {var, Line, ContextVar}]},
-                         {call, Line, {remote, Line, {atom, Line, simple_wrapper}, {atom, Line, call}},
-                          [Target, Msg, {var, Line, 'Context'}, {atom, Line, ModuleName}]}},
-            
-            %% Create state update: State1 = State#{context => Context1}
-            StateUpdate = case StateType of
-                record ->
-                    {match, Line, {var, Line, NewStateVar},
-                     {record, Line, {var, Line, CurrentStateVar}, state,
-                      [{record_field, Line, {atom, Line, context}, {var, Line, ContextVar}}]}};
-                map ->
-                    {match, Line, {var, Line, NewStateVar},
-                     {call, Line, {remote, Line, {atom, Line, maps}, {atom, Line, put}},
-                      [{atom, Line, context}, {var, Line, ContextVar}, {var, Line, CurrentStateVar}]}}
-            end,
-            
-            %% Continue with updated state variable
-            process_body_with_tuple_destructuring(Rest, ModuleName, StateType, Counter + 1, NewStateVar,
-                                                [StateUpdate, TupleMatch | Acc]);
-        
-        %% Pattern: {reply, Reply, State}
-        {tuple, Line, [{atom, _, reply}, ReplyExpr, {var, _, 'State'}]} ->
-            %% Update to use current state variable
-            UpdatedExpr = {tuple, Line, [{atom, Line, reply}, ReplyExpr, {var, Line, CurrentStateVar}]},
-            process_body_with_tuple_destructuring(Rest, ModuleName, StateType, Counter, CurrentStateVar, [UpdatedExpr | Acc]);
-        
-        %% Pattern: {noreply, State}
-        {tuple, Line, [{atom, _, noreply}, {var, _, 'State'}]} ->
-            %% Update to use current state variable
-            UpdatedExpr = {tuple, Line, [{atom, Line, noreply}, {var, Line, CurrentStateVar}]},
-            process_body_with_tuple_destructuring(Rest, ModuleName, StateType, Counter, CurrentStateVar, [UpdatedExpr | Acc]);
-        
-        %% All other expressions - use the working deep transformation logic but without gen_server:call replacement
-        _ ->
-            TransformedExpr = deep_transform_expression_without_genserver_call(Expr, ModuleName, StateType),
-            process_body_with_tuple_destructuring(Rest, ModuleName, StateType, Counter, CurrentStateVar, [TransformedExpr | Acc])
+transform_client_body_map(Body) ->
+    %% Check if there are any gen_server:call expressions in the body
+    case has_gen_server_call(Body) of
+        true ->
+            %% Has wrapper calls - transform everything
+            transform_client_body_map_with_context(Body, []);
+        false ->
+            %% No wrapper calls - return body unchanged
+            Body
     end.
 
-%%── Deep transformation logic from your working code, but WITHOUT transforming gen_server:call
-%%   (since we handle that at the clause level now)
-deep_transform_expression_without_genserver_call({call, CLine, Fun, Args}, ModuleName, StateType) ->
-    %% Transform arguments recursively but don't transform gen_server:call itself
-    case Fun of
-        {remote, _, {atom,_,gen_server}, {atom,_,call}} ->
-            %% This is gen_server:call - should be handled at clause level, so this is an error case
-            io:format("PARSE_TRANSFORM: WARNING: gen_server:call found in deep transform - should be handled at clause level~n"),
-            %% For safety, transform it the old way
-            ContextExpr = {var, CLine, 'Context'},
-            ModuleExpr = {atom, CLine, ModuleName},
-            {call, CLine, {remote, element(2, Fun), {atom, element(2, Fun), simple_wrapper}, {atom, element(2, Fun), call}},
-             Args ++ [ContextExpr, ModuleExpr]};
+transform_client_body_map_with_context([], Acc) ->
+    lists:reverse(Acc);
+transform_client_body_map_with_context([Expr | Rest], Acc) ->
+    case Expr of
+        %% Pattern: Variable = gen_server:call(...)
+        {match, _MLine, {var, VLine, VarName}, 
+         {call, CLine, {remote, _RLine, {atom,_,gen_server}, {atom,_,call}}, [Target, Msg]}} ->
+            TupleMatch = {match, VLine,
+                         {tuple, VLine, [{var, VLine, VarName}, {var, VLine, 'NewContext'}]},
+                         {call, CLine, {remote, CLine, {atom,CLine,simple_wrapper}, {atom,CLine,call}},
+                          [Target, Msg, {var, CLine, 'Context'}, {atom, CLine, client}]}},
+            transform_client_body_map_with_context(Rest, [TupleMatch | Acc]);
+        
+        %% Pattern: {reply, _, _} - Transform to include context update
+        {tuple, Line, [{atom, _, reply}, ReplyVar, StateVar]} ->
+            NewStateTuple = {tuple, Line, [
+                {atom, Line, reply},
+                ReplyVar,
+                {call,Line,{remote,Line,{atom,Line,maps},{atom,Line,put}},
+                 [{atom,Line,context},{var,Line,'NewContext'},StateVar]}
+            ]},
+            transform_client_body_map_with_context(Rest, [NewStateTuple | Acc]);
+        
+        %% Other expressions - keep unchanged
         _ ->
-            NewFun = deep_transform_expression_without_genserver_call(Fun, ModuleName, StateType),
-            NewArgs = lists:map(fun(Arg) -> deep_transform_expression_without_genserver_call(Arg, ModuleName, StateType) end, Args),
-            {call, CLine, NewFun, NewArgs}
-    end;
+            transform_client_body_map_with_context(Rest, [Expr | Acc])
+    end.
 
-deep_transform_expression_without_genserver_call({tuple, Line, Elements}, ModuleName, StateType) ->
-    NewElements = lists:map(fun(Elem) -> deep_transform_expression_without_genserver_call(Elem, ModuleName, StateType) end, Elements),
-    {tuple, Line, NewElements};
+transform_regular_body_map(Body, ModuleName) ->
+    lists:map(fun(Expr) -> transform_expr_map(Expr, ModuleName) end, Body).
 
-deep_transform_expression_without_genserver_call({cons, Line, Head, Tail}, ModuleName, StateType) ->
-    NewHead = deep_transform_expression_without_genserver_call(Head, ModuleName, StateType),
-    NewTail = deep_transform_expression_without_genserver_call(Tail, ModuleName, StateType),
-    {cons, Line, NewHead, NewTail};
-
-deep_transform_expression_without_genserver_call({'case', Line, Expr, Clauses}, ModuleName, StateType) ->
-    NewExpr = deep_transform_expression_without_genserver_call(Expr, ModuleName, StateType),
-    NewClauses = lists:map(fun({clause, CLine, CPatterns, CGuards, CBody}) ->
-        NewCBody = lists:map(fun(CExpr) -> deep_transform_expression_without_genserver_call(CExpr, ModuleName, StateType) end, CBody),
-        {clause, CLine, CPatterns, CGuards, NewCBody}
-    end, Clauses),
-    {'case', Line, NewExpr, NewClauses};
-
-deep_transform_expression_without_genserver_call({match, Line, Left, Right}, ModuleName, StateType) ->
-    NewRight = deep_transform_expression_without_genserver_call(Right, ModuleName, StateType),
-    {match, Line, Left, NewRight};
-
-deep_transform_expression_without_genserver_call({'if', Line, Clauses}, ModuleName, StateType) ->
-    NewClauses = lists:map(fun({clause, CLine, CPatterns, CGuards, CBody}) ->
-        NewCBody = lists:map(fun(CExpr) -> deep_transform_expression_without_genserver_call(CExpr, ModuleName, StateType) end, CBody),
-        {clause, CLine, CPatterns, CGuards, NewCBody}
-    end, Clauses),
-    {'if', Line, NewClauses};
-
-deep_transform_expression_without_genserver_call({'try', LineInfo, Body, [], CatchClauses, AfterClause}, ModuleName, StateType) ->
-    NewBody = lists:map(fun(Expr) -> deep_transform_expression_without_genserver_call(Expr, ModuleName, StateType) end, Body),
-    NewCatchClauses = lists:map(fun({clause, CLine, CPatterns, CGuards, CBody}) ->
-        NewCBody = lists:map(fun(CExpr) -> deep_transform_expression_without_genserver_call(CExpr, ModuleName, StateType) end, CBody),
-        {clause, CLine, CPatterns, CGuards, NewCBody}
-    end, CatchClauses),
-    NewAfterClause = case AfterClause of
-        [] -> [];
-        _ -> lists:map(fun(Expr) -> deep_transform_expression_without_genserver_call(Expr, ModuleName, StateType) end, AfterClause)
-    end,
-    {'try', LineInfo, NewBody, [], NewCatchClauses, NewAfterClause};
-
-deep_transform_expression_without_genserver_call({'receive', Line, Clauses}, ModuleName, StateType) ->
-    NewClauses = lists:map(fun({clause, CLine, CPatterns, CGuards, CBody}) ->
-        NewCBody = lists:map(fun(CExpr) -> deep_transform_expression_without_genserver_call(CExpr, ModuleName, StateType) end, CBody),
-        {clause, CLine, CPatterns, CGuards, NewCBody}
-    end, Clauses),
-    {'receive', Line, NewClauses};
-
-deep_transform_expression_without_genserver_call({'receive', Line, Clauses, Timeout, TimeoutBody}, ModuleName, StateType) ->
-    NewClauses = lists:map(fun({clause, CLine, CPatterns, CGuards, CBody}) ->
-        NewCBody = lists:map(fun(CExpr) -> deep_transform_expression_without_genserver_call(CExpr, ModuleName, StateType) end, CBody),
-        {clause, CLine, CPatterns, CGuards, NewCBody}
-    end, Clauses),
-    NewTimeout = deep_transform_expression_without_genserver_call(Timeout, ModuleName, StateType),
-    NewTimeoutBody = lists:map(fun(Expr) -> deep_transform_expression_without_genserver_call(Expr, ModuleName, StateType) end, TimeoutBody),
-    {'receive', Line, NewClauses, NewTimeout, NewTimeoutBody};
-
-deep_transform_expression_without_genserver_call({'fun', Line, {clauses, Clauses}}, ModuleName, StateType) ->
-    NewClauses = lists:map(fun({clause, CLine, CPatterns, CGuards, CBody}) ->
-        NewCBody = lists:map(fun(CExpr) -> deep_transform_expression_without_genserver_call(CExpr, ModuleName, StateType) end, CBody),
-        {clause, CLine, CPatterns, CGuards, NewCBody}
-    end, Clauses),
-    {'fun', Line, {clauses, NewClauses}};
-
-deep_transform_expression_without_genserver_call({lc, Line, Template, Qualifiers}, ModuleName, StateType) ->
-    NewTemplate = deep_transform_expression_without_genserver_call(Template, ModuleName, StateType),
-    NewQualifiers = lists:map(fun(Qual) ->
-        case Qual of
-            {generate, GLine, Pattern, Expr} ->
-                {generate, GLine, Pattern, deep_transform_expression_without_genserver_call(Expr, ModuleName, StateType)};
-            {b_generate, GLine, Pattern, Expr} ->
-                {b_generate, GLine, Pattern, deep_transform_expression_without_genserver_call(Expr, ModuleName, StateType)};
-            _ when is_tuple(Qual) ->
-                deep_transform_expression_without_genserver_call(Qual, ModuleName, StateType);
-            _ ->
-                Qual
-        end
-    end, Qualifiers),
-    {lc, Line, NewTemplate, NewQualifiers};
-
-deep_transform_expression_without_genserver_call({bc, Line, Template, Qualifiers}, ModuleName, StateType) ->
-    NewTemplate = deep_transform_expression_without_genserver_call(Template, ModuleName, StateType),
-    NewQualifiers = lists:map(fun(Qual) ->
-        case Qual of
-            {generate, GLine, Pattern, Expr} ->
-                {generate, GLine, Pattern, deep_transform_expression_without_genserver_call(Expr, ModuleName, StateType)};
-            {b_generate, GLine, Pattern, Expr} ->
-                {b_generate, GLine, Pattern, deep_transform_expression_without_genserver_call(Expr, ModuleName, StateType)};
-            _ when is_tuple(Qual) ->
-                deep_transform_expression_without_genserver_call(Qual, ModuleName, StateType);
-            _ ->
-                Qual
-        end
-    end, Qualifiers),
-    {bc, Line, NewTemplate, NewQualifiers};
-
-deep_transform_expression_without_genserver_call(Other, _ModuleName, _StateType) ->
-    Other.
+transform_expr_map(Expr, ModuleName) ->
+    case Expr of
+        %% Direct gen_server:call - transform to simple_wrapper:call
+        {call, CLine, {remote, RLine, {atom,_,gen_server}, {atom,_,call}}, [Target, Msg]} ->
+            {call, CLine, {remote, RLine, {atom,RLine,simple_wrapper}, {atom,RLine,call}},
+             [Target, Msg, {var, CLine, 'Context'}, {atom, CLine, ModuleName}]};
+        
+        %% Assignment: Var = gen_server:call(...) - ONLY for CLIENT modules use tuple destructuring
+        {match, MLine, Var, {call, CLine, {remote, RLine, {atom,_,gen_server}, {atom,_,call}}, [Target, Msg]}} ->
+            WrapperCall = {call, CLine, {remote, RLine, {atom,RLine,simple_wrapper}, {atom,RLine,call}},
+                          [Target, Msg, {var, CLine, 'Context'}, {atom, CLine, ModuleName}]},
+            case is_client_module(ModuleName) of
+                true ->
+                    %% For client: {Result, NewContext} = simple_wrapper:call(...)
+                    TuplePattern = {tuple, MLine, [Var, {var, MLine, '_NewContext'}]},
+                    {match, MLine, TuplePattern, WrapperCall};
+                false ->
+                    %% For non-client: Result = simple_wrapper:call(...) (keep original pattern)
+                    {match, MLine, Var, WrapperCall}
+            end;
+        
+        %% Handle all function calls recursively (same pattern as record version)
+        {call, Line, Fun, Args} ->
+            NewFun = transform_expr_map(Fun, ModuleName),
+            NewArgs = lists:map(fun(Arg) -> transform_expr_map(Arg, ModuleName) end, Args),
+            {call, Line, NewFun, NewArgs};
+        
+        %% Handle spawn calls specially
+        {call, Line, {atom, _, spawn}, [Fun]} ->
+            {call, Line, {atom, Line, spawn}, [transform_expr_map(Fun, ModuleName)]};
+        
+        %% Handle spawn/3 calls
+        {call, Line, {atom, _, spawn}, [Module, Function, Args]} ->
+            NewArgs = lists:map(fun(Arg) -> transform_expr_map(Arg, ModuleName) end, Args),
+            {call, Line, {atom, Line, spawn}, [Module, Function, NewArgs]};
+        
+        %% Handle other compound expressions recursively (same as record version)
+        {match, Line, Pattern, SubExpr} ->
+            {match, Line, Pattern, transform_expr_map(SubExpr, ModuleName)};
+        
+        %% Handle try blocks with ALL possible structures
+        {'try', Line, TryBody, CatchExpr, CatchClauses, AfterBody} ->
+            NewTryBody = lists:map(fun(E) -> transform_expr_map(E, ModuleName) end, TryBody),
+            NewCatchClauses = lists:map(fun({clause, CLine, Patterns, Guards, ClauseBody}) ->
+                {clause, CLine, Patterns, Guards, lists:map(fun(E) -> transform_expr_map(E, ModuleName) end, ClauseBody)}
+            end, CatchClauses),
+            NewAfterBody = case AfterBody of
+                [] -> [];
+                _ -> lists:map(fun(E) -> transform_expr_map(E, ModuleName) end, AfterBody)
+            end,
+            {'try', Line, NewTryBody, CatchExpr, NewCatchClauses, NewAfterBody};
+        
+        %% Handle case expressions
+        {'case', Line, CaseExpr, CaseClauses} ->
+            NewCaseExpr = transform_expr_map(CaseExpr, ModuleName),
+            NewCaseClauses = lists:map(fun({clause, CLine, Patterns, Guards, ClauseBody}) ->
+                {clause, CLine, Patterns, Guards, lists:map(fun(E) -> transform_expr_map(E, ModuleName) end, ClauseBody)}
+            end, CaseClauses),
+            {'case', Line, NewCaseExpr, NewCaseClauses};
+        
+        %% Handle if expressions
+        {'if', Line, IfClauses} ->
+            NewIfClauses = lists:map(fun({clause, CLine, [], Guards, ClauseBody}) ->
+                {clause, CLine, [], Guards, lists:map(fun(E) -> transform_expr_map(E, ModuleName) end, ClauseBody)}
+            end, IfClauses),
+            {'if', Line, NewIfClauses};
+        
+        %% Handle receive expressions
+        {'receive', Line, ReceiveClauses} ->
+            NewReceiveClauses = lists:map(fun({clause, CLine, Patterns, Guards, ClauseBody}) ->
+                {clause, CLine, Patterns, Guards, lists:map(fun(E) -> transform_expr_map(E, ModuleName) end, ClauseBody)}
+            end, ReceiveClauses),
+            {'receive', Line, NewReceiveClauses};
+        
+        %% Handle receive with timeout
+        {'receive', Line, ReceiveClauses, Timeout, TimeoutBody} ->
+            NewReceiveClauses = lists:map(fun({clause, CLine, Patterns, Guards, ClauseBody}) ->
+                {clause, CLine, Patterns, Guards, lists:map(fun(E) -> transform_expr_map(E, ModuleName) end, ClauseBody)}
+            end, ReceiveClauses),
+            NewTimeout = transform_expr_map(Timeout, ModuleName),
+            NewTimeoutBody = lists:map(fun(E) -> transform_expr_map(E, ModuleName) end, TimeoutBody),
+            {'receive', Line, NewReceiveClauses, NewTimeout, NewTimeoutBody};
+        
+        %% Handle fun expressions
+        {'fun', Line, {clauses, FunClauses}} ->
+            NewFunClauses = lists:map(fun({clause, CLine, Patterns, Guards, ClauseBody}) ->
+                {clause, CLine, Patterns, Guards, lists:map(fun(E) -> transform_expr_map(E, ModuleName) end, ClauseBody)}
+            end, FunClauses),
+            {'fun', Line, {clauses, NewFunClauses}};
+        
+        %% Handle list comprehensions
+        {lc, Line, Template, Qualifiers} ->
+            NewTemplate = transform_expr_map(Template, ModuleName),
+            NewQualifiers = lists:map(fun
+                ({generate, QLine, Pattern, QExpr}) ->
+                    {generate, QLine, Pattern, transform_expr_map(QExpr, ModuleName)};
+                ({b_generate, QLine, Pattern, QExpr}) ->
+                    {b_generate, QLine, Pattern, transform_expr_map(QExpr, ModuleName)};
+                (QExpr) when is_tuple(QExpr) ->
+                    transform_expr_map(QExpr, ModuleName);
+                (Other) ->
+                    Other
+            end, Qualifiers),
+            {lc, Line, NewTemplate, NewQualifiers};
+        
+        %% Handle binary comprehensions
+        {bc, Line, Template, Qualifiers} ->
+            NewTemplate = transform_expr_map(Template, ModuleName),
+            NewQualifiers = lists:map(fun
+                ({generate, QLine, Pattern, QExpr}) ->
+                    {generate, QLine, Pattern, transform_expr_map(QExpr, ModuleName)};
+                ({b_generate, QLine, Pattern, QExpr}) ->
+                    {b_generate, QLine, Pattern, transform_expr_map(QExpr, ModuleName)};
+                (QExpr) when is_tuple(QExpr) ->
+                    transform_expr_map(QExpr, ModuleName);
+                (Other) ->
+                    Other
+            end, Qualifiers),
+            {bc, Line, NewTemplate, NewQualifiers};
+        
+        %% Handle tuples
+        {tuple, Line, Elements} ->
+            NewElements = lists:map(fun(Elem) -> transform_expr_map(Elem, ModuleName) end, Elements),
+            {tuple, Line, NewElements};
+        
+        %% Handle lists
+        {cons, Line, Head, Tail} ->
+            NewHead = transform_expr_map(Head, ModuleName),
+            NewTail = transform_expr_map(Tail, ModuleName),
+            {cons, Line, NewHead, NewTail};
+        
+        %% Handle blocks
+        {block, Line, BlockBody} ->
+            NewBlockBody = lists:map(fun(E) -> transform_expr_map(E, ModuleName) end, BlockBody),
+            {block, Line, NewBlockBody};
+        
+        %% Handle catch expressions
+        {'catch', Line, CatchExpr} ->
+            {'catch', Line, transform_expr_map(CatchExpr, ModuleName)};
+        
+        %% Default case - return as is
+        _ ->
+            Expr
+    end.

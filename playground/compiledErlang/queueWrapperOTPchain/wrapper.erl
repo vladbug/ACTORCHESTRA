@@ -21,7 +21,6 @@ start_link() ->
 init([]) ->
     {ok, #state{}}.
 
-%% Public API - UNCHANGED from your original
 -spec call(pid() | atom(), term(), reference() | undefined) -> any().
 call(To, Msg, undefined) ->
     Context = make_ref(),
