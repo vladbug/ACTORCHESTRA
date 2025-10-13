@@ -1,0 +1,241 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Config/7_package.tex
+%% NOVA thesis configuration file
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE Config/5_packages.tex}%
+
+% \ntlangsetup{pt/contentsname=O MEU ÍNDICE}
+% \ntlangsetup{en/contentsname=MY LITTLE TOC}
+
+%%============================================================
+%%  FOR DEMO PURPOSES ONLY --- YOU SHOULD REMOVE THESE PACKAGES
+%%============================================================
+
+
+\IfFileExists{byo-twemojiss.sty}{
+  \usepackage{byo-twemojis}     % to typeset emojis
+  \newcommand{\emojiSmile}{\raisebox{-3pt}{\scalebox{1.3}{\byoTwemoji{head; eyes normal opened; mouth laughing}}}}
+}{
+  \newcommand{\emojiSmile}{\texttt{:D}}
+  \newlength{\twemojiDefaultHeight}
+}
+
+\newcommand{\MikTeX}{Mik\TeX}
+\newcommand{\TeXLive}{\TeX Live}
+\newcommand{\pdfLaTeX}{pdf\LaTeX}
+\definecolor{Schlgray}{gray}{0.95}
+
+
+%%============================================================
+%%  ADD YOUR PACKAGES AND OTHER CUSTOMIZATIONS HERE
+%%============================================================
+
+% \usepackage[orphans/prevent, widows/prevent]{widows-and-orphans} % add warnings about widows and orphans to “template.log”
+% \usepackage{refcheck}     % list used and unused labels
+%\usepackage{xargs}
+% todo commands
+%\newcommandx{\unsure}[2][1=]{\todo[linecolor=yellow,backgroundcolor=yellow!25,bordercolor=yellow,noinlinepar,inlinewidth=5cm,#1]{#2}}
+%\newcommandx{\crucial}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,noinlinepar,inlinewidth=5cm,#1]{#2}}
+%\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,noinlinepar,inlinewidth=5cm,#1]{#2}}
+%\newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,noinlinepar,inlinewidth=5cm,#1]{#2}}
+%\newcommandx{\citationRequired}[1][1=]{\crucial[#1]{Citation required!!!}}
+%\newcommandx{\placeholder}[2][1=]{\textbf{\color{red} #2} \crucial[#1]{Change placeholder}}
+%\newcommandx{\afterPreparation}[2][1=]{\crucial[#1]{#2}}
+
+
+\usepackage[nomain,acronym]{glossaries-extra}
+\usepackage{amsthm}
+\usepackage{amsmath, amssymb}
+\usepackage{cleveref}
+\usepackage{rotating}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{paralist}     % To enable costumizable enumerates.  See the documentation.
+
+\usepackage[textsize=footnotesize]{todonotes}  % To register TODO notes in the text
+
+\newcommand{\TODO}[1]{\textbf{\color{red}[TODO: #1]}}
+
+\usepackage{makecell}      % Multiline table cells and control vertical and horizontal alignment
+
+\usepackage{tcolorbox}    % pretty print color boxes
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{mathpartir}
+%\usepackage{amsmath}
+\usepackage{latexsym}
+%\usepackage{mathabx}
+\usepackage{cleveref}
+\usepackage{enumitem}
+%\usepackage{ulem}
+\usepackage{minted}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage[normalem]{ulem} % For \uline
+\usepackage{textcomp}       % For \textsubscript
+\usepackage{array}
+
+\usepackage{lipsum} % to center minted
+\usepackage{pifont}  % for \xmark
+
+\usepackage{musicography} % for music notes
+\usepackage{utfsym}
+\usepackage{tablefootnote}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage[table]{xcolor}
+\definecolor{rowgray}{gray}{0.95}
+
+% For Erlang code
+%\usepackage{courier} % For a nice monospace font
+
+% Define colors for syntax highlighting
+\definecolor{erlangblue}{RGB}{0,0,139}
+\definecolor{erlanggreen}{RGB}{0,128,0}
+\definecolor{erlangred}{RGB}{139,0,0}
+\definecolor{erlanggray}{RGB}{128,128,128}
+\definecolor{erlangpurple}{RGB}{128,0,128}
+\definecolor{backgroundgray}{RGB}{248,248,248}
+
+% Define Erlang language for listings
+\lstdefinelanguage{Erlang}{
+    keywords=[1]{
+        after, and, andalso, band, begin, bnot, bor, bsl, bsr, bxor, case, catch,
+        cond, div, end, fun, if, let, not, of, or, orelse, query, receive, rem,
+        try, when, xor
+    },
+    keywords=[2]{
+        module, export, import, compile, define, ifdef, ifndef,
+        else, endif, include, undef, record, spec, type, opaque,
+        callback, behaviour, behavior
+    },
+    keywords=[3]{include_lib},
+    otherkeywords={->, <<, >>, =, ==, /=, =:=, =/=, <, =<, >, >=, ++, --, !, ?},
+    sensitive=true,
+    morecomment=[l]\%,
+    morestring=[b]",
+    morestring=[b]',
+    alsoletter={-,_},
+    alsodigit={_},
+}
+
+% Main Erlang style
+\lstdefinestyle{erlang}{
+    language=Erlang,
+    basicstyle=\ttfamily\small,
+    keywordstyle=[1]\color{erlangblue}\bfseries,        % Core language keywords
+    keywordstyle=[2]\color{erlangpurple}\bfseries,      % Preprocessor directives
+    keywordstyle=[3]\color{erlangpurple}\bfseries,      % Special cases like include_lib
+    commentstyle=\color{erlanggreen}\itshape,
+    stringstyle=\color{erlangred},
+    numberstyle=\tiny\color{erlanggray},
+    backgroundcolor=\color{backgroundgray},
+    frame=single,
+    frameround=tttt,
+    framesep=5pt,
+    rulecolor=\color{gray!30},
+    numbers=left,
+    numbersep=8pt,
+    stepnumber=1,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=2,
+    captionpos=b,
+    xleftmargin=0.5cm,
+    xrightmargin=0.5cm,
+    escapeinside={(*@}{@*)}, % For special formatting within code
+}
+
+% Alternative minimal style (no line numbers, no background)
+\lstdefinestyle{erlang-minimal}{
+    language=Erlang,
+    basicstyle=\ttfamily\small,
+    keywordstyle=[1]\color{erlangblue}\bfseries,
+    keywordstyle=[2]\color{erlangpurple}\bfseries,
+    keywordstyle=[3]\color{erlangpurple}\bfseries,
+    commentstyle=\color{erlanggreen}\itshape,
+    stringstyle=\color{erlangred},
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=2,
+    escapeinside={(*@}{@*)},
+}
+
+% Inline code style
+\lstdefinestyle{erlang-inline}{
+    language=Erlang,
+    basicstyle=\ttfamily,
+    keywordstyle=[1]\color{erlangblue}\bfseries,
+    keywordstyle=[2]\color{erlangpurple}\bfseries,
+    keywordstyle=[3]\color{erlangpurple}\bfseries,
+    commentstyle=\color{erlanggreen},
+    stringstyle=\color{erlangred},
+    showstringspaces=false,
+    breaklines=false,
+}
+
+% Set default style
+\lstset{style=erlang}
+
+% Convenience commands
+\newcommand{\erlinline}[1]{\lstinline[style=erlang-inline]{#1}}
+\lstnewenvironment{erlang}[1][]{\lstset{style=erlang,#1}}{}
+\lstnewenvironment{erlangmin}[1][]{\lstset{style=erlang-minimal,#1}}{}
+
+%\usepackage{polyglossia}   
+
+% \usepackage{indentfirst}       % Indent first list after a (sub)section title
+
+% \usepackage{algorithm2e}
+% \RestyleAlgo{ruled}
+
+% \usepackage{minted}    % Fontification of source code listings
+
+% \usepackage{listings}    % Fontification of source code listingsConfig/5_packages.tex
+%                          % In alternative, use the package “minted” (highly recomended)
+
+% \lstset{
+%     captionpos=t,
+%     basicstyle={\ttfamily\footnotesize},
+%     numbers=left,
+%     numberstyle={\ttfamily\tiny},
+%     tabsize=2,
+%     language=Java,
+%     float,
+%     frame=single,
+%     columns=fullflexible,
+%     breaklines=true,
+%     postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+%     inputencoding=utf8,
+%     extendedchars=true,
+%     literate=
+%       {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+%       {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+%       {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+%       {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+%       {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+%       {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+%       {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+%       {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+%       {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+%       {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+%       {€}{{\EUR}}1 {£}{{\pounds}}1
+% }
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]

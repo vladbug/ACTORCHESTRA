@@ -1,0 +1,5 @@
+=== ATL Monitor Log Started at 2025-09-22 12:57:20 ===
+=== PROPERTY: Once joined to a room, client can ONLY send messages to that room ===
+
+[2025-09-22 12:57:20] ATL Monitor started with PID <0.381286.0> (tracking room exclusivity property)
+[2025-09-22 12:57:53] ATL Monitor stopped~n

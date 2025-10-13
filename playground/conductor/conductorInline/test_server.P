@@ -1,0 +1,57 @@
+-file("test_server.erl", 1).
+
+-module(test_server).
+
+-behaviour(gen_server).
+
+-export([start_link/0]).
+
+-export([init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         terminate/2,
+         code_change/3]).
+
+-record(state,{data = test_data, context = undefined}).
+
+start_link() ->
+    gen_server:start_link({local, test_server}, test_server, [], []).
+
+init([]) ->
+    {ok, #state{}}.
+
+handle_call({with_context, Context, Msg}, From, State) ->
+    ReceiveTime = erlang:system_time(millisecond),
+    io:format("[~p ms] [~p] RECEIVED with_context: ctx=~p, msg=~p~n",
+              [ReceiveTime, test_server, Context, Msg]),
+    StateWithContext = State#state{context = Context},
+    io:format("[~p ms] [~p] Context ~p injected, delegating message ~p~"
+              "n",
+              [ReceiveTime, test_server, Context, Msg]),
+    test_server:handle_call(Msg, From, StateWithContext);
+handle_call({context, Context}, _From, State) ->
+    {reply, ok, State#state{context = Context}};
+handle_call(hello, _From, State) ->
+    Context = State#state.context,
+    io:format("[TEST_SERVER] Hello called with context: ~p~n",
+              [Context]),
+    {reply, {ok, hello_response}, State};
+handle_call(_Request, _From, State) ->
+    Context = State#state.context,
+    {reply, {error, unknown_request}, State}.
+
+handle_cast(_Msg, State) ->
+    {noreply, State}.
+
+handle_info(_Info, State) ->
+    {noreply, State}.
+
+terminate(_Reason, _State) ->
+    ok.
+
+code_change(_OldVsn, State, _Extra) ->
+    {ok, State}.
+
+
+

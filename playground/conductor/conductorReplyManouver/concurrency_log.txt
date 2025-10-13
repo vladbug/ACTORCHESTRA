@@ -1,0 +1,80 @@
+=== CONCURRENCY LOG Started at 2025-08-28 18:53:11 ===
+[1756403591068 ms] [system:<0.85.0>] Concurrency logger started | "no_ctx"
+[1756403591194 ms] [client:<0.97.0>] CALLING connect to central server | "no_ctx"
+[1756403591199 ms] [slow_central_server:<0.91.0>] Client connected: <0.97.0> | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591200 ms] [client:<0.97.0>] CONNECT result: ok | "no_ctx"
+[1756403591200 ms] [client:<0.98.0>] CALLING connect to central server | "no_ctx"
+[1756403591203 ms] [slow_central_server:<0.91.0>] Client connected: <0.98.0> | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591203 ms] [client:<0.98.0>] CONNECT result: ok | "no_ctx"
+[1756403591203 ms] [client:<0.97.0>] CALLING process number 5 to central server | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591205 ms] [slow_central_server:<0.91.0>] RECV process request 5 from client <0.97.0> | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591205 ms] [slow_central_server:<0.91.0>] SPAWNED async worker, ready for next request | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591205 ms] [slow_central_server:<0.113.0>] WORKER <0.113.0> START processing 5 | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591205 ms] [slow_central_server:<0.113.0>] WORKER <0.113.0> CALLING add10 with 5 | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591205 ms] [slow_proc_add10:<0.93.0>] RECV process request 5 | "no_ctx"
+[1756403591205 ms] [slow_proc_add10:<0.93.0>] SPAWNED async worker, ready for next request | "no_ctx"
+[1756403591205 ms] [slow_proc_add10:<0.114.0>] WORKER <0.114.0> START processing 5 | "no_ctx"
+[1756403591205 ms] [slow_proc_add10:<0.114.0>] WORKER <0.114.0> CALC: 5 + 10 = 15 | "no_ctx"
+[1756403591205 ms] [slow_proc_add10:<0.114.0>] WORKER <0.114.0> CALLING mul2 with 15 | "no_ctx"
+[1756403591205 ms] [slow_proc_mul2:<0.92.0>] RECV process request 15 | "no_ctx"
+[1756403591205 ms] [slow_proc_mul2:<0.92.0>] CALC: 15 * 2 | "no_ctx"
+[1756403591205 ms] [slow_proc_mul2:<0.92.0>] COMPLETE: 15 * 2 = 30 (took 0 ms) | "no_ctx"
+[1756403591205 ms] [slow_proc_add10:<0.114.0>] WORKER <0.114.0> COMPLETE got {ok,30} (took 0 ms) | "no_ctx"
+[1756403591205 ms] [slow_central_server:<0.113.0>] WORKER <0.113.0> COMPLETE got {ok,30} (took 0 ms) | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591207 ms] [client:<0.97.0>] PROCESS result: {ok,30} | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591254 ms] [client:<0.98.0>] CALLING process number 2 to central server | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591256 ms] [slow_central_server:<0.91.0>] RECV process request 2 from client <0.98.0> | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591256 ms] [slow_central_server:<0.91.0>] SPAWNED async worker, ready for next request | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591256 ms] [slow_central_server:<0.135.0>] WORKER <0.135.0> START processing 2 | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591256 ms] [slow_central_server:<0.135.0>] WORKER <0.135.0> CALLING add10 with 2 | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591256 ms] [slow_proc_add10:<0.93.0>] RECV process request 2 | "no_ctx"
+[1756403591256 ms] [slow_proc_add10:<0.93.0>] SPAWNED async worker, ready for next request | "no_ctx"
+[1756403591256 ms] [slow_proc_add10:<0.137.0>] WORKER <0.137.0> START processing 2 | "no_ctx"
+[1756403591256 ms] [slow_proc_add10:<0.137.0>] WORKER <0.137.0> CALC: 2 + 10 = 12 | "no_ctx"
+[1756403591256 ms] [slow_proc_add10:<0.137.0>] WORKER <0.137.0> CALLING mul2 with 12 | "no_ctx"
+[1756403591256 ms] [slow_proc_mul2:<0.92.0>] RECV process request 12 | "no_ctx"
+[1756403591256 ms] [slow_proc_mul2:<0.92.0>] CALC: 12 * 2 | "no_ctx"
+[1756403591256 ms] [slow_proc_mul2:<0.92.0>] COMPLETE: 12 * 2 = 24 (took 0 ms) | "no_ctx"
+[1756403591257 ms] [slow_proc_add10:<0.137.0>] WORKER <0.137.0> COMPLETE got {ok,24} (took 1 ms) | "no_ctx"
+[1756403591257 ms] [slow_central_server:<0.135.0>] WORKER <0.135.0> COMPLETE got {ok,24} (took 1 ms) | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591257 ms] [client:<0.98.0>] PROCESS result: {ok,24} | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591362 ms] [client:<0.97.0>] CALLING process number 8 to central server | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591368 ms] [slow_central_server:<0.91.0>] RECV process request 8 from client <0.97.0> | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591368 ms] [slow_central_server:<0.91.0>] SPAWNED async worker, ready for next request | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591368 ms] [slow_central_server:<0.155.0>] WORKER <0.155.0> START processing 8 | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591368 ms] [slow_central_server:<0.155.0>] WORKER <0.155.0> CALLING add10 with 8 | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591368 ms] [slow_proc_add10:<0.93.0>] RECV process request 8 | "no_ctx"
+[1756403591368 ms] [slow_proc_add10:<0.93.0>] SPAWNED async worker, ready for next request | "no_ctx"
+[1756403591368 ms] [slow_proc_add10:<0.157.0>] WORKER <0.157.0> START processing 8 | "no_ctx"
+[1756403591368 ms] [slow_proc_add10:<0.157.0>] WORKER <0.157.0> CALC: 8 + 10 = 18 | "no_ctx"
+[1756403591368 ms] [slow_proc_add10:<0.157.0>] WORKER <0.157.0> CALLING mul2 with 18 | "no_ctx"
+[1756403591368 ms] [slow_proc_mul2:<0.92.0>] RECV process request 18 | "no_ctx"
+[1756403591368 ms] [slow_proc_mul2:<0.92.0>] CALC: 18 * 2 | "no_ctx"
+[1756403591368 ms] [slow_proc_mul2:<0.92.0>] COMPLETE: 18 * 2 = 36 (took 0 ms) | "no_ctx"
+[1756403591368 ms] [slow_proc_add10:<0.157.0>] WORKER <0.157.0> COMPLETE got {ok,36} (took 0 ms) | "no_ctx"
+[1756403591368 ms] [slow_central_server:<0.155.0>] WORKER <0.155.0> COMPLETE got {ok,36} (took 0 ms) | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591369 ms] [client:<0.97.0>] PROCESS result: {ok,36} | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403591441 ms] [client:<0.98.0>] CALLING process number 15 to central server | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591446 ms] [slow_central_server:<0.91.0>] RECV process request 15 from client <0.98.0> | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591446 ms] [slow_central_server:<0.91.0>] SPAWNED async worker, ready for next request | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591446 ms] [slow_central_server:<0.175.0>] WORKER <0.175.0> START processing 15 | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591446 ms] [slow_central_server:<0.175.0>] WORKER <0.175.0> CALLING add10 with 15 | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591446 ms] [slow_proc_add10:<0.93.0>] RECV process request 15 | "no_ctx"
+[1756403591446 ms] [slow_proc_add10:<0.93.0>] SPAWNED async worker, ready for next request | "no_ctx"
+[1756403591446 ms] [slow_proc_add10:<0.177.0>] WORKER <0.177.0> START processing 15 | "no_ctx"
+[1756403591446 ms] [slow_proc_add10:<0.177.0>] WORKER <0.177.0> CALC: 15 + 10 = 25 | "no_ctx"
+[1756403591446 ms] [slow_proc_add10:<0.177.0>] WORKER <0.177.0> CALLING mul2 with 25 | "no_ctx"
+[1756403591446 ms] [slow_proc_mul2:<0.92.0>] RECV process request 25 | "no_ctx"
+[1756403591446 ms] [slow_proc_mul2:<0.92.0>] CALC: 25 * 2 | "no_ctx"
+[1756403591446 ms] [slow_proc_mul2:<0.92.0>] COMPLETE: 25 * 2 = 50 (took 0 ms) | "no_ctx"
+[1756403591446 ms] [slow_proc_add10:<0.177.0>] WORKER <0.177.0> COMPLETE got {ok,50} (took 0 ms) | "no_ctx"
+[1756403591446 ms] [slow_central_server:<0.175.0>] WORKER <0.175.0> COMPLETE got {ok,50} (took 0 ms) | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403591447 ms] [client:<0.98.0>] PROCESS result: {ok,50} | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403596507 ms] [client:<0.97.0>] CALLING disconnect from central server | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403596513 ms] [slow_central_server:<0.91.0>] Client disconnected: <0.97.0> | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403596514 ms] [client:<0.97.0>] DISCONNECT result: ok | ["#Ref<0.1184304280.1573650443.197089>"]
+[1756403596514 ms] [client:<0.98.0>] CALLING disconnect from central server | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403596516 ms] [slow_central_server:<0.91.0>] Client disconnected: <0.98.0> | ["#Ref<0.1184304280.1573650443.197145>"]
+[1756403596516 ms] [client:<0.98.0>] DISCONNECT result: ok | ["#Ref<0.1184304280.1573650443.197145>"]
+
+=== CONCURRENCY LOG STOPPED ===

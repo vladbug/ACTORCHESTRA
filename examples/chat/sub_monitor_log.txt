@@ -1,0 +1,924 @@
+[2025-10-09 20:46:28] SUB-MONITOR STARTED: Monitoring client client_1 bound exclusively to room test_room, context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] Sub-monitor enforcing EXCLUSIVITY: client client_1 can ONLY send messages to room test_room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_1 trying to send "Message 1 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] Property satisfied: message "Message 1 from client_1" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_1 trying to send "Message 2 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] Property satisfied: message "Message 2 from client_1" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_1 trying to send "Message 3 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] Property satisfied: message "Message 3 from client_1" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_1 trying to send "Message 4 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] Property satisfied: message "Message 4 from client_1" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_1 trying to send "Message 5 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] Property satisfied: message "Message 5 from client_1" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {leave_room,client_1,test_room}, context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_1,test_room}, context #Ref<0.2517359506.2106589196.115149>
+[2025-10-09 20:46:28] SUB-MONITOR STARTED: Monitoring client client_1 bound exclusively to room test_room, context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] Sub-monitor enforcing EXCLUSIVITY: client client_1 can ONLY send messages to room test_room
+[2025-10-09 20:46:28] SUB-MONITOR STARTED: Monitoring client client_2 bound exclusively to room test_room, context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] Sub-monitor enforcing EXCLUSIVITY: client client_2 can ONLY send messages to room test_room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_1 trying to send "Message 1 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_2 trying to send "Message 1 from client_2" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] Property satisfied: message "Message 1 from client_1" sent to bound room
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] Property satisfied: message "Message 1 from client_2" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_1 trying to send "Message 2 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] Property satisfied: message "Message 2 from client_1" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_2 trying to send "Message 2 from client_2" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] Property satisfied: message "Message 2 from client_2" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_1 trying to send "Message 3 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] Property satisfied: message "Message 3 from client_1" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_2 trying to send "Message 3 from client_2" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] Property satisfied: message "Message 3 from client_2" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_1 trying to send "Message 4 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] Property satisfied: message "Message 4 from client_1" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_2 trying to send "Message 4 from client_2" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] Property satisfied: message "Message 4 from client_2" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_1 trying to send "Message 5 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] Property satisfied: message "Message 5 from client_1" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] MESSAGE ATTEMPT: Client client_2 trying to send "Message 5 from client_2" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] Property satisfied: message "Message 5 from client_2" sent to bound room
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {leave_room,client_1,test_room}, context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_1,test_room}, context #Ref<0.2517359506.2106589196.116435>
+[2025-10-09 20:46:28] SUB-MONITOR received: client -> chat_server, {leave_room,client_2,test_room}, context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:28] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_2,test_room}, context #Ref<0.2517359506.2106589196.116455>
+[2025-10-09 20:46:29] SUB-MONITOR STARTED: Monitoring client client_1 bound exclusively to room test_room, context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] Sub-monitor enforcing EXCLUSIVITY: client client_1 can ONLY send messages to room test_room
+[2025-10-09 20:46:29] SUB-MONITOR STARTED: Monitoring client client_2 bound exclusively to room test_room, context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] Sub-monitor enforcing EXCLUSIVITY: client client_2 can ONLY send messages to room test_room
+[2025-10-09 20:46:29] SUB-MONITOR STARTED: Monitoring client client_3 bound exclusively to room test_room, context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] Sub-monitor enforcing EXCLUSIVITY: client client_3 can ONLY send messages to room test_room
+[2025-10-09 20:46:29] SUB-MONITOR STARTED: Monitoring client client_4 bound exclusively to room test_room, context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] Sub-monitor enforcing EXCLUSIVITY: client client_4 can ONLY send messages to room test_room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_1 trying to send "Message 1 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_2 trying to send "Message 1 from client_2" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] Property satisfied: message "Message 1 from client_1" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_3 trying to send "Message 1 from client_3" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] Property satisfied: message "Message 1 from client_2" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_4 trying to send "Message 1 from client_4" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] Property satisfied: message "Message 1 from client_3" sent to bound room
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] Property satisfied: message "Message 1 from client_4" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_1 trying to send "Message 2 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] Property satisfied: message "Message 2 from client_1" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_2 trying to send "Message 2 from client_2" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] Property satisfied: message "Message 2 from client_2" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_3 trying to send "Message 2 from client_3" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] Property satisfied: message "Message 2 from client_3" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_4 trying to send "Message 2 from client_4" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] Property satisfied: message "Message 2 from client_4" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_1 trying to send "Message 3 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] Property satisfied: message "Message 3 from client_1" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_2 trying to send "Message 3 from client_2" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] Property satisfied: message "Message 3 from client_2" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_3 trying to send "Message 3 from client_3" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] Property satisfied: message "Message 3 from client_3" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_4 trying to send "Message 3 from client_4" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] Property satisfied: message "Message 3 from client_4" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_1 trying to send "Message 4 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] Property satisfied: message "Message 4 from client_1" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_2 trying to send "Message 4 from client_2" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] Property satisfied: message "Message 4 from client_2" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_3 trying to send "Message 4 from client_3" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] Property satisfied: message "Message 4 from client_3" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_4 trying to send "Message 4 from client_4" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] Property satisfied: message "Message 4 from client_4" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_1 trying to send "Message 5 from client_1" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] Property satisfied: message "Message 5 from client_1" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_2 trying to send "Message 5 from client_2" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] Property satisfied: message "Message 5 from client_2" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_3 trying to send "Message 5 from client_3" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] Property satisfied: message "Message 5 from client_3" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] MESSAGE ATTEMPT: Client client_4 trying to send "Message 5 from client_4" to room test_room (bound to test_room), context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] Property satisfied: message "Message 5 from client_4" sent to bound room
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {leave_room,client_1,test_room}, context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_1,test_room}, context #Ref<0.2517359506.2106589196.118953>
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {leave_room,client_2,test_room}, context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_2,test_room}, context #Ref<0.2517359506.2106589196.118969>
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {leave_room,client_3,test_room}, context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_3,test_room}, context #Ref<0.2517359506.2106589196.118983>
+[2025-10-09 20:46:29] SUB-MONITOR received: client -> chat_server, {leave_room,client_4,test_room}, context #Ref<0.2517359506.2106589196.118996>
+[2025-10-09 20:46:29] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_4,test_room}, context #Ref<0.2517359506.2106589196.118996>
+[2025-10-10 18:16:20] SUB-MONITOR STARTED: Monitoring client client_1 bound exclusively to room test_room, context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] Sub-monitor enforcing EXCLUSIVITY: client client_1 can ONLY send messages to room test_room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_1 trying to send "Message 1 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] Property satisfied: message "Message 1 from client_1" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_1 trying to send "Message 2 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] Property satisfied: message "Message 2 from client_1" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_1 trying to send "Message 3 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] Property satisfied: message "Message 3 from client_1" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_1 trying to send "Message 4 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] Property satisfied: message "Message 4 from client_1" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_1 trying to send "Message 5 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] Property satisfied: message "Message 5 from client_1" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {leave_room,client_1,test_room}, context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_1,test_room}, context #Ref<0.683434343.158334978.58584>
+[2025-10-10 18:16:20] SUB-MONITOR STARTED: Monitoring client client_1 bound exclusively to room test_room, context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] Sub-monitor enforcing EXCLUSIVITY: client client_1 can ONLY send messages to room test_room
+[2025-10-10 18:16:20] SUB-MONITOR STARTED: Monitoring client client_2 bound exclusively to room test_room, context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] Sub-monitor enforcing EXCLUSIVITY: client client_2 can ONLY send messages to room test_room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_1 trying to send "Message 1 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_2 trying to send "Message 1 from client_2" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] Property satisfied: message "Message 1 from client_1" sent to bound room
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] Property satisfied: message "Message 1 from client_2" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_1 trying to send "Message 2 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] Property satisfied: message "Message 2 from client_1" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_2 trying to send "Message 2 from client_2" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] Property satisfied: message "Message 2 from client_2" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_1 trying to send "Message 3 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] Property satisfied: message "Message 3 from client_1" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_2 trying to send "Message 3 from client_2" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] Property satisfied: message "Message 3 from client_2" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_1 trying to send "Message 4 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] Property satisfied: message "Message 4 from client_1" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_2 trying to send "Message 4 from client_2" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] Property satisfied: message "Message 4 from client_2" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_1 trying to send "Message 5 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] Property satisfied: message "Message 5 from client_1" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] MESSAGE ATTEMPT: Client client_2 trying to send "Message 5 from client_2" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] Property satisfied: message "Message 5 from client_2" sent to bound room
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {leave_room,client_1,test_room}, context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_1,test_room}, context #Ref<0.683434343.158334978.59870>
+[2025-10-10 18:16:20] SUB-MONITOR received: client -> chat_server, {leave_room,client_2,test_room}, context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:20] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_2,test_room}, context #Ref<0.683434343.158334978.59893>
+[2025-10-10 18:16:21] SUB-MONITOR STARTED: Monitoring client client_1 bound exclusively to room test_room, context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] Sub-monitor enforcing EXCLUSIVITY: client client_1 can ONLY send messages to room test_room
+[2025-10-10 18:16:21] SUB-MONITOR STARTED: Monitoring client client_2 bound exclusively to room test_room, context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] Sub-monitor enforcing EXCLUSIVITY: client client_2 can ONLY send messages to room test_room
+[2025-10-10 18:16:21] SUB-MONITOR STARTED: Monitoring client client_3 bound exclusively to room test_room, context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] Sub-monitor enforcing EXCLUSIVITY: client client_3 can ONLY send messages to room test_room
+[2025-10-10 18:16:21] SUB-MONITOR STARTED: Monitoring client client_4 bound exclusively to room test_room, context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] Sub-monitor enforcing EXCLUSIVITY: client client_4 can ONLY send messages to room test_room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_1 trying to send "Message 1 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_2 trying to send "Message 1 from client_2" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] Property satisfied: message "Message 1 from client_1" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_3 trying to send "Message 1 from client_3" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] Property satisfied: message "Message 1 from client_2" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_4 trying to send "Message 1 from client_4" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] Property satisfied: message "Message 1 from client_3" sent to bound room
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] Property satisfied: message "Message 1 from client_4" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_1 trying to send "Message 2 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] Property satisfied: message "Message 2 from client_1" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_2 trying to send "Message 2 from client_2" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] Property satisfied: message "Message 2 from client_2" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_3 trying to send "Message 2 from client_3" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] Property satisfied: message "Message 2 from client_3" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_4 trying to send "Message 2 from client_4" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] Property satisfied: message "Message 2 from client_4" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_1 trying to send "Message 3 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] Property satisfied: message "Message 3 from client_1" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_2 trying to send "Message 3 from client_2" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] Property satisfied: message "Message 3 from client_2" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_3 trying to send "Message 3 from client_3" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] Property satisfied: message "Message 3 from client_3" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_4 trying to send "Message 3 from client_4" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] Property satisfied: message "Message 3 from client_4" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_1 trying to send "Message 4 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] Property satisfied: message "Message 4 from client_1" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_2 trying to send "Message 4 from client_2" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] Property satisfied: message "Message 4 from client_2" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_3 trying to send "Message 4 from client_3" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] Property satisfied: message "Message 4 from client_3" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_4 trying to send "Message 4 from client_4" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] Property satisfied: message "Message 4 from client_4" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_1 trying to send "Message 5 from client_1" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] Property satisfied: message "Message 5 from client_1" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_2 trying to send "Message 5 from client_2" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] Property satisfied: message "Message 5 from client_2" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_3 trying to send "Message 5 from client_3" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] Property satisfied: message "Message 5 from client_3" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] MESSAGE ATTEMPT: Client client_4 trying to send "Message 5 from client_4" to room test_room (bound to test_room), context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] Property satisfied: message "Message 5 from client_4" sent to bound room
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {leave_room,client_1,test_room}, context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_1,test_room}, context #Ref<0.683434343.158334978.62388>
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {leave_room,client_2,test_room}, context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_2,test_room}, context #Ref<0.683434343.158334978.62404>
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {leave_room,client_3,test_room}, context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_3,test_room}, context #Ref<0.683434343.158334978.62418>
+[2025-10-10 18:16:21] SUB-MONITOR received: client -> chat_server, {leave_room,client_4,test_room}, context #Ref<0.683434343.158334978.62431>
+[2025-10-10 18:16:21] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_4,test_room}, context #Ref<0.683434343.158334978.62431>
+[2025-10-13 17:58:23] SUB-MONITOR STARTED: Monitoring client client_1 bound exclusively to room test_room, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Sub-monitor enforcing EXCLUSIVITY: client client_1 can ONLY send messages to room test_room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_1 trying to send "Message 1 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Property satisfied: message "Message 1 from client_1" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_1 trying to send "Message 2 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Property satisfied: message "Message 2 from client_1" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_1 trying to send "Message 3 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Property satisfied: message "Message 3 from client_1" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_1 trying to send "Message 4 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Property satisfied: message "Message 4 from client_1" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_1 trying to send "Message 5 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Property satisfied: message "Message 5 from client_1" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {leave_room,client_1,test_room}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_1,test_room}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] SUB-MONITOR STARTED: Monitoring client client_1 bound exclusively to room test_room, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Sub-monitor enforcing EXCLUSIVITY: client client_1 can ONLY send messages to room test_room
+[2025-10-13 17:58:23] SUB-MONITOR STARTED: Monitoring client client_2 bound exclusively to room test_room, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Sub-monitor enforcing EXCLUSIVITY: client client_2 can ONLY send messages to room test_room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_1 trying to send "Message 1 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_2 trying to send "Message 1 from client_2" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Property satisfied: message "Message 1 from client_1" sent to bound room
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Property satisfied: message "Message 1 from client_2" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_1 trying to send "Message 2 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Property satisfied: message "Message 2 from client_1" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_2 trying to send "Message 2 from client_2" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Property satisfied: message "Message 2 from client_2" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_1 trying to send "Message 3 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Property satisfied: message "Message 3 from client_1" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_2 trying to send "Message 3 from client_2" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Property satisfied: message "Message 3 from client_2" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_1 trying to send "Message 4 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Property satisfied: message "Message 4 from client_1" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_2 trying to send "Message 4 from client_2" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Property satisfied: message "Message 4 from client_2" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_1 trying to send "Message 5 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Property satisfied: message "Message 5 from client_1" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] MESSAGE ATTEMPT: Client client_2 trying to send "Message 5 from client_2" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Property satisfied: message "Message 5 from client_2" sent to bound room
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {leave_room,client_1,test_room}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_1,test_room}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] SUB-MONITOR received: client -> chat_server, {leave_room,client_2,test_room}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_2,test_room}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:24] SUB-MONITOR STARTED: Monitoring client client_1 bound exclusively to room test_room, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Sub-monitor enforcing EXCLUSIVITY: client client_1 can ONLY send messages to room test_room
+[2025-10-13 17:58:24] SUB-MONITOR STARTED: Monitoring client client_2 bound exclusively to room test_room, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Sub-monitor enforcing EXCLUSIVITY: client client_2 can ONLY send messages to room test_room
+[2025-10-13 17:58:24] SUB-MONITOR STARTED: Monitoring client client_3 bound exclusively to room test_room, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Sub-monitor enforcing EXCLUSIVITY: client client_3 can ONLY send messages to room test_room
+[2025-10-13 17:58:24] SUB-MONITOR STARTED: Monitoring client client_4 bound exclusively to room test_room, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Sub-monitor enforcing EXCLUSIVITY: client client_4 can ONLY send messages to room test_room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_1 trying to send "Message 1 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_2 trying to send "Message 1 from client_2" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Property satisfied: message "Message 1 from client_1" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_3 trying to send "Message 1 from client_3" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Property satisfied: message "Message 1 from client_2" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "1",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_4 trying to send "Message 1 from client_4" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Property satisfied: message "Message 1 from client_3" sent to bound room
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Property satisfied: message "Message 1 from client_4" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_1 trying to send "Message 2 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Property satisfied: message "Message 2 from client_1" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_2 trying to send "Message 2 from client_2" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Property satisfied: message "Message 2 from client_2" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_3 trying to send "Message 2 from client_3" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Property satisfied: message "Message 2 from client_3" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "2",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_4 trying to send "Message 2 from client_4" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Property satisfied: message "Message 2 from client_4" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_1 trying to send "Message 3 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Property satisfied: message "Message 3 from client_1" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_2 trying to send "Message 3 from client_2" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Property satisfied: message "Message 3 from client_2" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_3 trying to send "Message 3 from client_3" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Property satisfied: message "Message 3 from client_3" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "3",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_4 trying to send "Message 3 from client_4" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Property satisfied: message "Message 3 from client_4" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_1 trying to send "Message 4 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Property satisfied: message "Message 4 from client_1" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_2 trying to send "Message 4 from client_2" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Property satisfied: message "Message 4 from client_2" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_3 trying to send "Message 4 from client_3" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Property satisfied: message "Message 4 from client_3" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "4",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_4 trying to send "Message 4 from client_4" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Property satisfied: message "Message 4 from client_4" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_1,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_1 trying to send "Message 5 from client_1" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_1 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Property satisfied: message "Message 5 from client_1" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_2,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_2 trying to send "Message 5 from client_2" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_2 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Property satisfied: message "Message 5 from client_2" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_3,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_3 trying to send "Message 5 from client_3" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_3 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Property satisfied: message "Message 5 from client_3" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {send_message,client_4,
+                                              test_room,
+                                              [77,101,115,115,97,103,101,32,
+                                               "5",32,102,114,111,109,32,
+                                               "client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] MESSAGE ATTEMPT: Client client_4 trying to send "Message 5 from client_4" to room test_room (bound to test_room), context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] MESSAGE ALLOWED: Client client_4 sent to CORRECT room test_room (matches binding), context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Property satisfied: message "Message 5 from client_4" sent to bound room
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {leave_room,client_1,test_room}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_1,test_room}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {leave_room,client_2,test_room}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_2,test_room}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {leave_room,client_3,test_room}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_3,test_room}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] SUB-MONITOR received: client -> chat_server, {leave_room,client_4,test_room}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] SUB-MONITOR: Ignoring non-send_message event {leave_room,client_4,test_room}, context #Ref<0.430316469.2972188674.70333>

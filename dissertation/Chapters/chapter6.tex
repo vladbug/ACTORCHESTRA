@@ -1,0 +1,1382 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter6.tex
+%% NOVA thesis document file
+%%
+%% Chapter with lots of dummy text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter6.tex}%
+
+\chapter{ACTORCHESTRA}
+\label{cha:actorchestra}
+
+In \Cref{cha:waltz}, we introduced the theoretical foundations of WALTZ,
+focusing on how formulas are evaluated and how runtime monitors verify these
+formulas against system execution traces. A central concern in this
+verification process is the notion of contexts, which capture the causal
+dependencies between messages. Importantly, such contextual information is not
+natively provided by the systems under observation.
+
+This chapter turns to the problem of context management. We begin by examining
+how context information could, in principle, be generated and maintained
+directly by the system. We then show that, even in the absence of explicit
+support, correct \texttt{Erlang} programs can still be constructed by relying
+on the OTP model. However, OTP on its own imposes intrinsic limitations when it
+comes to building explicit causal chains between messages. To address these
+limitations, we propose a complementary approach based on the selective
+injection of code into the system. This method systematically enriches program
+execution with causal information, enabling precise reasoning about message
+dependencies and interactions.
+\section{Instrumentation}
+\label{sec:instrumentation}
+
+\texttt{ACTORCHESTRA} is the glue that holds everything together. It provides
+the necessary instrumentation to observe a system under scrutiny and to
+coordinate the interaction between the system and the monitors. Our primary
+objective is to enable monitoring without interfering with the system itself,
+following an outline monitoring approach in which monitors are external
+entities rather than being embedded directly into the system’s code.
+This task becomes particularly challenging in distributed \texttt{Erlang}
+systems, where multiple components may be active simultaneously and
+asynchronous behaviour plays a central role. While this asynchrony is precisely
+what allows such systems to scale and perform effectively, it also complicates
+the design of efficient and non-intrusive monitoring. In what follows, we focus
+on addressing these challenges in the context of asynchronous, distributed
+settings.
+
+\iffalse
+Therefore, our job was to create the glue between the system and the monitoring infrastructure.
+The instrumentation is depicted in \Cref{fig:instrumenation2}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\linewidth]{Chapters/Figures/actorchestra.pdf}%
+  \caption{Temporary Placeholder of Instrumentation}
+  \label{fig:instrumenation2}
+\end{figure}
+\fi
+
+In this chapter, we address the three main entities that collaborate to achieve
+runtime verification: the system, the \texttt{conductor}, and the monitors. We
+begin by outlining the assumptions made about the system under observation and
+the standards it must follow. We then introduce the \texttt{conductor}, the
+central entity responsible for managing contexts. Finally, we show how these
+three entities interact, exchanging information and coordinating their roles to
+produce the “symphony” required to verify properties over an \texttt{Erlang}
+system.
+
+\section{Causality With Contexts}
+\label{sec:causal_contexts}
+As established in \Cref{cha:waltz}, the function $\gamma$ plays a central role
+in WALTZ by defining the relation between messages and their contexts. But how
+does $\gamma$ manifest in practice? It is precisely through this function that
+we can construct the context tree $\mathcal{C}$, which underpins property
+verification and serves as one of the key foundations of WALTZ.
+
+At first glance, we might think of $\gamma$ as the programmer himself.
+Indeed, when designing and implementing a correct \texttt{Erlang} program,
+reference management is unavoidable. Without it, we would not be adhering to
+\texttt{Erlang}’s standards, and our program would be incorrect by design.
+However, even with proper reference management, such as that enforced by OTP,
+causal chains are not automatically established, unless the programmer
+explicitly encodes them in the system’s logic.
+
+In our earlier exposition of WALTZ, we worked under the assumption that
+$\gamma$ was already available and that messages in a trace carried explicit
+context information. In practice, however, this assumption does not hold:
+messages do not inherently “know” which context they belong to. Instead, an
+explicit mechanism is required to associate each message with the correct
+context.
+
+What this means in practice is that context information must be explicitly
+propagated through the messages exchanged in the system. By doing so, and given
+that the monitors are already aware of the message signatures, they can
+reliably capture and associate the causal information required for
+verification. The following subsections examine different strategies for
+handling this causality: starting from manual management by the developer,
+moving to solutions that exploit the existing \texttt{Erlang}/OTP infrastructure, and
+culminating in our novel approach of automated context injection.
+\subsection{Developer Management}
+\label{sub_sec:causal_developer}
+
+This represents raw \texttt{Erlang} programming, where developers themselves are
+responsible for managing causality without relying on OTP abstractions. In this
+style, processes interact exclusively through direct message passing, and
+correlation tokens must be explicitly threaded through each interaction by the
+programmer. An example of such a design is shown in Listing
+\ref{lst:rawerlang}.
+
+In this raw approach, every message carries its correlation token explicitly.
+This allows the monitor to track message relationships precisely, since
+$\gamma$ directly assigns tokens to messages. For instance, if a client issues
+multiple requests, the monitor can only determine how they are related if each
+one carries its associated context. By managing this manually, the programmer
+ensures that causality is preserved end-to-end. Crucially, this not only aids
+the monitor in correlating messages, but also guarantees the correct flow of
+the system itself.
+
+\begin{lstlisting}[language=erlang, caption=Manual Reference Management in \text{\texttt{Erlang}}, label={lst:rawerlang}]
+start_client() ->
+    CorrelationToken = make_ref(),
+    AddPid ! {process, self(), 10, CorrelationToken},
+    receive
+        {result, Result, CorrelationToken} -> Result
+    end.
+
+add_loop() ->
+    receive
+        {process, ClientPid, Number, Context} ->
+            MultPid ! {process, ClientPid, Number+10, Context}, 
+            add_loop()
+    end.
+
+mult_loop() ->
+    receive
+        {process, ClientPid, Number, Context} ->
+            ClientPid ! {result, Number*2, Context}, 
+            mult_loop()
+    end.
+\end{lstlisting}
+
+The function \texttt{make\_ref()} generates a unique reference that guarantees
+each message chain can be distinguished, providing robustness against
+concurrency effects and message interleaving. This is a common distributed
+systems pattern for maintaining request integrity in asynchronous
+communication. To make this more concrete, let us assume that the trace
+$\sigma$ consists of the messages \texttt{m$_1$}, \texttt{m$_2$}, and
+\texttt{m$_3$}, and unfolds as follows:
+\[
+\begin{align*}
+  \text{\texttt{m$_1$}} &= \text{\texttt{\{process, <1.0.0>, 10, \#Ref<1.2>\}}} \\
+  \text{\texttt{m$_2$}} &= \text{\texttt{\{process, <1.0.0>, 20, \#Ref<1.2>\}}} \\
+  \text{\texttt{m$_3$}} &= \text{\texttt{\{result, 40, \#Ref<1.2>\}}}
+\end{align*}
+\]
+
+Given this trace, we can state that $\gamma(\text{\texttt{m$_1$}}) =
+\gamma(\text{\texttt{m$_2$}}) = \gamma(\text{\texttt{m$_3$}}) =
+\text{\texttt{#Ref<1.2>}}$, since all messages in the chain share the same
+correlation token. This guarantees perfect causality tracking but comes at the
+cost of meticulous manual management, which quickly becomes error-prone in
+large distributed systems.
+
+The design relies on explicit context threading: every message must carry its
+correlation token to preserve causal relationships across interactions.
+Developers are therefore responsible for propagating metadata in every request
+and response. This tight coupling between business logic and token management
+not only clutters the code but also amplifies the risk of subtle mistakes. A
+single omission, forgetting to forward or validate a token, breaks the causal
+chain, leaving downstream components unable to reconstruct the intended flow.
+Such errors are notoriously difficult to trace and debug.
+
+Beyond fragility, this approach forfeits the reliability and fault-tolerance
+benefits of higher-level abstractions such as OTP. Because causality is handled
+ad-hoc, rather than through established supervisory patterns, the system cannot
+leverage OTP’s guarantees and often ends up re-implementing them manually. The
+result is a brittle, maintenance-heavy architecture that demands rigorous
+developer discipline. While complete causality tracking is achieved, it comes
+at the price of ignoring OTP’s proven design standards and making it harder to
+establish a uniform behaviour for verification, since each manually managed
+system tends to diverge significantly in style and structure.
+\subsection{OTP Management}
+\label{sub_sec:causal_OTP}
+
+To address the shortcomings of manual context management, the \texttt{Erlang}/OTP
+framework introduces built-in reference handling through its
+\texttt{gen\_server} behaviour and message-passing primitives. In particular,
+every \texttt{gen\_server:call} operation automatically generates a unique
+reference that binds a request to its corresponding response. This mechanism
+relieves developers from explicitly managing correlation tokens while still
+providing a degree of causality tracking. Concretely, when one process issues a
+\texttt{call} to another, the recipient responds via its \texttt{handle\_call}
+function, and both sides of this interaction are internally linked by the same
+reference. In this way, the runtime itself ensures that each response can be
+unambiguously associated with the originating request, offering a standardized
+form of causality tracking without additional developer effort. This behaviour
+is illustrated in Listing \ref{lst:otp1}.
+
+\begin{lstlisting}[language=erlang, caption=OTP Reference Management Example, label={lst:otp1}]
+% client call 
+Result = gen_server:call(add, {process, 10}),
+
+handle_call({process, Number}, From, State) ->
+    MultResult = gen_server:call(mult, {process, Number}),
+    {reply, MultResult, State}.
+
+handle_call({process, Number}, From, State) ->
+    {reply, {ok, Number*2}, State}.
+\end{lstlisting}
+
+OTP generates references using the \texttt{make\_ref()} function, creating one
+for every \texttt{(request, response)} pair in order to correlate each request
+with its matching reply. In the example of Listing \ref{lst:otp1}, a reference
+\texttt{REF$_1$} is established between the \texttt{client} and the
+\texttt{add} interaction, and another, \texttt{REF$_2$}, is created for the
+interaction between \texttt{add} and \texttt{mult}. The abstraction
+underpinning this mechanism is straightforward: a process issues a request and
+expects a response. This is the natural behaviour of \texttt{call} and
+\texttt{handle\_call} operations in OTP, which are designed primarily for
+synchronous communication.
+
+That said, asynchronous designs can still benefit from OTP’s reference
+management. By spawning a separate process to execute the \texttt{call}
+operation, and then manually returning the result using
+\texttt{gen\_server:reply}, developers can integrate OTP’s built-in correlation
+into an asynchronous workflow.
+
+While OTP provides excellent local causality, ensuring that each individual
+request is correctly matched to its corresponding response, it does not extend
+this tracking across an entire chain of requests. The function $\gamma$,
+representing OTP’s internal correlation mechanism, is thus limited to pairwise
+relationships:
+$$\gamma(\text{\texttt{request}}_i, \text{\texttt{response}}_i) = \text{\texttt{REF}}_i$$
+
+Due to the nature of these references, OTP cannot relate \texttt{REF$_1$} and
+\texttt{REF$_2$} as part of the same logical request without additional
+information.
+
+This limitation becomes evident in complex distributed systems, where
+understanding end-to-end request flows is crucial for debugging, performance
+analysis, and, in our case, verification. A monitor observing OTP
+references only sees independent request–response pairs and cannot reconstruct
+complete causal chains spanning multiple actors. Consequently, the set of
+properties we can monitor is constrained, although this partial visibility is
+still valuable.
+
+The OTP approach offers clear advantages. It imposes zero developer burden,
+since no manual context management is required, and ensures automatic
+correlation: request–response pairs are always properly linked. Moreover, OTP
+provides fault tolerance, handling failures and timeouts gracefully.
+
+However, this model introduces notable limitations for system observability.
+Its causality tracking is local, limited to immediate request–response pairs,
+preventing true end-to-end tracing of user request flows. As a result,
+debugging operations that span multiple services, or, in our case, multiple
+actors, becomes more challenging. Nevertheless, OTP provides a standard
+foundation to work from, in contrast to the manual approach, which requires
+developers to explicitly manage correlations themselves.
+\subsection{No Management, Working With Wrong Programs}
+\label{sub_sec:causal_nomanagement}
+
+This represents the worst-case scenario: raw \texttt{Erlang} programs with no reference
+management at all. Such implementations violate fundamental principles of
+concurrent programming, resulting in systems that are unreliable, untraceable,
+and highly prone to race conditions. We assume that we will never deal with
+systems of this type, since they fail to adhere to the basic structuring
+principles of \texttt{Erlang} programs.
+
+Our focus is on verifying the logical properties of messages within a properly
+structured \texttt{Erlang} system, not on whether the program itself is designed
+correctly. One of the key assumptions we make about the systems we analyse is
+that they follow OTP standards. These standards are proven to be correct and
+provide a uniform structure, which greatly facilitates verification by ensuring
+predictable behaviour and a consistent coding style.
+
+As a contrast, consider a poorly designed system using raw message passing
+without any correlation mechanisms, shown in Listing \ref{lst:wrongprogram}.
+
+\begin{lstlisting}[language=erlang, caption=No Reference Management - Broken Raw \text{\texttt{Erlang}}, label={lst:wrongprogram}]
+start_client() ->
+    AddServer ! {process, self(), 10},
+    receive
+        {result, Result} -> Result  % Could be anyone's data
+    end.
+add_loop() ->
+    receive
+        {process, ClientPid, Number} ->
+            MultPid ! {process, ClientPid, Number+10}, 
+            add_loop()
+    end.
+mult_loop() ->
+    receive
+        {process, ClientPid, Number} ->
+            ClientPid ! {result, Number*2}, 
+            mult_loop()
+    end.
+malicious_loop() ->
+  ClientPid ! {result, 100}.
+\end{lstlisting}
+
+In such broken systems, not only is causality completely lost, but the overall
+management of message flow collapses. Function $\gamma$ becomes undefined or
+maps all messages to a meaningless global context, as discussed in
+\Cref{sub_sec:waltz_context}.
+
+This leads to severe systemic problems. Responses cannot be reliably correlated
+with their originating requests, client isolation may be violated, and
+debugging becomes nearly impossible. Non-deterministic behaviour can arise when
+identical inputs produce different outputs depending on timing. Additionally,
+malicious or misbehaving processes may send unexpected messages, for instance, a
+client might receive a message from an unintended source, such as
+\texttt{malicious\_loop}. Without proper error handling, messages may reach the
+wrong recipients, causing processes to wait indefinitely and potentially
+stalling the entire system. Such systems are fundamentally broken and unfit for
+practical use. This underscores the necessity of proper reference management,
+whether manual or through OTP, to maintain causality, ensure correct message
+flow, and enable meaningful runtime verification.
+\subsection{Why OTP Is Not Enough}
+\label{sub_sec:not_enough}
+
+As we have seen, using purely OTP, we are able to capture causal relations
+between pairs of actors. For simple properties, this may suffice. For example,
+consider the property $\varphi
+=\Omega(\text{\texttt{send$_{\text{\texttt{server $\rightarrow$ client }}}$}}
+\text{\texttt{\{ok, Result\}}} : \text{\texttt{Result > 10}})$, which checks
+that all responses from the server to clients have a result greater than 10.
+Following OTP standards, a simple monitor can successfully verify this
+property. Listing \ref{lst:otptrace} shows what the trace looks like to the
+monitor using \texttt{Erlang}’s tracing mechanisms:
+
+\begin{lstlisting}[language=erlang, caption=OTP trace, label={lst:otptrace}]
+client sent message: [alias| #Ref<140989>, {echo,"Hello World!"}] to server
+client received: [alias| #Ref<140989>, {echoed,"Hello World!"}] from server
+\end{lstlisting}
+
+
+As observed, the request from the client can be correlated with the server’s
+response because both share the same reference. This is sufficient for
+monitoring simple interactions like the one above. The challenge arises in more
+complex systems with multiple interacting components. Consider the following scenario:
+$$
+\texttt{client} \rightarrow \texttt{server1} \rightarrow \texttt{server2} \rightarrow \texttt{server3} 
+$$
+
+OTP internally maintains correct causal chains for each request–response pair.
+However, for an external observer, such as our monitor, each interaction
+generates a distinct reference. The simplified trace, represented in Listing
+\ref{lst:correlationotp}, shows that while we can correlate \texttt{client}
+with \texttt{server1}, \texttt{server1} with \texttt{server2}, and
+\texttt{server2} with \texttt{server3}, there is no single reference linking
+the entire logical transaction.
+
+\begin{lstlisting}[language=erlang, caption=Reference Correlation, label={lst:correlationotp}]
+%% Client calls Server1
+*** SEND: Client -> Server1 with REF #Ref<A>
+*** RECEIVE: Server1 received REF #Ref<A>
+%% Server1 calls Server2 (NEW reference!)
+*** SEND: Server1 -> Server2 with REF #Ref<B>  
+*** RECEIVE: Server2 received REF #Ref<B>
+%% Server2 calls Server3 (ANOTHER new reference!)
+*** SEND: Server2 -> Server3 with REF #Ref<C>
+*** RECEIVE: Server3 received REF #Ref<C>
+%% Responses come back with their respective refs
+*** SEND: Server3 -> Server2 with REF #Ref<C>
+*** SEND: Server2 -> Server1 with REF #Ref<B>  
+*** SEND: Server1 -> Client with REF #Ref<A>
+\end{lstlisting}
+
+From the perspective of the monitor, each pairwise correlation is visible, but
+the overall transaction remains fragmented. To enable end-to-end monitoring of
+complex properties across multiple actors, we require a global causal reference
+that spans the entire chain of messages belonging to the same logical
+transaction. This motivates the need for an entity capable of assigning and
+propagating such references, ensuring full causal correlation across all
+interactions.
+
+\subsection{Out Take On It}
+\label{sub_sec:ourtake}
+Our approach bridges the gap between the fine-grained control of
+developer-managed contexts and the convenience of OTP’s automatic reference
+management. We target systems that follow standard \texttt{Erlang}/OTP patterns,
+primarily leveraging the \texttt{gen\_server} behaviour, and augment them with
+automated code instrumentation to enable end-to-end causality tracking without
+requiring any manual intervention from developers. This automated context
+injection relies on specific architectural and communication assumptions that
+are not arbitrary limitations but rather reflect best practices for building
+reliable, observable, and traceable distributed systems. In particular, we
+assume that all participating processes consistently follow the OTP
+\texttt{gen\_server} behaviour, providing predictable request–response
+structures that our approach can instrument systematically. By grounding our
+method in these assumptions, we can achieve complete causal tracking while
+maintaining compatibility with existing OTP applications.
+
+We leverage several key strengths of the OTP model. First, it
+benefits from standardized communication patterns: although both
+\texttt{gen\_server:call} and \texttt{gen\_server:cast} exist, we focus on
+\texttt{gen\_server:call}, since it provides automatic pairwise reference
+management, ensuring that requests and responses are intrinsically correlated.
+Equally important is OTP’s structured state management. Each
+\texttt{gen\_server} maintains its own state, allowing our context injector to
+seamlessly embed causality information without interfering with the core
+business logic, since context data is simply added to the process state. Additionally,
+OTP provides a uniform message-handling interface through the
+\texttt{handle\_call} callback, giving us a consistent entry point to
+systematically apply context injection across all services.
+
+The proposed method presents several important advantages. It imposes no additional burden on
+developers, as existing OTP code requires no manual modifications. At the same
+time, it enables true end-to-end tracing, capturing complete request flows
+seamlessly across service boundaries. Automatic propagation ensures that
+contexts move transparently throughout the system, without any developer
+intervention. The solution is fully backward compatible, so systems continue
+functioning correctly even if the enhancement is not adopted.
+
+In essence, our approach combines the best of both worlds: the complete
+causality and precision of manual context management, with the convenience and
+robustness of OTP’s automatic handling, while avoiding the limitations inherent
+in each individual approach.
+\iffalse
+\subsection{Our Take On It}
+\label{sub_sec:ourtake}
+Our approach bridges the gap between the manual precision of developer-managed
+contexts and the automatic convenience of OTP reference management. We assume
+that programs follow correct Erlang/OTP patterns using the \texttt{gen\_server}
+behaviour, enhancing them with automated code injection to achieve
+end-to-end causality tracking without developer intervention. More
+specifically, we deal with systems that have a clear entry point to the
+interaction with the systems API, which means, we consider that there is always
+a \texttt{client.erl} module that is used in order to communicate with a
+system.
+
+The foundation of our approach rests on the observation that well-structured
+Erlang applications using OTP \texttt{gen\_server} behaviours already have a
+clear request-response communication pattern. We leverage this existing
+structure and augment it with automatic context propagation through parse-time
+transformation.
+
+We focus on systems that work around the \texttt{handle\_call} and
+\texttt{call} directives, since they offer the ability to make requests and
+wait for responses. What we mean by this, is that in this work we do not
+consider the directive \texttt{cast}, which enables asynchrony into the system,
+but at the same time looses the automatic reference management of requests and
+responses. We are still able to achieve asynchrony with \texttt{handle\_call} by
+performing \texttt{spawn} events of processes, and responding directly to the \texttt{call}
+performed, following the structuring present in Listing \ref{lst:asynccall}.
+
+Our approach bridges the gap between the manual precision of developer-managed
+contexts and the convenience of OTP’s automatic reference management. We assume
+systems follow standard Erlang/OTP patterns, primarily using the
+\texttt{gen\_server} behaviour, and enhance them with automated code
+instrumentation to achieve end-to-end causality tracking without developer
+intervention. In particular, we focus on systems with a clear client entry
+point, typically a \texttt{client.erl} module, that interacts with the system
+and issues requests.
+
+Well-structured OTP applications using \texttt{gen\_server} already implement
+clear request–response patterns. We leverage this structure by transparently
+propagating context metadata through parse-time transformations in the
+established pattern. Our target systems operate around \texttt{call} and
+\texttt{handle\_call}, which naturally support request–response semantics.
+While \texttt{cast} allows fire-and-forget asynchrony, it does not provide
+automatic reference tracking; for now, we focus on \texttt{call}-based
+interactions.
+
+While \texttt{call} supports synchronous request–response semantics, our
+approach can also handle asynchrony. In these cases, services may delegate work
+to background processes, replying to the original caller once computation
+completes. This allows systems to remain responsive while preserving causality
+for monitoring purposes.
+
+We are interested in the study of systems where it is possible to performs
+requests and wait for answers. With the cast operation, which works as "fire
+and forget", our interest, for now, is not in those types of system. This will
+be covered in the future work section.
+
+Our approach introduces several important advantages. It imposes zero burden on
+developers, as existing OTP code requires no manual modifications. It also
+enables true end-to-end tracing, allowing complete request flows to be captured
+seamlessly across service boundaries.
+
+Another benefit is session awareness: multiple requests from the same client
+can be correlated as part of a session. However, request isolation is not
+entirely guaranteed, since maintaining strict isolation would require treating
+each request as an isolated entity. We play with the trade off of having a
+single context for each client entity interacting with the system that is used
+along all of the interaction with the system, which then the monitor interprets
+the messages on its own way to create isolation between the requests, forcing
+clients to wait for a response before issuing a new request, because each
+client request would have the same internal context, even though having in the
+eyes of the monitor a different one.
+
+As we will see in the future work section, in order to be able correlate both,
+sessions and individual requests within that session, we need more that a
+simple context identifier. Note that this problem only occurs when concurrent
+chains of messages from the same client might happen and when working with
+different architectures and protocols of communication.
+
+In addition, the approach supports automatic propagation, ensuring that
+contexts flow transparently throughout the system without developer
+intervention. Finally, it remains fully backward compatible, allowing systems
+to continue functioning correctly even without adopting the enhancement. Our
+approach thus combines the best aspects of manual context management (complete
+causality) with the convenience of OTP (automatic handling), while avoiding the
+limitations of both approaches.
+\fi
+\section{Assumptions and Design Principles}
+\label{sec:system_assumptions}
+
+In addition to leveraging OTP’s \texttt{gen\_server:call} and \texttt{call}
+directives, our approach targets a specific architectural pattern to maintain
+clarity and enforce causal tracking: the client–server model. In this design,
+clients serve as distinct logical entities, such as users, external systems, or
+autonomous agents, that generate independent streams of work by initiating
+requests. Server processes handle these requests and may, in turn, issue
+requests to other servers, forming chains of causally related operations that
+span multiple components.
+
+To provide a concrete boundary for context creation, we assume the presence of
+a \texttt{client.erl} module responsible for interacting with the system. Each
+client issues requests and awaits responses before initiating subsequent
+requests, ensuring that individual client sessions maintain a clear causal
+flow. While multiple clients can operate concurrently, the system is designed
+to handle their interactions asynchronously, without breaking the integrity of
+each client’s request–response chain. This architectural assumption allows our
+automated context injection to anchor contexts at the client boundary,
+providing well-defined, traceable causal chains across the system.
+
+This architecture naturally supports our context generation strategy: client
+interactions mark the boundaries of causal chains, with each new client request
+potentially spawning a fresh context. By anchoring context creation at the
+client boundary, we ensure that causally related operations are consistently
+tracked throughout the system.
+
+We further assume that complex operations are constructed through chains of
+service calls. In this model, services communicate primarily using synchronous
+\texttt{gen\_server:call} operations, while still allowing for asynchronous
+execution when necessary by spawning separate processes. Every service in the
+chain adds value in some form, whether through transformation, validation,
+persistence, or other business logic. Once the work is completed, the final
+result propagates back along the same causal chain, ultimately reaching the
+originating client. This preserves a clear and traceable flow of responsibility
+throughout the system.
+\subsection{The Asynchrony Problem and Context Necessity}
+\label{sub_sec:asyncandcontext}
+The introduction of asynchrony, an essential feature for building responsive
+and scalable systems, disrupts the natural causality tracking inherent in
+synchronous execution. In our target systems, multiple forms of asynchrony are
+present, each requiring explicit context management to accurately relate
+messages and verify properties over them. This need for contextual tracking is
+exemplified in Listing \ref{lst:async1}, where message relationships must be
+preserved despite the non-deterministic order of execution.
+
+\begin{lstlisting}[float=ht, language=erlang, caption=Concurrent Client Requests, label={lst:async1}]
+    % Time T1: Client A starts request
+    ClientA -> ServiceX: {process, data_a} 
+    % Time T2: Client B starts request 
+    ClientB -> ServiceX: {process, data_b}
+    % Time T3: ServiceX processes data_b first (scheduling)
+    ServiceX -> DatabaseY: {store, data_b}
+    % Time T4: ServiceX processes data_a  
+    ServiceX -> DatabaseY: {store, data_a}
+\end{lstlisting}
+
+Without explicit context tracking, a monitor observing these messages cannot
+determine which \texttt{store} operation corresponds to which client’s original
+request, making it impossible to reason about their relationship. Using time as
+a heuristic is unreliable, as it offers no guarantees and may incorrectly
+correlate messages.
+
+To address this, we can leverage the \texttt{handle\_call} reference generation
+mechanism, enabling us to maintain asynchrony in the system while spawning
+processes and replying later. This approach, illustrated in Listing
+\ref{lst:spawnasync}, allows us to preserve causal relationships without
+sacrificing concurrency. The primary trade-off is the overhead of spawning
+multiple processes; however, since \texttt{Erlang} is designed for efficient
+handling of large numbers of processes, it can easily accommodate this
+approach, achieving both scalability and reliable message tracking.
+    
+\begin{lstlisting}[language=erlang, caption=Spawned Process Delegation, label={lst:spawnasync}]
+handle_call({heavy_computation, Data}, From, State) ->
+  % Spawn worker to avoid blocking the main service
+  spawn(fun() ->
+    Result = perform_computation(Data),
+    gen_server:reply(From, Result)
+  end),
+  {noreply, State}.
+\end{lstlisting}
+
+Our approach targets request-response distributed systems, which may
+incorporate both synchronous and asynchronous processing patterns. These
+systems are defined by operations where each request produces a corresponding
+response, providing a natural form of operational traceability regardless of
+the underlying processing model used by the target services.
+
+The distinction lies in operational semantics rather than the execution model.
+Whether a service handles requests synchronously or delegates them to
+background workers is transparent to our context-assignment mechanism. What
+matters is that each request ultimately generates exactly one corresponding
+response, ensuring reliable tracking and reasoning about system behaviour.
+\subsection{The Context Injection Solution}
+\label{sub_sec:contextinjection}
+Our automated context injection addresses common gaps in asynchrony and
+observability by transparently carrying causal information throughout system
+interactions. Instead of requiring developers to manually manage correlation
+IDs or thread contexts across every hop, the system automatically injects and
+propagates lightweight context metadata along \texttt{gen\_server:call} chains,
+ensuring that causally related operations are linked end-to-end.
+
+From the moment a client issues a call, the context is attached to the message
+envelope and travels with the call/response pair. This makes end-to-end tracing
+straightforward: each service in the chain receives the context and returns
+results without any developer intervention to pass or reconstruct correlation
+information.
+
+New contexts are established at client boundaries, treating each client
+interaction as the natural starting point of a causal chain. This design
+ensures that every logical request stream is associated with a single,
+well-defined context, simplifying trace interpretation by providing a clear
+entry point for each trace. It also reduces the risk of context contamination
+that can arise when internal services create contexts arbitrarily.
+
+The client entities, including users, external APIs, scheduled jobs, or
+autonomous agents, naturally mark where new work enters the system. Typically,
+each client interaction corresponds to a single logical operation that must be
+traced from start to finish. By anchoring contexts at these boundaries, traces
+accurately reflect real-world operations rather than arbitrary internal events.
+
+Generating fresh contexts at the client boundary also helps maintain separation
+between causal chains: unrelated client requests are not conflated simply
+because they pass through the same services. This design minimizes false
+correlations and makes it straightforward to answer questions such as “Which
+client triggered this sequence of events?” without having to sift through
+noisy, intermixed traces.
+
+Context creation scales naturally with the number of clients. As concurrent
+client interactions increase, the system automatically produces independent
+causal chains without additional coordination, keeping the tracing layer
+horizontally scalable and aligned with the application’s inherent concurrency.
+
+In practice, this approach provides strong observability with minimal developer
+effort, though it carries pragmatic trade-offs. Maintaining context across
+spawned or delegated work requires disciplined wrapper usage to ensure every
+process preserves the context token. Additionally, achieving strict request
+isolation may necessitate some coordination on the client side, for example,
+requiring clients to wait for a response before issuing a follow-up
+request, which is the strategy employed in our work.
+
+Our approach introduces several important advantages. It imposes zero burden on
+developers, as existing OTP code requires no manual modifications. It also
+enables true end-to-end tracing, allowing complete request flows to be captured
+seamlessly across service boundaries.
+
+Another benefit of creating contexts at client boundaries is session awareness:
+multiple requests from the same client can be correlated as part of a session.
+However, strict request isolation is not fully guaranteed, since achieving it
+would require treating each request as a completely independent entity. In our
+approach, we accept the trade-off of using a single context for all
+interactions from a given client. The monitor interprets messages to enforce
+logical isolation between requests, often requiring clients to wait for a
+response before issuing a subsequent request. This is necessary because,
+internally, all requests from the same client share the same context, even
+though the monitor treats them as separate logical units.
+
+\iffalse
+As we discuss in the future work section, correlating both sessions and
+individual requests within a session requires more than a simple context
+identifier. This challenge arises specifically when multiple concurrent message
+chains originate from the same client.
+\fi
+
+Our approach thus combines the best aspects of manual context management
+(complete causality) with the convenience of OTP (automatic handling), while
+avoiding the limitations of both approaches.
+\section{The Conductor}
+\label{sec:wrapper}
+
+The \texttt{conductor} will be the central entity responsible for automatic context
+management in the system. It operates externally, capturing system messages and
+communicating with the monitor to provide a real-time view of system activity.
+
+Serving as an oracle for every action in the system, the conductor ensures that
+all interactions pass through it before proceeding further. In this section, we
+explore how the conductor operates and the key nuances that must be considered
+when integrating it into the system.
+
+Naturally, introducing the conductor introduces some overhead. In addition to
+the monitor that verifies system properties, the conductor executes the
+function $\gamma$, capturing all runtime messages and managing the contexts
+between them. While this adds computational cost, it provides precise causal
+tracking and consistent context propagation across all system interactions.
+
+\subsection{Redirecting Calls}
+\label{sub_sec:redirectingcalls}
+Call redirection to the \texttt{conductor} is the pillar of the monitoring
+system, serving as the mechanism that preserves causal correlations between
+messages throughout the distributed system. Without programmatic injection of
+context-tracking code, it would be impossible to maintain causal consistency
+across actor interactions while keeping the original application logic intact.
+
+Instead of manually modifying source code, our approach leverages \texttt{Erlang}'s
+Abstract Syntax Tree (AST) transformation capabilities via the
+\texttt{parse\_transform} module. This enables precise, surgical modifications
+at the compiled representation level, ensuring that the original source files
+remain unaltered. The general structure is illustrated in \Cref{fig:instrumenation3}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\linewidth]{Chapters/Figures/actorchestra_diagram_cropped.pdf}%
+  \caption{Instrumentation pipeline of \texttt{ACTORCHESTRA}}
+  \label{fig:instrumenation3}
+\end{figure}
+
+A key modification is the transformation of every \texttt{call} request.
+Instead of a message being sent directly to its original target, each call is redirected
+to the \texttt{conductor}, carrying both its original information and additional
+metadata required for context management. By intercepting all messages in the
+system, the \texttt{conductor} ensures that every communication passes through it. It
+assigns context references and delegates them whenever messages belong to the same
+causal chain, enabling consistent end-to-end tracking.
+
+This approach embodies the principle of transparent context injection. To
+illustrate, consider a standard OTP-based client-server system shown in Listing
+\ref{lst:noinject} with the original code.
+
+\begin{lstlisting}[language=erlang, caption=Standard OTP System Before Enhancement, label={lst:noinject}]
+% Client code - unchanged
+handle_call({send_number, Number}, _From, State) ->
+    Result = gen_server:call(central_server, {process, self(), Number}),
+    {reply, Result, State}.
+\end{lstlisting}
+
+Through parse-time transformation, our context injector automatically enhances
+the code to re-direct the original call to the \texttt{conductor}, sharing the
+context and the module, as depicted in Listing \ref{lst:injected}.
+
+\begin{lstlisting}[language=erlang, caption=After Automatic Context Injection, label={lst:injected}]
+% Client code - automatically transformed
+handle_call({send_number, Number}, _From, State) ->
+    Result = conductor:call(central_server, {process, self(), Number}, Context, client),
+    {reply, Result, State}.
+\end{lstlisting}
+
+This transformation allows the system to implement the function $\gamma$, which
+maps messages to their corresponding contexts. By routing all system actions
+through the \texttt{conductor}, the injector ensures that contexts are consistently
+assigned and related, providing accurate end-to-end tracking of causal chains.
+$$\gamma(\text{\texttt{message}}) = \begin{cases}
+  \text{\texttt{Context}} & \text{if message belongs to established context} \\
+  \text{\texttt{gen\_context()}} & \text{if message initiates new context}
+\end{cases}$$
+
+The \texttt{conductor} forwards all messages to the monitor, generating
+specific signatures that the monitor anticipates. Thanks to this context
+management, the monitor can distinguish between different contexts and evaluate
+properties within each independently. In essence, the \texttt{conductor}
+effectively simulates the $\gamma$ function.
+\subsection{Injection Mechanisms}
+\label{sub_sec:injectionmecha}
+
+To enable context injection, each \texttt{Erlang} module must include the
+following compiler directive in its header:
+$$
+\text{\texttt{-compile({parse\_transform, context\_injector}).}}
+$$
+
+This flag instructs the \texttt{Erlang} compiler to process the module's AST according
+to the transformations defined in \texttt{context\_injector.erl}, which analyses
+the existing code structure and applies the necessary modifications
+automatically.
+
+The \texttt{context\_injector} performs four primary categories of
+transformations: state management enhancement, context reception handling,
+message call transformation, and context extraction.
+
+To start, the injector detects whether the module uses record-based or
+map-based state management. Following OTP conventions, developers may choose
+either approach for maintaining state. To accommodate this flexibility, the
+injector supports both record and map-based state representations, ensuring
+that all system files can be correctly transformed regardless of the underlying
+data structure.
+
+In the OTP framework, a process’s state is formally an opaque value passed
+through successive callback invocations. The runtime system imposes no
+restriction on its type: any \texttt{Erlang} term is admissible. In principle,
+a process may maintain its state as a single integer, a tuple, or even a list.
+However, both the \texttt{Erlang}/OTP standard library and idiomatic application design
+show that structured representations, specifically records and maps, are
+overwhelmingly preferred in practice~\cite{erlangBook, erlangBooktwo}.
+
+The rationale is twofold. First, records and maps provide semantic clarity by
+associating symbolic names with fields, avoiding the positional ambiguities
+inherent in tuples or lists. Second, they enhance reliability: records offer
+compile-time validation of field access, while maps provide runtime flexibility
+to accommodate evolving state schemas without extensive code modification. This
+duality reflects a key design trade-off in \texttt{Erlang}: records dominate the OTP
+infrastructure, whereas maps are adopted due to their dynamic evolution behaviour.
+
+From a software engineering perspective, using records or maps balances
+efficiency, readability, and maintainability in concurrent systems. The
+literature consistently reinforces this consensus: while arbitrary terms are
+technically valid as state, disciplined use of records or maps is a hallmark of
+well-structured and robust OTP system~\cite{erlangBook}.
+
+Our context injection mechanism builds on these assumptions, specializing its
+transformations for the two idiomatic state representations in \texttt{Erlang}. In
+record-based modules, the injector augments the record definition with an
+additional \texttt{context} field. In map-based modules, context management is
+introduced via \texttt{maps:put} and \texttt{maps:get} operations.
+
+This design ensures that the injected code remains aligned with established
+\texttt{Erlang} programming idioms, thereby minimizing cognitive overhead for
+developers and maximizing the maintainability of the transformed system.
+Crucially, it also reflects an aspect-oriented approach at the compiler level:
+rather than introducing an alternative representation of process state, the
+injector integrates context propagation into the forms already recognized as
+best practice within the community.
+
+By constraining the mechanism to operate over records and maps, we
+simultaneously achieve compatibility, clarity, and methodological soundness.
+While the \texttt{Erlang} runtime permits unconstrained state representations,
+restricting the injection mechanism to the dominant patterns constitutes a
+deliberate design choice: it anchors the system in conventions that have proven
+effective in the construction of reliable, large-scale concurrent systems. In
+doing so, it aligns the technical design of context injection with both the
+theoretical foundations of OTP’s process model and the practical conventions of
+expert \texttt{Erlang} development.
+
+Therefore, the injector augments process state to include a dedicated
+\texttt{context} field. If a state record is defined, a \texttt{context} field
+is added, and set up as \texttt{undefined} as its initial value. When clients
+interact with our system, this value will constantly change. The change can
+consulted in Listing \ref{lst:contextrecord}.
+
+\begin{lstlisting}[language=erlang, caption=Context addition in record, label={lst:contextrecord}]
+-record(state, {
+    existing_field1,
+    existing_field2,
+    context = undefined  % Injected field
+}).
+\end{lstlisting}
+
+For map-based state handling, the injector introduces context operations via
+\texttt{map:put} and \texttt{map:get} whenever we have to update the context
+value or retrieve, if it already exists. The injection can be visible at
+Listing \ref{lst:contextmap}.
+
+\begin{lstlisting}[language=erlang, caption=Context addition in map based structures, label={lst:contextmap}]
+% Context storage
+maps:put(context, Context, State).
+% Context retrieval
+maps:get(context, State, undefined).
+\end{lstlisting}
+
+In addition to injecting the \texttt{context} field, each \texttt{gen\_server}
+is augmented with a dedicated \texttt{handle\_call} clause to receive and store
+context updates from the \texttt{conductor}. To ensure atomicity, these updates are
+processed as a single message. In this clause, the server receives the message
+from the \texttt{conductor}, updates the context variable, and then invokes the original
+function within the module that would have been called by the original
+requester.
+
+The \texttt{context} value is replaced for each interaction, which is expected:
+as long as the original message and its associated context are signaled to the
+monitor by the \texttt{conductor} as an atomic pair, causal consistency is
+preserved. This mechanism is realized through the \texttt{with\_context}
+handler, which receives both the original request and the context from the
+\texttt{conductor}, updates the state accordingly, and executes the original
+function within the same module. An implementation example of this handler is
+presented in Listing \ref{lst:withcontext}.
+
+\begin{lstlisting}[language=erlang, caption=\texttt{with-context} handler injection, label={lst:withcontext}]
+handle_call({with_context, Context, Msg}, From, State) ->
+    % Map-based:
+    StateWithContext = maps:put(context, Context, State),
+    % Record-based:
+    StateWithContext = State#state{context = Context},
+    ?MODULE:handle_call(Msg, From, StateWithContext);
+\end{lstlisting}
+
+
+
+\subsection{Forward Propagation}
+\label{sub_sec:forwards}
+
+As discussed, the most critical transformation involves rewriting all
+inter-process calls to pass through the \texttt{conductor}. Specifically, each
+original \texttt{call} is replaced with a corresponding \texttt{call} to the
+\texttt{conductor}. For example, consider the following original code:
+$$
+\text{\texttt{Result = gen\_server:call(TargetPid, {process, Data}).}}
+$$
+
+we will have the following change:
+$$
+\text{\texttt{Result = conductor:call(TargetPid, {process, Data}, Context, ?MODULE).
+}}
+$$
+
+where the context is automatically extracted from the caller's state and the
+\texttt{?MODULE} identifies the calling module for monitoring and tracing
+purposes.  When a chain exists in the system, the context is propagated forward throughout
+the interaction. Upon completion of an operation, the result has to be delivered to
+the client, and the client’s context needs to update accordingly.
+
+This architecture ensures that the context flows across the entire chain of
+interactions, with the \texttt{conductor} relaying all events to the running
+monitor. As the context propagates, the injected \texttt{with\_context}
+\texttt{handle\_call} functions assign the current context to each process,
+effectively maintaining context consistency across the full interaction chain of
+request and response calls.
+
+\subsection{Back-Propagation}
+\label{sub_sec:backwards}
+Back-propagation of the context does not require updating the state in every
+process it passes through; this is already handled during forward propagation.
+The \texttt{conductor} maintains all necessary information to provide a complete
+execution trace to the monitor, so internal calls do not need to modify or
+store the context as results return in the chain.
+
+However, the client process, being the anchor of the communication, must update
+its injected \texttt{context} field. Since the client cannot automatically
+update this field during the call, the context is piggybacked on the response.
+A special handling mechanism in the client module extracts the context from the
+result and updates the client’s state accordingly. This is illustrated in
+Listing \ref{lst:clientcontext}, enabling correlation of all subsequent
+requests from the same client when needed.
+
+\begin{lstlisting}[language=erlang, caption=Client processing of context, label={lst:clientcontext}]
+handle_call(operation, _From, State) ->
+    ...
+    {Reply, NewContext} = conductor:call(...),
+    {reply, Reply, maps:put(context, NewContext, State)}.
+\end{lstlisting}
+
+This extraction ensures that any subsequent interaction from the same client
+uses the context established during the first interaction. Request isolation is
+preserved, as the monitor can interpret each context independently within
+separate \texttt{receive} chains, while still allowing correlation of messages
+originating from the same client.
+\subsection{Context Assignment}
+\label{sub_sec:context_assign}
+At the start of an actor’s life cycle, the \texttt{context} variable is
+initialized to \texttt{undefined}. As the actor begins communicating within the
+system, the \texttt{conductor} assigns values to the \texttt{context} to establish
+causal relationships between messages.
+
+The \texttt{conductor} accomplishes this by sending the \texttt{context} through the
+special handler injected into each actor (\texttt{with\_context}). Upon
+receiving a message, the \texttt{conductor} checks whether the \texttt{context} is
+already set. If not, it generates a unique reference using \texttt{Erlang}’s built-in
+\texttt{make\_ref()} function and shares this reference along with the original
+message with the target actor.
+
+The \texttt{conductor} achieves this by sending the \texttt{context} through the special
+\texttt{handle\_call} that we injected into each actor. The \texttt{conductor} receives
+a message, examines if the \texttt{context} field has a value to it, if not it
+generates a unique reference, using \texttt{Erlang} built in function
+\texttt{make\_ref()}, and shares that reference with the target actor that was
+supposed to receive the initial message and the original message at the same
+time.
+
+The key concern is the correct assignment and sharing of context at the time of
+interaction, since the \texttt{conductor} captures and replays this information to the
+monitor. Multiple clients may overwrite a component’s context value, but as
+long as the pairing of message and context is accurately shared with the
+\texttt{conductor}, causal consistency is maintained.
+
+Special attention is required when propagating context, both from the actors
+and the \texttt{conductor}. Each actor maintains a \texttt{context} field, which may be
+overwritten throughout its life cycle. As long as the correct context is
+associated with each message, causal consistency is preserved. To ensure this,
+the context must be extracted before sending it to the \texttt{conductor}.
+
+In \texttt{Erlang}, it is considered good practice to avoid letting spawned
+processes access mutable state directly. The context must be captured before
+spawning, particularly when the system employs OTP \texttt{gen\_server:call}
+and asynchronous behaviour, as discussed in \Cref{sub_sec:asyncandcontext}.
+Without this precaution, the system might inadvertently propagate an incorrect
+or outdated context.
+
+To address this, we inject a single line of code that extracts the context at
+the beginning of the \texttt{handle\_call}, ensuring that any spawned process
+receives the exact context active when the call was initially handled. The
+implementation is shown in Listing \ref{lst:correctcontext}.
+
+\begin{lstlisting}[language=erlang, caption=Correct context extraction, label={lst:correctcontext}]
+handle_call({process, Data}, _From, State) ->
+  Context = State#state.context,
+  spawn(fun() ->
+    Result = conductor:call(Target, Msg, Context, ?MODULE),
+    gen_server:reply(From, Result)
+  end)
+\end{lstlisting}
+
+\subsection{Concurrency and Dead-Locks}
+\label{sub_sec:conduct_concurrency}
+The \texttt{conductor} inevitably introduces some overhead, as all messages
+must pass through it. To minimize interference with the system, the \texttt{conductor}
+leverages asynchrony wherever possible, enabling multiple messages to be routed
+concurrently and making it suitable for highly concurrent scenarios.
+
+Asynchrony is also essential to prevent deadlocks. Since all processes
+communicate with the \texttt{conductor}, a chain of dependent events could cause the
+\texttt{conductor} to block if it processed messages synchronously. For example, if a
+response depends on the actions of another process, a synchronous \texttt{conductor}
+might stall when the dependent process attempts to interact with it. By
+handling message redirection asynchronously, the \texttt{conductor} avoids such
+deadlocks. Thus, asynchrony is not merely an optimization for performance, it is
+a requirement for correct orchestration.
+\subsection{New Signatures}
+\label{sub_sec:newsign}
+
+With the \texttt{conductor} managing contexts, the monitor no longer requires
+\texttt{Erlang}’s built-in \texttt{tracing} tool. The \texttt{conductor} handles message tracking
+and forwards only the relevant information to the monitor, specifically, the
+messages that the monitor is expecting according to the property being
+verified.
+
+This approach significantly reduces overhead. In dynamic systems, traditional
+tracing mechanisms capture all system events and then filter out irrelevant
+ones, which is costly. With the \texttt{conductor}, only the relevant communications are
+sent to the monitor. Messages outside the scope of the property are
+automatically ignored, simplifying monitoring and focusing only on meaningful
+events. Instead of relying on the built-in tracing signatures, such as:
+\[
+\begin{align*}
+  &\text{\texttt{\{trace, Pid, send, Msg, To\}}} \\
+  &\text{\texttt{\{trace, Pid, 'receive', Msg\}}} \\
+  &\text{\texttt{\{trace, Pid, return\_from, {Module, Function, Arity}, ReturnVal\}}} \\
+  &...
+\end{align*}
+\]
+
+we can disable these tracing mechanisms and rely on the messages produced by the \texttt{conductor}, which follow a simple signature:
+$$
+\text{\texttt{\{Sender, Receiver, Message, Context\}}}
+$$
+
+This simplifies monitor design, as it only needs to handle messages in the
+\texttt{conductor}’s format, while the attached context enables causal reasoning between
+different messages in the system. Although it would be possible to retain the
+tracing mechanisms and augment each message with context, doing so would
+unnecessarily increase overhead, which is avoided by relying solely on the
+\texttt{conductor}.
+\section{Conductor re-direction}
+\label{sec:conductor-redirect}
+As introduced earlier, the \texttt{conductor} injects a \texttt{context} field into the
+system. This context may be overwritten multiple times, depending on the
+different interactions taking place. Naturally, it is crucial to ensure that
+each message is consistently associated with the correct context. To guarantee
+this, the \texttt{conductor} sends messages as tuples, preserving atomicity between the
+message and its context.
+
+Consider a simple system with two modules: \texttt{client.erl} and
+\texttt{server.erl}. Clients can send messages to the server, which simply
+echoes them back. Even in this simple setup, concurrency issues can arise if
+context handling is not performed carefully.
+
+Whenever a message is sent from the \texttt{client} to the \texttt{server}, the
+call is redirected to the \texttt{conductor}. The original \texttt{call} from the client
+is transformed into a \texttt{call} to the \texttt{conductor}, including both the
+message and the destination process. The following interaction illustrates this
+behaviour:
+\[
+\begin{align*}
+\text{\texttt{client1}} \rightarrow \text{\texttt{server}} \\
+\text{\texttt{client2}} \rightarrow \text{\texttt{server}}
+\end{align*}
+\]
+will be transformed into the following interactions with the \texttt{conductor}:
+\[
+\begin{align*}
+\text{\texttt{client1}} \rightarrow \text{\texttt{conductor}} \\
+\text{\texttt{conductor}} \rightarrow \text{\texttt{server}} \\
+\text{\texttt{client2}} \rightarrow \text{\texttt{conductor}} \\
+\text{\texttt{conductor}} \rightarrow \text{\texttt{server}}
+\end{align*}
+\]
+
+The \texttt{conductor} forwards messages to their intended recipients along with the
+associated context. To achieve this, the \texttt{conductor} first determines whether the
+message should be propagated with an existing context or if a new context
+should be generated for a fresh interaction. This is handled by a dedicated
+\texttt{call} endpoint, which all other processes invoke. The handler inspects
+the message to check for an existing context and either reuses it or generates
+a new one as needed, as illustrated in Listing \ref{lst:contextconductor}.
+
+\begin{lstlisting}[language=erlang, caption=Conductor Context Assignment, label={lst:contextconductor}]
+call(To, Msg, undefined, Module) ->
+    Context = make_ref(),
+    gen_server:call(?MODULE, {send_with_context, To, Msg, Context, Module});
+call(To, Msg, Context, Module) ->
+    gen_server:call(?MODULE, {send_with_context, To, Msg, Context, Module}).
+\end{lstlisting}
+
+Next, the \texttt{conductor} invokes its internal method responsible for redirecting the
+original message, capturing the response, and reporting all interactions to the
+running monitor. To avoid deadlocks and optimize performance, the \texttt{conductor}
+spawns worker processes to handle message redirection, which is especially
+important under high concurrency with multiple clients. This mechanism is
+illustrated in Listing \ref{lst:sendcontextconductor}. It is important to
+distinguish between the \texttt{client} module and other modules: for the
+\texttt{client}, the context must be propagated back so that it can be stored
+locally.
+
+\begin{lstlisting}[language=erlang, caption=Conductor Re-direction of Messages, label={lst:sendcontextconductor}]
+handle_call({send_with_context, To, Msg, Context, Module}, From, State) ->
+    ToModule = get_target_module(To),
+    monitor ! {Module, ToModule, Msg, Context},
+    spawn(fun() ->
+        worker_process(To, Msg, Context, Module, From, ToModule)
+    end),
+    {noreply, State}.
+
+worker_process(To, Msg, Context, Module, From, ToModule) ->
+  Reply = gen_server:call(To, {with_context, Context, Msg}),
+  FinalReply = case is_client_module(Module) of
+    true -> {Reply, Context};
+    false -> Reply
+  end,
+  monitor ! {ToModule, Module, Reply, Context},
+  gen_server:reply(From, FinalReply),
+  end.
+
+\end{lstlisting}
+The proposed solution introduces a wrapper-based architecture that
+fundamentally changes how context propagation occurs in inter-process
+communication. Instead of transmitting context and original messages
+separately, which can create race conditions and synchronization
+complexities, the system embeds contextual information directly within the
+message payload using a specialized envelope pattern. This effectively
+transforms the traditional two-message protocol into a single atomic operation.
+
+The core innovation is the context injection handler at the receiving process
+level. When a target process receives a message of the form
+{\texttt{\{with\_context, Context, OriginalMessage\}}, the injected handler
+immediately extracts the context, updates the process state with this
+information, and delegates the original message to the appropriate receiver.
+\subsection{Monitor's Melody}
+\label{sub_sec:melodymonitor}
+The monitoring component provides comprehensive observability into the causal
+flow of messages across the distributed system. The monitor receives
+notifications for each message transmission, including both outbound messages
+and their corresponding responses, along with the associated context
+identifier. This bidirectional tracking enables the construction of complete
+request-response cycles that can be correlated across arbitrary process
+topologies.
+
+The monitor’s effectiveness relies on the atomic nature of the context
+injection mechanism. Because the context and message are transmitted together
+as a single unit, the monitoring system obtains a consistent view of the causal
+chain without the temporal ambiguities that would arise from separate
+transmissions. Each monitored interaction includes the source module,
+destination module, message content, and context reference, providing
+sufficient information to reconstruct the full execution trace.
+
+This approach is particularly valuable in complex distributed workflows, where
+a single client request may trigger cascading operations across multiple
+services. The monitor can follow these operations as they propagate through
+various processing stages, preserving causal linkages that support debugging,
+performance analysis, and end-to-end request tracing.
+\section{System Symphony}
+\label{sec_system_symph}
+Our monitoring approach addresses the fundamental challenge of maintaining
+coherent operation traceability in distributed systems through a deliberate
+architectural choice that combines context management with
+mandatory client API abstraction layers. This design reflects the recognition
+that effective distributed system monitoring requires careful consideration of
+both technical implementation constraints and natural system interaction
+patterns.
+
+Depending on the system that we are working with, the way that we perform this
+causality tracking changes drastically, and in some systems, such as
+publish-subscribe architectures, our approach breaks completely. Therefore, we
+must focus on one type of architecture, since tackling all the possible ones
+would be nearly impossible. 
+
+
+Our approach targets distributed systems that follow the actor-based model,
+specifically the client-server interaction pattern implemented using
+\texttt{Erlang} OTP \texttt{gen\_server:call}. These systems exhibit
+request-response interaction patterns, where each operation has an initiator
+(the client) that waits for a response. Examples include traditional
+client-server systems, service interactions with request-response cycles,
+pipeline architectures, and microservice architectures. The key characteristic
+is that all supported systems share the fundamental property that each request
+produces a response, enabling traceability and context management.
+
+Clients serve as the points where new contexts enter the system, providing a
+controlled mechanism for context creation. Without this client-driven context
+injection model, server processes would retain static contexts indefinitely,
+leading to context pollution, where unrelated operations become incorrectly
+associated across different client sessions. By isolating contexts at the
+client level, context boundaries align naturally with client interactions,
+preventing context staleness in long-running server processes.
+
+This architectural choice addresses a critical challenge that arises in systems
+lacking client-level context management. In scenarios where clients interact
+directly with the system, such as via terminal interfaces or direct protocol
+access, the system might rely on internal databases or session stores for client
+identification. However, without client-side context preservation, each
+interaction is treated as an isolated event. When multiple requests originate
+from the same logical client session, the lack of maintained context state
+prevents the establishment of proper causal relationships, even when these
+relationships reflect important operational dependencies.
+
+Despite the constraints imposed by sequential operations at the client level,
+this approach effectively addresses a substantial portion of distributed system
+architectures commonly encountered in enterprise environments. Examples include
+HTTP API interactions, service-to-service communications, database transaction
+sequences, and traditional request-response patterns. These scenarios exhibit
+natural session boundaries that align well with our monitoring model, providing
+comprehensive observability while maintaining clear boundaries regarding its
+intended application domain.
+\iffalse
+A foundational assumption of our approach is the existence of a client API
+module, a specialized Erlang processes that serves as intermediary layer
+between external clients and the monitored system. Each client spawns an
+independent instance of this API module, creating isolated interaction contexts
+that encapsulate both the communication protocol and the necessary
+instrumentation for context tracing. This architectural decision removes the
+burden of understanding system-specific communication details from clients
+while ensuring that all interactions flow through instrumented channels capable
+of generating and managing context identifiers.
+
+The client API layer serves multiple critical functions beyond simple protocol
+abstraction. Each API instance acts as a stateful context repository for its
+associated client, maintaining session continuity across multiple operations
+while providing the injection points necessary for comprehensive interaction
+tracing. This design ensures that context generation and management occur
+within controlled boundaries, enabling the systematic capture of causal
+relationships between operations within client sessions.
+\fi
+
+\iffalse
+\subsection{Returning Context, Take It Back}
+\label{sub_sec:returning_context}
+
+The context propagation works perfectly fine when the context is being forwarded 
+in the chain of messages that is being created. When responding back there is no
+need to store the values in the state of each process, since the conductor has the 
+knowledge of each request and response pair, therefore propagating all the necessary
+information to the monitor.
+
+It is of our interest that the \texttt{client} entity is able to receive the context and
+store the value in its variable, because he was the initiator of this context chain, but
+never got the change to actually update the value in the record or map. It is important
+to do so, because in some scenarios we want the context of a session of a client to be
+shared among all the requests that he might perform over the system. Under the eye of the
+monitor, and depending on the property, these requests will still be treated as isolated
+requests, but we will always be able to associate all the interaction history of a client
+with it. As we have seen, in order to achieve that, for the \texttt{client} entity there
+is an update of the context right before he accepts another incoming request.
+
+The session model operates under the constraint that clients execute operations
+sequentially within sessions, waiting for each operation to complete before
+initiating subsequent requests. While this requirement limits maximum
+theoretical concurrency, it ensures that context hierarchies remain
+well-defined and that monitoring receive chains can reliably correlate
+operations within session boundaries.
+\fi
+\iffalse
+\subsection{Context Renovation}
+\label{sub_sec:contextrenov}
+
+Client API instances serve as context renovation entities within the monitoring
+architecture, providing the controlled mechanism through which new contexts
+enter the system. Without this client-driven context injection model, server
+processes would retain static contexts indefinitely, leading to context
+pollution where unrelated operations become incorrectly associated across
+different client sessions. The isolation provided by individual client API
+instances ensures that context boundaries align with natural client interaction
+patterns while preventing the context staleness that would otherwise accumulate
+in long-running server processes.
+
+This architectural choice addresses a critical challenge that would emerge in
+systems lacking proper client API abstraction. Consider the alternative
+scenario where clients interact directly with the system through terminal
+interfaces or direct protocol access. In such configurations, the system might
+manage client identification through internal databases or session stores, but
+the absence of client-side context preservation would result in each
+interaction being treated as an isolated event. When multiple requests
+originate from the same logical client session, the lack of maintained context
+state would prevent the establishment of proper causal relationships, even when
+such relationships represent important business logic dependencies.
+
+Despite the constraints imposed by sequential operations within the client API
+layers, this approach effectively addresses a substantial portion of
+distributed system architectures commonly encountered in enterprise
+environments. HTTP API interactions, service-to-service communications,
+database transaction sequences, and traditional request-response patterns all
+exhibit natural session boundaries that align well with our monitoring model.
+The approach provides comprehensive observability for systems where operational
+coherence and session-level traceability represent primary requirements, while
+maintaining clear boundaries regarding its intended application domain.
+\fi
+\iffalse
+\subsection{Future Extensions}
+\label{sub_sec:future}
+Our approach represents a principled architectural choice that deliberately
+optimizes for specific interaction patterns while clearly acknowledging both
+its capabilities and limitations. Rather than attempting to create a universal
+monitoring solution, we focus on robust support for session-based interaction
+models, recognizing that comprehensive distributed system observability
+requires a portfolio of specialized techniques, each optimized for particular
+architectural patterns.
+
+We acknowledge that systems requiring high-concurrency operation isolation,
+complex event-driven patterns, such as publish subscribe, broadcast protocols
+may benefit from alternative approaches. Future research directions might
+explore hierarchical context management strategies that combine session-level
+identifiers with operation-specific tokens, enabling fine-grained operation
+tracking while preserving session-level correlation. Such extensions would
+expand the applicability of context-based monitoring while maintaining the
+operational clarity that emerges from deliberate scope definition.
+
+\begin{lstlisting}[language=erlang, caption=Context Isolation Problem]
+% Timeline in event bus:
+T1: Client1 subscribes → event_bus stores Context1
+T2: Client2 subscribes → event_bus stores Context2 (overwrites Context1!)
+T3: Client3 publishes → event_bus uses Context2 for publish (wrong!)
+T4: Event delivered to both subscribers with Context2 (double wrong!)
+
+% Monitor sees:
+% "Client2 published event and received it twice" (completely false!)
+\end{lstlisting}
+
+The session-based context management model, supported by mandatory client API
+abstraction, thus represents a sophisticated response to the inherent
+complexity of distributed system monitoring. By accepting specific
+architectural constraints—sequential operation execution and mediated client
+communication—we achieve reliable, comprehensible monitoring for a well-defined
+class of distributed systems while establishing a foundation for future
+extensions that might address broader system architectures.
+
+\iffalse
+As it is of our interested, usually a client connects to a given system and performs 
+a couple of operations with it. It is of our interested to capture that session and
+consider all of those messages to be part of the same session, each request is considered
+as an isolated component, but the session itself should be preserved. 
+
+In practice what this means, is sending back to the client the context the conductor
+generated for his first interaction with the system. Then, since each client spawns
+an entity of this module of the client API, we will be able to re-use that context for
+further interactions, to associate messages in the same session, yet under the eye of
+a monitor, and depending on the property we are monitoring, we will still be able
+to capture each message that we are interested in isolated.
+
+In theory when we have hierarchy relation between contexts, in practice that will mean that 
+they essentially have the same context. This works in these types of systems, because our
+monitors will be able to capture the new children contexts, even if the reference generated is
+the same, because we will always enter in a new chain of \texttt{receive} chains, and this
+also only works if the client performs 1 by 1 requests, waiting for one to finish in order
+to be able to ask for something next to the server.
+
+The clients serve as context renovation entities, and they are the ones that will allow
+for multiple contexts to flow within the system. If we did not have them, from the
+moment the context is assigned to a system process, if no other different comes in
+in, then we will never replace the context stored in the state and always use the same
+which could lead to matching problems in terms of causality if the systems support high
+concurrency, since all the messages will be using the same context, due to how
+things are implemented in practice. The necessity of not only having a context 
+identifier, but a session identifier and request might be the solution to work
+around with these types of systems. This will be mentioned again in the future work
+part of the document.
+
+This all depends on how our system works, and how we want to interpret it: do
+we want everything isolated? do we want to maintain a session relation? That
+all depends on what we want as a verification perspective and also a
+compreehension of how a given system works.
+
+But, even with this assumption over the system that we are working with, we can
+still monitor and verify multiple architectures, such as HTTP API calls, direct
+service to service calls, request response systems that are usually used in
+Erlang systems.
+\fi
+\fi
+
+
+
+
+

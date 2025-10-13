@@ -1,0 +1,5 @@
+OMEGA(
+    send {client -> chat_server} WITH {join_room, ClientName, RoomName1} : TOP;
+    send {chat_server -> client} WITH {ok, joined} : TOP;
+    OMEGA(send {client -> chat_server} WITH {send_message, ClientName, RoomName2, Message} : RoomName1 == RoomName2)
+)

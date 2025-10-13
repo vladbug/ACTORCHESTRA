@@ -1,0 +1,4 @@
+(executable
+ (public_name waltz_compiler)
+ (name main)
+ (libraries waltz))

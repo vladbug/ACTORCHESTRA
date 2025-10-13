@@ -1,0 +1,57 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% abstract-pt.tex
+%% NOVA thesis document file
+%%
+%% Abstract in Portuguese
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE abstract-pt.tex}%
+
+
+A verificação de software é um princípio fundamental para a construção e
+implementação de software fiável e correto. Atualmente, várias técnicas de
+verificação são empregues com sucesso: prova de teoremas, verificação de
+modelos (model checking) e testes, cada uma com os seus pontos fortes e
+compromissos. Estes métodos ajudam a garantir que os sistemas se comportam
+conforme o esperado e cumprem os padrões de fiabilidade.
+
+A Verificação em Tempo de Execução (Runtime Verification) é uma técnica de
+verificação que se tornou popular e conhecida pela sua abordagem leve e
+complementar, oferecendo garantias adicionais sobre um sistema em análise. Ao
+contrário dos métodos tradicionais, a verificação em tempo de execução tira
+partido da capacidade de realizar verificações enquanto o sistema está em
+funcionamento, permitindo a monitorização dinâmica do comportamento do sistema.
+Isto acrescenta a possibilidade de verificar e alertar sempre que o sistema
+começa a comportar-se de forma inesperada ou indesejada, reforçando assim a
+fiabilidade e correção global.
+
+Nesta tese, abordámos o problema da verificação em tempo de execução em
+sistemas baseados em atores, um paradigma de programação utilizado por
+linguagens como o \texttt{Erlang}. Definimos uma linguagem de especificação,
+WALTZ, que permite a definição de propriedades que abrangem múltiplos actores e
+realiza uma verificação sensível à causalidade. Após conceber e implementar o
+compilador para WALTZ, gerando executáveis de monitores em \texttt{Erlang},
+implementámos a orquestração necessária para manter as relações de causalidade
+entre sistemas que seguem as diretrizes OTP, através da injeção cirúrgica de
+código no sistema. Com estes dois componentes, construímos o
+\texttt{ACTORCHESTRA}, a ferramenta que permite ao utilizador especificar
+propriedades e monitorizá-las automaticamente em tempo de execução.
+
+Realizámos uma avaliação com base em dois estudos de caso, demonstrando o
+alcance da linguagem de especificação e da ferramenta, e analisámos a
+sobrecarga causada pela ferramenta em comparação com a versão original do
+código, explicando os compromissos associados a ter uma camada adicional de
+segurança nos nossos programas.
+
+% Palavras-chave do resumo em Português
+% \begin{keywords}
+% Palavra-chave 1, Palavra-chave 2, Palavra-chave 3, Palavra-chave 4
+% \end{keywords}
+\keywords{
+  verificação em tempo de execução \and
+  monitorização de propriedades \and
+  propriedades monitorizávies \and
+  modelo de atores
+}
+% to add an extra black line

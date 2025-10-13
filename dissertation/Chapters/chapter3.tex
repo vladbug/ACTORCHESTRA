@@ -1,0 +1,287 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter3.tex
+%% NOVA thesis document file
+%%
+%% Chapter with a short latex tutorial and examples
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter3.tex}%
+
+\makeatletter
+\newcommand{\ntifpkgloaded}{%
+  \@ifpackageloaded%
+}
+\makeatother
+
+
+\chapter{Related Work}
+\label{cha:related_work}
+This chapter overviews specification languages and tools developed for runtime
+verification, focusing on RV tools tailored for the actor-based model. It
+examines key specification languages used in RV and highlights tools designed
+to examine a system in general and actor-based models.
+\section{Specification languages for RV}
+\label{sec:spec_for_rv}
+
+This section provides an overview of various specification languages introduced by the RV community, highlighting their
+characteristics and applications. 
+
+\subsection{LTL$_4$}
+\label{sub_sec:ltl4}
+
+LTL$_4$~\cite{falcone2012can} is based on the idea of revocable verdicts. As
+mentioned, whenever a monitor yields a verdict, it has to be absolute; it
+cannot change it. With that came the idea of having a specification language
+that, instead of simply outputting the inconclusive verdict "?", uses a
+four-valued domain, where one has the $\top$, $\bot$ and instead of "?", there
+is the potentially true $\top_{c}$ and potentially false $\bot_{c}$ verdicts.
+
+With this, one gains the ability to monitor more properties at the cost of
+sometimes never being sure about the correctness of a property,  therefore
+never being able to give us guarantees beyond soundness, as defined
+in~\cite{opGuideMon}.
+\subsection{Metric Temporal Logic}
+\label{sub_sec:mtl}
+
+Metric temporal logic (MTL) is an extension of the base LTL specification language where the constructors of
+the LTL specification language are augmented with time constraints~\cite{koymans1990specifying}. In the case of
+the running example in \Cref{sub_sec:running_example}, one could define the following
+$$
+\square \ (enter \rightarrow (\lozenge_{(0,20)} \ post))
+$$
+
+in the MTL language. In the property above, $\lozenge_{(0,20)}$ means that something must happen in the 
+next 20 time units. With this specification language one achieves a notion of time that cannot be achieved
+with the base LTL formulas.
+
+\subsection{Metric First-Order Temporal Logic}
+\label{sub_sec:mfotl}
+Metric first-order temporal logic (MFOTL)~\cite{monitoringMFOTL} extends the
+base MTL specification language by adding data parameters and first-order
+quantifiers, creating an expressive formalism with practical usage, as seen in
+tools such as MonPoly~\cite{basin2017monpoly} and WHYMON~\cite{limawhymon}.
+
+MFOTL has a monitorable fragment of the language, as studied and defined
+in~\cite{monitoringMFOTL}; the authors define this fragment by applying certain
+restrictions to how one can use it. Regardless, their study shows that
+monitoring a wide variety of properties at runtime is still possible.
+By creating additional predicates with first order logic, in the case of our
+running example, a property defined in MFOTL looks like:
+$$
+\square \forall x \forall y : entered(x,y) \rightarrow \lozenge_{(0,20)} \ post(x)
+$$
+which means that in every channel, if a person entered it, then that person must post a message within the first 20 
+time units on that channel.
+
+\subsection{$\mu$HML and mHML}
+\label{sub_sec:miuhml}
+
+Efforts to create a specification language have been presented in various
+studies~\cite{theGoodTheBad,ANCONA2021102610}, allowing for the definition of
+properties that can be monitored in a runtime context. Recent research has also
+explored monitors for specification languages not based on LTL, such as the
+modal $\mu$-calculus with a linear-time interpretation. Additionally, a recent
+study has focused on Hennessy-Milner logic with recursion, known as
+$\mu$HML~\cite{adventuresMon,opGuideMon}, which is a reformulation of the
+$\mu$-calculus.
+
+Instead of redefining the semantics of a specification logic to adhere to the
+necessities of RV like it was performed for LTL$_3$, the objective is to create
+a specification language with the sole purpose of runtime verification context.
+
+Certain properties expressed in $\mu$HML are not monitorable; in order to
+solve this issue, Francalanza~\cite{henessyAdrian} studied the monitorable
+fragment of $\mu$HML and defined a subset of the logic and defined a
+specification logic called mHML, which guarantees that if one expresses
+properties with it it is guaranteed to be monitorable. The definition is given
+in \Cref{def:henessy}.
+
+\begin{definition}[mHML~\cite{henessyAdrian}]
+$\psi, \chi \in \text{MHML}^{\text{def}} = \text{sHML} \cup \text{cHML}$ where:
+
+\[
+\theta, \vartheta \in \text{sHML} ::= \text{tt} 
+\; \mid \; \text{ff} 
+\; \mid \; [\alpha]\theta 
+\; \mid \; \theta \wedge \vartheta 
+\; \mid \; \text{max} \, X.\theta 
+\; \mid \; X
+\]
+\[
+\pi, \varpi \in \text{cHML} ::= \text{tt} 
+\; \mid \; \text{ff} 
+\; \mid \; \langle \alpha \rangle \pi 
+\; \mid \; \pi \vee \varpi 
+\; \mid \; \text{min} \, X.\pi 
+\; \mid \; X
+\]
+\label{def:henessy}
+\end{definition}
+where sHML is the safe property fragment and the cHML is the co-safe fragment
+of the logic. An important note is that one can only choose one or another, not
+both, at the same time to define monitorable properties with this specification
+language. An example of a property that can be defined with this specification
+language is stating that, for instance, our system cannot perform action
+$\phi$, then the formula would be $[\phi]\text{\texttt{ff}}$.
+
+\section{RV tools}
+\label{sec:rv_tools}
+In this section, we introduce and discuss some of the tools developed in the
+context of RV. These tools are designed to facilitate the specification,
+monitoring, and analysis of system behaviors, aiding in detecting deviations
+from expected properties.
+\subsection{MonPoly}
+\label{sub_sec:monpoly}
+
+MonPoly~\cite{basin2017monpoly} is a runtime verification tool built with
+\texttt{OCaml}~\cite{ocaml} that analyses traces and properties defined in
+metric first-order temporal logic (MFOTL)~\cite{monitoringMFOTL}. Not all MFOTL
+properties are monitorable. Therefore, a monitorable safety fragment was
+defined for this language~\cite{monitoringMFOTL}, which is used in MonPoly.
+This specification language is helpful since it can carry data on it, adding
+more expressiveness to the language, coming at the cost that only a fragment of
+it is monitorable~\cite{monitoringMFOTL}. A later version of MonPoly was
+released that supports full MFOTL but comes at the cost of substantial
+efficiency problems~\cite{formallyMTL}.
+
+It is worth mentioning that monitors used in MonPoly compute sets of satisfying
+variable assignments instead of simple boolean verdicts, which is helpful
+information compared to simply knowing if a given property was violated; it is
+possible to know what the assignment of values that caused that violation.
+
+The disadvantage of MonPoly is how the fact that traces are defined manually.
+Even if the tool's algorithm incrementally processes the trace, the trace
+itself is read from a log file created beforehand with a grammar specific to
+that type of log file. Extracting traces from a running system would be more
+interesting than reading them from a log file that was not produced by a real
+running system.
+
+\subsection{WHYMON}
+\label{sub_sec:whymon}
+\textt{WHYMON}~\cite{limawhymon} takes a similar approach to MonPoly, working with the
+same specification language (MFOTL) but presenting differences towards the
+MonPoly tool. To begin with, \texttt{WHYMON} uses full MFOTL, as it has no restrictions on
+negation and universal quantifiers, allowing arbitrary free variables, and
+supports past and future temporal operators. 
+
+A novel feature of this tool is that the output value given by the monitor is
+richer; more specifically, the outputs of the monitors in \texttt{WHYMON} are
+partitioned decision trees that resemble MTL's semantics. These trees are  used
+to explain why a formula is satisfied or violated, enhancing explainability in
+the verdicts by outputting explanations. The tool provides a much more detailed
+explanation for every satisfying and violating
+assignment~\cite{explainableOnline}.
+
+However, even if this tool can be applied online, the traces must be manually
+created by the user using their grammar, similar to how MonPoly does it. The
+tool is more advanced than MonPoly because it offers explainable verdicts, and
+one can incrementally examine the trace to observe those verdicts and the
+assignments bound to the variables in the formulas and the incoming trace.
+
+Compared to MonPoly, \texttt{WHYMON} takes much more time to perform the same
+analysis~\cite{explainableOnline}, but one must consider the different outputs
+that each monitor does; the \texttt{WHYMON} monitor's outputs carry much more information and
+explainability compared to the MonPoly ones.
+\section{RV in Actor Based Models}
+\label{sec:rv_actor_based}
+Ian Cassar and Adrian Francalanza~\cite{Cassar_2017} defined a spectrum of
+instrumentation techniques for online monitoring that are possible to
+incorporate in a given RV tool. The spectrum ranges from completely
+asynchronous monitors, where problems of late detection appear, to tightly
+entangled monitors to the system, where one has very high control over what is
+happening but adds extreme overhead on the system due to the synchrony required
+between the system and the monitor. Furthermore, a study addressed
+the instrumentation techniques chosen in the context of the actor-based
+model~\cite{asyncSyncActor}.
+\subsection{detectEr}
+\label{sub_sec:detecter}
+
+\texttt{detectEr}~\cite{attard2017runtime} is a runtime verification tool that
+is used to verify the correctness of Erlang programs formally, that leverages
+from the native \texttt{Erlang} tracing mechanisms. It uses the monitorable
+fragment of $\mu$HML to allow the definition of safety properties. By offering
+a mechanism to automatically generate the monitors from the specification given
+and running alongside the system, this tool presents the novelty of actually
+receiving the information of a running system and yielding verdicts based on a
+real incoming trace, in contrast to the majority of tools that examine log
+files prepared a priori.
+
+The tool provides various instrumentation options that can be utilized in
+different ways, including both online and offline instrumentation. Users can
+choose whether the monitor will be deployed inline or as an outline of the
+system. Future updates to the tool will also allow users to select from various
+instrumentation techniques, as detailed in the study on instrumentation
+methods~\cite{Cassar_2017}.
+
+\texttt{detectEr} is a verification tool that triggers whenever a given
+property defined in mHML is violated, detecting the violation of safety
+properties, that state that nothing bad will ever
+happen~\cite{alpern1987recognizing}. However, the verdict given by the monitor
+is a boolean value and does not help the user understand what went wrong. This
+analysis could be crucial in systems that have many actors communicating with
+each other. Recently, the tool was extended to allow the maxHML$^{D}$ fragment to be
+supported by the tool, a maximally-expressive syntactic fragment of
+$\mu$HML that describes the safety properties of system executions over linear
+time with data~\cite{adventuresMon}.
+
+The tool uses only a fragment of the monitorable properties (the safety
+fragment), reducing the set of properties that one can monitor at runtime,
+compared to tools such as \textt{WHYMON} and MonPoly, especially in the case of
+\textt{WHYMON} because it allows the expression of properties in the complete
+MFOTL logic.
+
+\subsection{Elarva}
+\label{sub_sec:elarva}
+\texttt{ELARVA}~\cite{elarva} is an Erlang-based implementation of a runtime
+verification tool called \texttt{LARVA}, that is built with \texttt{Java}.
+\texttt{LARVA}~\cite{larva} supports dynamic automata with timers and events
+(DATE) as its specification language, which is then converted into a monitor,
+working in a synchronous online fashion.
+
+\texttt{ELARVA} performs online monitoring in a completely asynchronous
+fashion, not adding instrumentation code inside the monitored system, in
+contrast to \texttt{LARVA}. Like \texttt{detectEr}, it also leverages from the
+tracing mechanism offered by the \texttt{Erlang} virtual machine to capture the
+messages exchanged between the different actors in the system, but with the
+disadvantage of late detection and potentially not avoiding software failures.
+
+\section{Explainability}
+\label{sec:explainability}
+
+As mentioned before, \texttt{WHYMON} allows for explainability in its verdicts;
+that is, more than simply stating whether a property was violated, it does more
+than that and explains how the conclusion of the monitor was reached. 
+
+Explainability is an active research topic in runtime
+verification~\cite{issues}; beyond merely detecting a violation, it is valuable
+to understand how the monitor arrived at that conclusion. Furthermore, there is
+an even greater need to identify the root cause of the error. By discovering
+what caused the error, one can quickly shift from verification into
+adaptability and enforceability~\cite{betterEnforce,falcone2012can} of the
+system with that information.
+
+Luca Aceto et al.~\cite{monitoringLinearTimeExp} worked on a prototype tool
+with an explainable algorithm for the verdicts that explains how these verdicts
+are reached and tested in an \texttt{Erlang} program. The authors present an algorithm
+explaining how a given verdict was reached, which is more valuable than
+throwing a boolean value out of the monitor. Though that verdict alone does not
+allow the identification of the source or the violation, one could examine the
+output of the monitor and try to discover what caused the problem, but in a
+practical scenario that is not feasible at all.
+
+The same thing goes for the work developed in \texttt{WHYMON}, where a proof
+tree is given as the output of the monitor, explaining how a given verdict was
+reached. However, it does not allow one to identify what produced the violation
+automatically.
+
+A survey was conducted on fault
+localization~\cite{faultLoc}, detailing various fault localization techniques.
+These techniques are worth exploring in the context of runtime verification to
+explain violations and, more importantly, identify their origins. Of course, by
+doing this, the overhead added by a monitor increases tremendously; therefore,
+depending on the scenarios, a monitor might yield truth domain verdicts or more
+complex ones (like \texttt{WHYMON}). Some work has also been done in blame
+assignment within session types~\cite{blame}, but nothing has been done in the
+context of the actor-based model.
+

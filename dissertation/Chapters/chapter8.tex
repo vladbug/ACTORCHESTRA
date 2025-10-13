@@ -1,0 +1,975 @@
+\typeout{NT FILE chapter8.tex}%
+
+\chapter{Related Work}
+\label{cha:related_work}
+
+This chapter positions \texttt{WALTZ} and \texttt{ACTORCHESTRA} within the
+broader runtime verification landscape, highlighting how our context-aware
+approach overcomes fundamental limitations in monitoring concurrent actor
+systems. We evaluate existing specification languages and tools along three key
+dimensions: their capacity to process execution traces obtained from real
+running systems, their support for context-aware verification, and their
+mechanisms for correlating variables across interacting actors.
+
+\section{Runtime Verification Landscape}
+\label{sec:landscaperv}
+Runtime verification tools can be classified along several critical dimensions
+that determine their suitability for actor-based systems. One axis is the
+monitoring approach: some tools operate on live execution traces directly from
+a running system, while others analyse pre-defined logs of actions, even if
+those logs originate from real executions. Another dimension is concurrency
+support, which ranges from tools that assume sequential execution to those
+capable of context-aware verification that accounts for asynchronous message
+passing and causal relationships. A third dimension concerns property scope,
+spanning from monitoring single components in isolation to verifying
+system-wide invariants that involve multiple interacting actors.
+
+Most existing RV approaches struggle when applied to actor-based systems
+because they either presuppose sequential execution or restrict verification to
+individual components. Actor systems, however, are inherently concurrent, built
+on asynchronous communication and causal message relationships that may extend
+across multiple hops in an interaction chain.
+The remainder of this chapter surveys existing languages and tools along these
+dimensions, setting the stage for our novel approach, which enables practical
+runtime verification of context-aware properties in concurrent actor-based
+systems.
+\section{Specification Languages}
+\label{sec:spec_languages}
+This section provides an overview of various specification languages introduced by the
+RV community, highlighting their characteristics and applications.
+\subsection{Linear Temporal Logics}
+\label{sub_sec:ltls}
+Linear Temporal Logic (LTL)~\cite{pnueli1977temporal} and its extensions express system properties
+through temporal operators over global state sequences. While powerful in
+sequential contexts, these approaches face fundamental challenges when applied
+to actor systems, as discussed in \Cref{sec:waltz_motivation}.
+
+\textbf{LTL}$_4$~\cite{falcone2012can} introduces the idea of revocable
+verdicts. In standard runtime monitoring, verdicts must be absolute, once
+produced, they cannot change. LTL$_4$ extends the verdict domain from three
+values ($\top$, $\bot$, “?”) to four: true ($\top$), false ($\bot$),
+potentially true ($\top_{c}$), and potentially false ($\bot_{c}$). This allows
+monitors to capture a broader range of properties, though at the cost of
+sometimes never reaching a definitive conclusion. The guarantees remain limited
+to soundness~\cite{opGuideMon}, making LTL$_4$ more of a semantic refinement
+than a fundamental solution to the limitations of temporal logics.
+
+\textbf{Metric Temporal Logic (MTL)} augments LTL with explicit timing
+constraints~\cite{koymans1990specifying}. For example, in the running example
+from \Cref{cha:background}, we could define:
+$$ \square \ (enter \rightarrow (\lozenge_{(0,20)} \ post)) $$
+
+Here, $\lozenge_{(0,20)}$ specifies that an event must occur within 20 time
+units. While this enables reasoning about deadlines and bounded response
+times, features absent in basic LTL, the reliance on global timing assumptions
+limits its applicability in distributed actor systems, where message delays
+vary unpredictably.
+
+\textbf{Metric First-Order Temporal Logic (MFOTL)}~\cite{monitoringMFOTL}
+extends MTL by adding data parameters and first-order quantifiers,
+significantly increasing expressiveness. Tools such as
+MonPoly~\cite{basin2017monpoly} and WHYMON~\cite{limawhymon} demonstrate
+MFOTL’s practical utility. The monitorable fragment of MFOTL, formally defined
+in~\cite{monitoringMFOTL}, imposes restrictions on quantifier usage while still
+allowing a wide range of properties to be monitored at runtime. For instance,
+in the running example, we could write:
+$$
+\square \forall x \forall y : entered(x,y) \rightarrow \lozenge_{(0,20)} \ post(x)
+$$
+
+This property expresses that in every room, if a person $x$ entered it, then
+$x$ must post within 20 time units. Despite this expressive power, MFOTL
+inherits temporal semantics that assume perfect global synchronization, an
+unrealistic requirement in distributed systems. Alternatives like Distributed
+Temporal Logic (DTL) attempt to address this but assume sequential execution
+with synchronous event sharing~\cite{basin2011distributed}.
+
+In summary, while LTL and its extensions (LTL$_4$, MTL, MFOTL) expand the
+expressiveness and monitorability of temporal specifications, they remain
+grounded in assumptions that do not align with the realities of actor-based
+distributed systems. Global time, sequential execution, and perfect
+synchronization are either impractical or outright impossible in asynchronous
+environments where causality is determined by message passing. As a result,
+these logics struggle to capture the fine-grained, context-dependent properties
+that arise in concurrent actor interactions. This motivates the need for the
+approaches such as \texttt{WALTZ} and \texttt{ACTORCHESTRA}, which explicitly
+embrace actor semantics and context propagation as first-class principles in their design 
+and verification.
+
+\subsection{$\mu$HML and mHML}
+\label{sub_sec:miuhml}
+
+Efforts to create a specification language have been presented in various
+studies~\cite{theGoodTheBad,ANCONA2021102610}, allowing for the definition of
+properties that can be monitored in a runtime context. Recent research has also
+explored monitors for specification languages not based on LTL, such as the
+modal $\mu$-calculus with a linear-time interpretation. Additionally, a recent
+study has focused on Hennessy-Milner logic with recursion, known as
+$\mu$HML~\cite{adventuresMon,opGuideMon}, which is a reformulation of the
+$\mu$-calculus.
+Instead of redefining the semantics of a specification logic to adhere to the
+necessities of RV like it was performed for LTL$_3$, the objective is to create
+a specification language with the sole purpose of runtime verification.
+
+Certain properties expressed in $\mu$HML are not inherently monitorable. To
+address this limitation, Francalanza~\cite{henessyAdrian} analysed the
+monitorable fragment of $\mu$HML and identified a subset of the logic that
+ensures monitorability. Building on this insight, he introduced a specification
+logic called mHML, which guarantees that any property expressed within it can
+be monitored at runtime. The formal definition of this logic is provided in
+\Cref{def:henessy}.
+
+\begin{definition}[mHML~\cite{henessyAdrian}]
+$\psi, \chi \in \text{MHML}^{\text{def}} = \text{sHML} \cup \text{cHML}$ where:
+
+\[
+\theta, \vartheta \in \text{sHML} ::= \text{tt} 
+\; \mid \; \text{ff} 
+\; \mid \; [\alpha]\theta 
+\; \mid \; \theta \wedge \vartheta 
+\; \mid \; \text{max} \, X.\theta 
+\; \mid \; X
+\]
+\[
+\pi, \varpi \in \text{cHML} ::= \text{tt} 
+\; \mid \; \text{ff} 
+\; \mid \; \langle \alpha \rangle \pi 
+\; \mid \; \pi \vee \varpi 
+\; \mid \; \text{min} \, X.\pi 
+\; \mid \; X
+\]
+\label{def:henessy}
+\end{definition}
+where sHML is the safe property fragment and the cHML is the co-safe fragment
+of the logic. An important note is that we can only choose one or another, not
+both, at the same time to define monitorable properties with this specification
+language. An example of a property that can be defined with this specification
+language is stating that, for instance, our system cannot perform action
+$\phi$, then the formula would be $[\phi]\text{\texttt{ff}}$.
+
+While mHML aligns more closely with process semantics, it faces two major
+limitations in the context of actor-based systems. First, it lacks mechanisms
+for context-aware verification, preventing monitors from distinguishing between
+independent causal chains. Second, it requires the explicit specification of
+all possible interleavings, a burden that quickly becomes impractical in
+real-world interaction scenarios where concurrency patterns multiply rapidly.
+
+These specification languages, while sophisticated, rest on assumptions that
+limit their applicability to actor-based systems: either a reliance on global state
+evolution or the need for explicit enumeration of all possible interleavings.
+In contrast, actor-based systems demand specification frameworks that can span
+multiple locality levels, capturing local actor state, actor-to-actor
+relationships, and system-wide invariants, while natively handling causal
+contexts and asynchronous interactions.
+\section{RV Tools}
+\label{sec:rv_tools}
+
+In this section, we present and examine several tools developed within the
+field of RV. These tools provide support for specifying
+system properties, monitoring executions, and analyzing system behaviour,
+enabling the early detection of deviations from expected properties and
+improving the reliability of concurrent and distributed systems.
+\subsection{Log Examination Tools}
+\label{sub_sec:logtools}
+
+\textbf{MonPoly}~\cite{basin2017monpoly} is a runtime verification tool built with
+\texttt{OCaml}~\cite{ocaml} that analyses traces and properties defined in
+metric first-order temporal logic (MFOTL)~\cite{monitoringMFOTL}. Not all MFOTL
+properties are monitorable. Therefore, a monitorable safety fragment was
+defined for this language~\cite{monitoringMFOTL}, which is used in MonPoly.
+This specification language is helpful since it can carry data on it, adding
+more expressiveness to the language, coming at the cost that only a fragment of
+it is monitorable~\cite{monitoringMFOTL}. A later version of MonPoly was
+released that supports full MFOTL but comes at the cost of substantial
+efficiency problems~\cite{formallyMTL}.
+
+It is worth mentioning that monitors used in MonPoly compute sets of satisfying
+variable assignments instead of simple boolean verdicts, which is helpful
+information compared to simply knowing if a given property was violated; it is
+possible to know what the assignment of values that caused that violation.
+A notable limitation of MonPoly lies in the manual definition of traces.
+Although the tool’s algorithm processes traces incrementally, the traces
+themselves must be read from pre-generated log files, which adhere to a grammar
+specific to that type of log file. Extracting traces from a running system
+would be more interesting than reading them from a log file that was not
+produced by a real running system. It does function in an online environment,
+but the trace is read from a log file that is generated based on a grammar and
+defined rules.
+
+\textbf{WHYMON}~\cite{limawhymon} takes a similar approach to MonPoly, working
+with the same specification language (MFOTL) but presenting differences towards
+the MonPoly tool. To begin with, WHYMON uses full MFOTL, as it has no
+restrictions on negation and universal quantifiers, allowing arbitrary free
+variables, and supports past and future temporal operators. 
+A novel feature of this tool is that the output value given by the monitor is
+richer; more specifically, the outputs of the monitors in WHYMON are
+partitioned decision trees that resemble MTL's semantics. These trees are  used
+to explain why a formula is satisfied or violated, enhancing explainability in
+the verdicts by outputting explanations. The tool provides a much more detailed
+explanation for every satisfying and violating
+assignment~\cite{explainableOnline}.
+However, even if this tool can be applied online, the traces must be manually
+created by the user using their grammar, similar to how MonPoly does it. But,
+it also examines real-world traces besides the synthetic examples they provide.
+The tool is more advanced than MonPoly because it offers explainable verdicts,
+and we can incrementally examine the trace to observe those verdicts and the
+assignments bound to the variables in the formulas and the incoming trace.
+Compared to MonPoly, WHYMON takes much more time to perform the same
+analysis~\cite{explainableOnline}, but we must consider the different outputs
+that each monitor does; the WHYMON monitor's outputs carry much more information and
+explainability compared to the MonPoly ones.
+
+Lima et al.~\cite{limawhymon} assume sequential, totally ordered event streams,
+processing events one at a time in timestamp order. Their approach works best
+for centralized systems with sequential logs, or distributed systems where
+events can be accurately timestamped and merged without losing causal
+information. While limited in concurrency handling, the tool greatly advances
+the state of the art by providing richer and more explainable verdicts.
+
+\section{RV in Actor-Based Models}
+\label{sec:rv_actor_based}
+Ian Cassar and Adrian Francalanza~\cite{Cassar_2017} outlined a spectrum of
+instrumentation techniques for online monitoring that can be integrated into
+runtime verification tools. This spectrum spans from fully asynchronous
+monitors, which may suffer from delayed detection of violations, to tightly
+coupled monitors, which provide fine-grained control over system behaviour but
+introduce significant overhead due to the required synchrony. Additionally,
+subsequent work examined the application of these instrumentation strategies
+specifically within the actor-based model~\cite{asyncSyncActor}.
+
+\subsection{Elarva}
+\label{sub_sec:elarva}
+
+\texttt{ELARVA}~\cite{elarva} extends \texttt{LARVA}~\cite{larva}, a Java-based
+runtime verification tool that relies on Dynamic Automata with Timers and
+Events (DATE) for specification. While \texttt{LARVA} operates synchronously
+and lacks support for concurrency or distribution, \texttt{ELARVA} adapts the
+approach to the actor model, performing online monitoring in a fully
+asynchronous fashion. It leverages \texttt{Erlang}’s tracing mechanisms to observe
+communications, but suffers from late detection and limited fault-prevention
+capabilities. The crucial distinction is scope: \texttt{ELARVA} restricts
+properties to single \texttt{Erlang} components~\cite{galea2013polylarva}, whereas
+\texttt{ACTORCHESTRA} targets inter-component interactions. Moreover, while
+\texttt{ELARVA} relies on DATEs for specification, WALTZ introduces a
+modal, action-driven logic that abstracts away interleaving complexity and
+evaluates properties directly within their causal contexts.
+
+\iffalse
+\texttt{ELARVA}~\cite{elarva} is an Erlang-based implementation of a runtime
+verification tool called \texttt{LARVA}, that is built with \texttt{Java}.
+\texttt{LARVA}~\cite{larva} supports dynamic automata with timers and events
+(DATE) as its specification language, which is then converted into a monitor,
+working in a synchronous online fashion. But, \texttt{LARVA} has no support
+for concurrency or distributed systems, which is the design of any \texttt{Erlang}
+application, that is why the tool was extended to \texttt{ELARVA}.
+
+\texttt{ELARVA} performs online monitoring in a completely asynchronous
+fashion, not adding instrumentation code inside the monitored system, in
+contrast to \texttt{LARVA}. Like \texttt{detectEr}, it also leverages from the
+tracing mechanism offered by the \texttt{Erlang} virtual machine to capture the
+messages exchanged between the different actors in the system, but with the
+disadvantage of late detection and potentially not avoiding software failures.
+
+ELARVA is an extension of LARVA, focused for actor-based system, to fill the
+gaps of LARVA that is uncapable of dealing with concurrent systems. The main
+difference between WALTZ and ELARVA, is that ELARVA only allows the definition
+of properties over a single Erlang components~\cite{galea2013polylarva}, not
+entire interactions between different components, which is the target of WALTZ.
+
+ELARVA uses DATEs to define properties, whereas WALTZ uses a modal action
+driven specification language for its property definitions, that internally
+hides the complications of dealing with concurrent systems and performs the
+evaluation of formulas based on the causal context that they live within.
+\fi
+
+\subsection{Multiparty Session Types}
+Fowler~\cite{frowler}, building on Yoshida’s work on multiparty session
+types~\cite{multipartysessions}, proposed \texttt{monitored-session-erlang}, a
+runtime verification framework for \texttt{Erlang} OTP applications. His
+approach shares our assumptions, since it also targets OTP-compliant
+\texttt{Erlang} programs. The methodology centers on multiparty session types,
+where protocols define sequences of typed interactions among multiple
+participants.
+
+By leveraging multiparty session types, Fowler’s work introduces a notion of
+causality within actor interactions through the internal use of a
+\texttt{sessionID} that relates all the events within the same session. The
+\texttt{monitored-session-erlang} framework validates message exchanges at
+runtime against predefined session type specifications that describe the
+expected participants, sequence, and structure of interactions. To ensure
+correct routing of messages to their corresponding monitors in multiparty
+sessions, the framework generates opaque values that act as conversation keys.
+While this mechanism supports multiple concurrent sessions, the responsibility
+for switching between and managing these sessions rests on the
+developer. Messages are verified by checking whether valid transitions exist
+from the current session state, with violations resulting in runtime
+exceptions. The framework is implemented as an \texttt{Erlang} library, built
+on top of \texttt{gen\_server} behaviour and supervision hierarchies.
+Participating actors are required to implement specific directives for session
+initiation, joining conversations, and handling typed communications, ensuring
+structured and reliable interactions within the system.
+
+Although conceptually related, Fowler’s framework differs from
+\texttt{ACTORCHESTRA} in several key ways. It relies on session types to
+capture causality, whereas our approach uses context injection, avoiding the
+rigidity of protocol typing. Additionally, Fowler’s framework requires manual
+insertion of session-management directives, while \texttt{ACTORCHESTRA}
+automates this via code injection, reducing developer effort and allowing
+greater flexibility for future extensions.
+
+Most importantly, the expressiveness of \texttt{monitored-session-erlang} is
+limited compared to \texttt{ACTORCHESTRA}. It ensures protocol conformance,
+e.g, that actor A sends a message of type X to actor B, but cannot reason about
+message payloads or their relationships across interactions. In contrast,
+\texttt{ACTORCHESTRA} supports context-aware verification of both communication
+flow and data content, enabling richer properties beyond protocol compliance.
+
+\subsection{detectEr}
+\label{sub_sec:detecter}
+
+\texttt{detectEr}~\cite{attard2017runtime} is a runtime verification tool for
+\texttt{Erlang} programs that leverages the language’s native tracing
+mechanisms to capture execution events. It uses the monitorable fragment of
+$\mu$HML to define safety properties and automatically generates monitors that
+run online alongside the system. This capability allows \texttt{detectEr} to
+operate on real execution traces, in contrast to many earlier tools that relied
+on pre-recorded logs. The tool supports multiple instrumentation strategies,
+including inline and outline deployment, and recent extensions allow it to
+handle the maxHML$^{D}$ fragment, a maximally expressive syntactic subset of
+$\mu$HML with data~\cite{adventuresMon}. The tool produces boolean verdicts
+depending on whether the property was violated or not, logging which
+interaction was observed to cause it.
+
+\texttt{detectEr} represents an important step forward in
+bringing runtime verification to actor systems. At the same time, it has
+certain limitations when applied to modern actor-based applications. The tool
+primarily supports monitoring of individual processes in isolation, which makes
+it challenging to express properties that span multiple actors, such as
+system-wide invariants or multi-actor protocols. Moreover, although the
+underlying logic can, in principle, capture cross-actor properties, the
+implemented fragment focuses on single-process monitoring. As a result, events
+that are causally related across asynchronous chains cannot be directly
+correlated.
+
+In practice, applying \texttt{detectEr} to scenarios involving multiple actors
+can be challenging, as it would require a synchronous model that does not align
+naturally with the asynchronous nature of \texttt{Erlang}’s actor system. Moreover, due
+to \texttt{Erlang}’s concurrency model, users must explicitly enumerate possible message
+interleavings. As the number of actors and concurrent interactions increases,
+this task quickly becomes complex and difficult to scale. As a result,
+\texttt{detectEr} is particularly well suited for monitoring local
+request–response interactions but less equipped to capture longer causal chains
+or variable correlations across multiple interactions in large-scale
+distributed systems.
+
+\texttt{ACTORCHESTRA} overcomes these limitations through its context-aware
+approach. By embedding causal contexts directly into the language semantics,
+WALTZ allows properties to be defined not just over individual messages, but
+across entire chains of actor interactions. This enables the specification and
+verification of properties that span multiple actors and multiple interactions,
+capturing complex causal relationships that arise in real-world distributed
+systems. The system automatically manages these contexts, eliminating the need
+for manual interleaving specification and allowing messages within the same
+causal chain to be correlated seamlessly. These capabilities make it possible
+to perform intra-actor and context-aware verification in concurrent,
+asynchronous environments. \texttt{detectEr}'s process-centric does not
+directly address context-awareness, which limits its applicability. In
+contrast, \texttt{ACTORCHESTRA} enables precise monitoring of complex
+distributed properties that naturally span multiple actors and interactions,
+providing a level of insight and correctness assurance aligned with the
+realities of modern actor-based concurrency.
+\iffalse
+\texttt{detectEr}~\cite{attard2017runtime} is a runtime verification tool that
+is used to verify the correctness of Erlang programs formally, that leverages
+from the native \texttt{Erlang} tracing mechanisms. It uses the monitorable
+fragment of $\mu$HML to allow the definition of safety properties. By offering
+a mechanism to automatically generate the monitors from the specification given
+and running alongside the system, this tool presents the novelty of actually
+receiving the information of a running system and yielding verdicts based on a
+real incoming trace, in contrast to the majority of tools that examine log
+files prepared a priori.
+
+The tool provides various instrumentation options that can be utilized in
+different ways, including both online and offline instrumentation. Users can
+choose whether the monitor will be deployed inline or as an outline of the
+system. Future updates to the tool will also allow users to select from various
+instrumentation techniques, as detailed in the study on instrumentation
+methods~\cite{Cassar_2017}.
+
+\texttt{detectEr} is a verification tool that triggers whenever a given
+property defined in mHML is violated, detecting the violation of safety
+properties, that state that nothing bad will ever
+happen~\cite{alpern1987recognizing}. However, the verdict given by the monitor
+is a boolean value and does not help the user understand what went wrong. This
+analysis could be crucial in systems that have many actors communicating with
+each other. Recently, the tool was extended to allow the maxHML$^{D}$ fragment to be
+supported by the tool, a maximally-expressive syntactic fragment of
+$\mu$HML that describes the safety properties of system executions over linear
+time with data~\cite{adventuresMon}.
+
+The tool uses only a fragment of the monitorable properties (the safety
+fragment), reducing the set of properties that one can monitor at runtime,
+compared to tools such as \textt{WHYMON} and MonPoly, especially in the case of
+\textt{WHYMON} because it allows the expression of properties in the complete
+MFOTL logic.
+
+\texttt{detectEr}~\cite{attard2017runtime} represents the closest existing
+approach to our work, utilizing actor-based systems and leveraging Erlang
+tracing tools to build monitors from specification languages. However,
+\texttt{detectEr} suffers from three fundamental limitations that severely
+constrain its applicability to real-world concurrent systems.
+
+The first one being that \texttt{detectEr} can only monitor individual
+processes in isolation, preventing the specification and verification of
+properties that span multiple actors. Due to that, the properties that one can
+define within \texttt{detectEr} lack expressiveness, similar to the OTP
+pair-wise properties that we have seen. This restriction eliminates the
+possibility of expressing system-wide invariants or protocols that inherently
+involve multi-actor coordination.
+
+Secondly, while \texttt{detectEr}'s underlying specification language
+theoretically supports cross-actor properties, the implemented fragment
+restricts users to single-process monitoring. The only correlation possible is
+between a request and its immediate response within the same process, just like
+the OTP pair-wise responses. This severely limits the tool's ability to capture
+complex interaction patterns common in distributed systems. \texttt{detectEr}
+does not deal with the context aware verification whole issue. In order for it
+to work in such scenarios we would need to have a perfectly synchronous system.
+But, the real world applications rely of asynchronous behaviour, in order to
+take advantage of the actor-based model, and accelerate computation.
+
+And finally, due to Erlang's concurrency model, \texttt{detectEr} requires
+users to manually specify all possible message interleavings. This approach
+becomes exponentially complex and often practically impossible as the number of
+concurrent actors and interactions grows, placing an unrealistic burden on
+users. 
+
+The only correlation that is possible to perform is from one request to its own
+response. Describing longer chains of messages is not possible in the tool, and
+if we want to correlate variables over different interaction, just as in WALTZ,
+that is not possible in \texttt{detectEr}. 
+
+WALTZ fundamentally addresses these limitations through its novel approach to
+intra-actor message correlation within context-aware verification frameworks.
+Unlike \texttt{detectEr}'s process-centric view, WALTZ enables the
+specification of properties that span entire chains of actor interactions while
+maintaining causal relationships between messages. The language semantics
+automatically manage causal contexts, eliminating the need for manual
+interleaving specification.
+
+By hiding beneath the semantics of the language the notions of context, and
+context aware verification of properties, that target such asynchronous
+systems. Due to this possibility, we open the doors to intra actor property
+definitions and verification, since we are able to correlate all the messages
+that belong to the same causal context and evaluate these properties in highly
+concurrent scenarios without mixing message payloads of different causal
+chains.
+
+While \texttt{detectEr} pioneered runtime verification in actor systems, its
+single-process limitation and lack of context-awareness render it insufficient
+for modern distributed applications. WALTZs strength lies precisely in enabling
+intra-actor message relations and context-aware verification in concurrent
+scenarios, opening new possibilities for expressing and verifying complex
+distributed system properties that were previously intractable.
+\fi
+
+\section{WALTZ and ACTORCHESTRA}
+\label{sec:waltz_positioning}
+
+The analysis above highlights a clear gap in the RV 
+landscape: while existing approaches have advanced the field, they either lack
+full support for actor-specific concurrency or face constraints that reduce
+their effectiveness in real-world distributed systems. WALTZ and
+\texttt{ACTORCHESTRA} address these challenges through three core innovations.
+
+Traditional runtime verification approaches struggle in actor systems because
+concurrency obscures causal relationships between messages. WALTZ overcomes
+this limitation by embedding causal context directly into the language
+semantics, allowing the properties to track which events are truly related. This
+enables verification of properties that depend on causal chains, rather than
+just sequential order, making it possible to specify and check meaningful
+correctness conditions even in highly concurrent actor-based systems. Unlike
+process-centric tools such as \texttt{detectEr} or global-state approaches like
+MonPoly, \texttt{ACTORCHESTRA} explicitly models the causal relationships
+between messages, allowing monitors to reason about multi-actor interactions
+to verify properties.
+
+Beyond context management, real-world actor systems often require verification
+of properties that span chains of interactions across multiple processes.
+Existing tools either restrict monitoring to single processes, as in
+\texttt{detectEr}, or rely on manual correlation mechanisms, such as
+multiparty session types. WALTZ overcomes these limitations by allowing natural
+specification of properties that encompass entire interaction chains. Causal
+relationships are automatically preserved, and variables can be correlated
+across different actors and interaction steps. This capability enables the
+expression of complex distributed protocols, such as end-to-end request
+guarantees or multi-actor coordination workflows, without requiring developers
+to manually track correlations.
+
+Finally, practical deployment of runtime verification requires integration with
+live systems. Many sophisticated RV tools, such as MonPoly or WHYMON, operate
+on pre-recorded log files, restricting their usefulness to post-hoc analysis
+rather than proactive failure prevention. \texttt{ACTORCHESTRA} integrates directly with
+running actor systems, extracting traces in real-time, and providing immediate
+feedback. It automatically injects the necessary instrumentation code,
+minimizing developer overhead while enabling practical deployment in production
+environments. This combination of context-aware specification and real-time
+monitoring transforms runtime verification from a passive debugging tool into
+an active mechanism for maintaining system reliability.
+
+\iffalse
+\subsection{Context-Aware Verification}
+\label{sub_sec:context_aware}
+
+Traditional RV approaches assume that temporally adjacent events in traces are
+causally related. In actor systems, however, concurrent message processing
+creates traces where causally unrelated events appear interleaved. This leads
+to false violations when monitors cannot distinguish between legitimate
+concurrency and actual property violations.
+
+WALTZ embeds context-awareness directly into its semantics, automatically
+managing causal relationships between messages. The language semantics track
+causal contexts and ensure that property evaluation only considers causally
+related events. This eliminates the need for manual interleaving specification
+while enabling correct verification in highly concurrent scenarios.
+
+Unlike detectEr's process-centric view or MFOTL's global state assumptions,
+WALTZ recognizes that actor systems require evaluation within causal contexts
+to distinguish concurrency from incorrectness.
+\fi
+\iffalse
+\subsection{Intra-Actor Message Correlation}
+\label{sub_sec:message_correlation}
+
+Real actor systems require properties that span chains of interactions across
+multiple processes. Existing tools either restrict to single-process monitoring
+(detectEr) or require complex manual correlation mechanisms (session types).
+
+WALTZ enables natural specification of properties spanning entire interaction
+chains while automatically maintaining causal relationships. Variables can be
+correlated across different actors and interaction steps, enabling expression
+of complex distributed protocols without manual correlation management.
+
+This capability opens new possibilities for expressing system-wide invariants
+that were previously intractable, such as end-to-end request processing
+guarantees or multi-actor coordination protocols.
+\fi
+\iffalse
+\subsection{Real-Time System Integration} 
+\label{sub_sec:realtime_integration}
+
+Many sophisticated RV tools operate on predetermined log files (MonPoly,
+WHYMON), limiting their applicability to post-hoc analysis rather than runtime
+failure prevention.
+
+ACTORCHESTRA integrates directly with running actor systems, extracting traces
+in real-time and providing immediate feedback. The framework automatically
+injects necessary instrumentation code, minimizing developer burden while
+enabling practical deployment in production systems.
+
+This real-time capability transforms runtime verification from a debugging aid
+to a proactive system reliability mechanism.
+\fi
+The general comparison between our tool and others in the field is visible in
+\Cref{tab:tool_comparison}.
+
+\begin{table}[h]
+  \centering
+  \small
+  \setlength{\tabcolsep}{6pt}
+  \renewcommand{\arraystretch}{1.2}
+  \rowcolors{2}{rowgray}{white}
+  \begin{tabular}{lcccc}
+    \toprule
+    {Tool} & {Running trace} & {Distributed} & {Context-aware} & {Rich Verdicts}\\
+    \midrule
+    MonPoly          & \ding{56}  & \ding{56} & \ding{56} & \ding{52}  \\
+    WHYMON           & \ding{56}  & \ding{56} & \ding{56} & \ding{52}  \\
+    \texttt{detectEr}         & \ding{52} & \ding{52}  & \ding{56} & \ding{52}      \\
+    ELARVA           & \ding{52} & \ding{52}  & \ding{56}  & \ding{56}     \\
+    Session Types\tablefootnote{Compared to our framework, Fowler~\cite{frowler}’s approach lacks automation and does not support properties that capture or reason about data relationships across interactions due to the nature of session types.}    & \ding{52} & \ding{52} & \ding{52} & \ding{56} \\
+    \texttt{ACTORCHESTRA} & \ding{52} & \ding{52} & \ding{52} & \ding{52} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Comparison of RV approaches}
+  \label{tab:tool_comparison}
+\end{table}
+
+The runtime verification landscape shows a clear evolution from general
+temporal logics toward domain-specific approaches tailored to particular
+computational models. Nevertheless, existing tools struggle with the core
+challenges of monitoring concurrent actor systems: context-aware evaluation,
+multi-actor property correlation, and real-time integration with running
+systems.
+
+WALTZ advances the state of the art by embedding context-awareness directly
+into the specification language semantics, automatically handling the
+complexities that render verification of concurrent systems intractable with
+conventional methods. \texttt{ACTORCHESTRA} complements this with practical real-time
+monitoring capabilities, enabling deployment in production actor systems.
+
+
+While tools such as \texttt{detectEr} pioneered actor-based runtime
+verification and proved its practical feasibility, WALTZ takes this further by
+introducing context-aware verification and supporting message correlation both
+within and across actors. This significantly broadens the spectrum of
+properties that can be expressed and checked, enabling the verification of
+richer and more realistic behaviours in modern distributed systems.
+
+By combining domain-specific language design, context-aware semantics, and
+real-time system integration, WALTZ and \texttt{ACTORCHESTRA} open new possibilities for
+ensuring correctness in concurrent actor systems, capabilities that were
+previously either theoretically intractable or practically
+infeasible. \texttt{ACTORCHESTRA} functions as a passive, online, outlined, and
+asynchronous runtime verification tool, leveraging a centralized
+\texttt{conductor} along with decentralized monitors where needed. This
+combination enables scalable, context-sensitive verification that operates
+alongside the system without interfering with its execution, making it a
+practical and robust solution for detecting user defined property violations or
+satisfactions.
+
+\iffalse
+\section{WALTZ vs LTL and variants}
+\label{sec:waltz_variants}
+LTL and MFOLT, are other forms of inputs to RV frameworks, but the natural
+abstraction level of actor-based systems differ from what general temporal
+logics provide. It is not simply a matter of convenience, it is more of a
+semantic alignment between the specification language and the computational
+model. Another problem of LTL is that it assumes a global state that evolves
+linearly over time. However, actor-based systems are built on the principle of
+local state and asynchronous interactions. Actor systems often need properties
+that span multiple locality levels, local actor state, actor-to-actor
+relationships, and system-wide properties. These typically force you to choose
+one level, making mixed properties cumbersome.
+
+Runtime verification needs efficient monitors. Translating actor-specific
+properties through general formalisms often creates monitors that track
+unnecessary global state, making them inefficient for distributed runtime
+checking. Our specification language is designed to align with natural
+instrumentation points in actor systems (message sends, receives, state
+changes), while general formalisms might require extensive additional
+instrumentation.
+
+Even if we used these other formalisms, the specifications themselves can
+become cumbersome, which may lead to incorrect property specifications, since
+it is more likely to commit a mistake. The closer the formalism is to the way
+the system works, less error prone that formalism will be. There is research
+showing that specification languages closer to the domain reduce cognitive load
+and error rates. Also, a domain-specific language can provide better error
+messages, debugging support, and integration with actor-based development
+tools.
+\section{WALTZ vs $\mu$HML and mHML}
+\label{sec:watlz_miu}
+$\mu$HML and mHML are the specification languages used in \texttt{detectEr}, which resolve
+around a fix point that checks the properties similar to how we do in WALTZ, in the sense of
+whenever a message sequence is observed and verifies, the monitor will be ready to interpret the
+next sequence of actions.
+
+The mHML specification language does not consider context and causality in its evaluation, it
+assumes that the monitor will receive a sequence of events that are all causally related, which as we 
+have seen through this document is not true in highly concurrent systems. Context aware evaluation is something
+that WALTZ has built in the semantics of the language.
+
+Another issue with mHML, is the need to specify all the possible interleavings in a system, which is cumbersome
+and escalates pretty quickly the more processes are involved in the interactions.
+
+\section{ACTORCHESTRA vs other RV tools}
+\label{sec:actorchest_others}
+
+Comparing the limits of our tool and other tools is essential to understand their strengths
+and differences. Certain tools tackle different systems, and have different assumptions over the
+systems that they are working with.
+
+\subsection{MonPoly and WHYMON}
+As stated, MonPoly works with a log file of a system, instead of working with a
+real running system. That is the main difference between ACTORCHESTRA and
+MonPoly. MonPolys target is not actor-based system with concurrent actions and
+processing. The same goes for WHYMON, it does not consider a real running
+systems, it simply relies on an offline trace that is examined and evaluated
+according to the properties defined. 
+
+Both tools have richer verdicts than simple boolean verdicts, which is something that WALTZ does not
+have yet. Though, WALTZ and the monitor generation process enables for such richer verdicts, it would not
+be difficult to implement richer verdicts, that even output the trace that caused a given violation and 
+state which interaction was responsible for it. Since our monitors are structured in a hierarchy and are built
+with \texttt{receive} chains, we could easily enhance our verdicts to be more informative.
+
+A deeper study on the expressiveness of each specification language used by the tools has to be considered, in order
+to understand if one tool allows for more expressive properties than the other. But, the main comparison to both these
+tools, is the fact that we are indeed obtaining the trace from a real running system, and not hard-coded traces that
+are interpreted as the trace of that given system.
+
+\subsection{detectEr}
+\texttt{detectEr}~\cite{attard2017runtime} represents the closest existing
+approach to our work, utilizing actor-based systems and leveraging Erlang
+tracing tools to build monitors from specification languages. However,
+\texttt{detectEr} suffers from three fundamental limitations that severely
+constrain its applicability to real-world concurrent systems.
+
+The first one being that \texttt{detectEr} can only monitor individual
+processes in isolation, preventing the specification and verification of
+properties that span multiple actors. Due to that, the properties that one can
+define within \texttt{detectEr} lack expressiveness, similar to the OTP
+pair-wise properties that we have seen. This restriction eliminates the
+possibility of expressing system-wide invariants or protocols that inherently
+involve multi-actor coordination.
+
+Secondly, while \texttt{detectEr}'s underlying specification language
+theoretically supports cross-actor properties, the implemented fragment
+restricts users to single-process monitoring. The only correlation possible is
+between a request and its immediate response within the same process, just like
+the OTP pair-wise responses. This severely limits the tool's ability to capture
+complex interaction patterns common in distributed systems. \texttt{detectEr}
+does not deal with the context aware verification whole issue. In order for it
+to work in such scenarios we would need to have a perfectly synchronous system.
+But, the real world applications rely of asynchronous behaviour, in order to
+take advantage of the actor-based model, and accelerate computation.
+
+And finally, due to Erlang's concurrency model, \texttt{detectEr} requires
+users to manually specify all possible message interleavings. This approach
+becomes exponentially complex and often practically impossible as the number of
+concurrent actors and interactions grows, placing an unrealistic burden on
+users. 
+
+The only correlation that is possible to perform is from one request to its own
+response. Describing longer chains of messages is not possible in the tool, and
+if we want to correlate variables over different interaction, just as in WALTZ,
+that is not possible in \texttt{detectEr}. 
+
+WALTZ fundamentally addresses these limitations through its novel approach to
+intra-actor message correlation within context-aware verification frameworks.
+Unlike \texttt{detectEr}'s process-centric view, WALTZ enables the
+specification of properties that span entire chains of actor interactions while
+maintaining causal relationships between messages. The language semantics
+automatically manage causal contexts, eliminating the need for manual
+interleaving specification.
+
+By hiding beneath the semantics of the language the notions of context, and
+context aware verification of properties, that target such asynchronous
+systems. Due to this possibility, we open the doors to intra actor property
+definitions and verification, since we are able to correlate all the messages
+that belong to the same causal context and evaluate these properties in highly
+concurrent scenarios without mixing message payloads of different causal
+chains.
+
+While \texttt{detectEr} pioneered runtime verification in actor systems, its
+single-process limitation and lack of context-awareness render it insufficient
+for modern distributed applications. WALTZs strength lies precisely in enabling
+intra-actor message relations and context-aware verification in concurrent
+scenarios, opening new possibilities for expressing and verifying complex
+distributed system properties that were previously intractable.
+\subsection{ELARVA}
+ELARVA is an extension of LARVA, focused for actor-based system, to fill the
+gaps of LARVA that is uncapable of dealing with concurrent systems. The main
+difference between WALTZ and ELARVA, is that ELARVA only allows the definition
+of properties over a single Erlang components~\cite{galea2013polylarva}, not
+entire interactions between different components, which is the target of WALTZ.
+
+ELARVA uses DATEs to define properties, whereas WALTZ uses a modal action driven specification language for its property
+definitions, that internally hides the complications of dealing with concurrent systems and performs the evaluation
+of formulas based on the causal context that they live within.
+\subsection{Multiparty Session Types}
+Fowler~\cite{frowler} takes on the approach of Yoshida~\cite{multipartysessions}, by working with multi party session
+types in the context of \texttt{Erlang} programs. In terms of assumptions his
+work is very similar to ours, since he also considers \texttt{Erlang} programs
+that follow the OTP guidelines. In his work, he presented
+\texttt{monitored-session-erlang}, which is a framework for runtime
+verification of \texttt{Erlang} OTP applications using multiparty session
+types. The core of the methodology is the use of multiparty session types. A
+protocol, which is a series of typed interactions between multiple
+participants.
+
+Each actor's monitor maintains a hashtable mapping session IDs and roles to
+monitors. When a message is checked, the monitor verifies if any transitions
+can be made from the current state. If not, an exception is raised. 
+
+The framework is implemented as an \texttt{Erlang} library, leveraging the OTP
+\texttt{gen\_server} behaviour and the supersion hierarchies. Actor that
+participate in sessions, must implement some directives to handle special call
+backs, such as initializing a communication, joining a session, establish
+conversations and handle messages. The framework uses \texttt{ConvKey}, which
+as the name says, is a conversation key used in session types, it is used in
+order to correlate complex events that span across multiple actors.
+
+This tool is very similar to what we achieve, yet it has some crucial
+differences. First, it uses session types, which is not the approach followed
+by ACTORCHESTRA at all, the way that we tackle the problem is completely
+different. Second, all the directives must be added manually by the programmer,
+which is the opposite of what we do, which is injecting the necessary code
+management automatically. Of course, this injection targets specific system
+architectures, but it has room for improvement and further adaptability to
+tackle more complex systems.
+\fi
+
+\iffalse
+This chapter positions WALTZ and ACTORCHESTRA within the runtime verification landscape, examining how our context-aware approach addresses fundamental limitations in monitoring concurrent actor systems. We analyse existing specification languages and tools across three key dimensions: their ability to handle real-time monitoring of running systems, their support for actor-based concurrency patterns, and their expressiveness for multi-actor properties.
+
+\section{The Runtime Verification Landscape}
+\label{sec:rv_landscape}
+
+Runtime verification tools can be categorized along several critical dimensions that directly impact their applicability to actor-based systems. \textbf{Monitoring approach} distinguishes between offline analysis of predetermined traces versus online monitoring of live systems. \textbf{Concurrency support} ranges from sequential assumption to actor-aware verification that handles asynchronous message passing and causal relationships. \textbf{Property scope} varies from single-component monitoring to system-wide invariants spanning multiple actors.
+
+Most existing RV approaches fall short when applied to actor systems because they assume either sequential execution or global state evolution. Actor systems, however, are fundamentally built on local state, asynchronous interactions, and causal message relationships that span multiple processes. This creates a gap that WALTZ and ACTORCHESTRA specifically address through context-aware verification and intra-actor message correlation.
+
+The remainder of this chapter examines how existing work attempts to bridge this gap, building toward our novel approach that enables practical runtime verification of complex actor-based systems.
+
+\section{Specification Languages for Actor Systems}
+\label{sec:spec_languages}
+
+Effective runtime verification requires specification languages that can naturally express properties of the target computational model. For actor systems, this means handling asynchronous interactions, local state evolution, and causal message relationships.
+
+\subsection{Temporal Logic Approaches}
+\label{sub_sec:temporal_approaches}
+
+Linear Temporal Logic (LTL) and its extensions attempt to specify system properties through temporal operators over global state sequences. However, these approaches face fundamental challenges when applied to actor systems.
+
+\textbf{LTL$_4$}~\cite{falcone2012can} introduces revocable verdicts through a four-valued domain ($\top$, $\bot$, $\top_{c}$, $\bot_{c}$) rather than the traditional three-valued approach. While this enables monitoring of more properties, it still assumes global state evolution that conflicts with actor systems' local state and asynchronous nature.
+
+\textbf{Metric Temporal Logic (MTL)}~\cite{koymans1990specifying} augments LTL with time constraints, enabling properties like $\square (enter \rightarrow (\lozenge_{(0,20)} post))$. However, MTL's global timing assumptions prove problematic in distributed actor systems where message delays vary unpredictably.
+
+\textbf{Metric First-Order Temporal Logic (MFOTL)}~\cite{monitoringMFOTL} extends MTL with data parameters and quantifiers, creating a more expressive formalism used in tools like MonPoly~\cite{basin2017monpoly} and WHYMON~\cite{limawhymon}. Properties can reference data: $\square \forall x \forall y : entered(x,y) \rightarrow \lozenge_{(0,20)} post(x)$. While MFOTL's monitorable fragment enables practical verification, it still requires manual specification of all possible interleavings in concurrent systems—a burden that grows exponentially with system complexity.
+
+\subsection{Process-Oriented Specification Languages}
+\label{sub_sec:process_oriented}
+
+Recognizing limitations of global temporal logics, researchers developed specification languages tailored to process-based systems.
+
+\textbf{$\mu$HML and mHML}~\cite{adventuresMon,opGuideMon} represent modal logics with recursion, specifically designed for runtime verification contexts. The monitorable fragment mHML~\cite{henessyAdrian} guarantees monitorability by restricting to safety (sHML) or co-safety (cHML) properties:
+
+\begin{definition}[mHML~\cite{henessyAdrian}]
+$\psi, \chi \in \text{MHML}^{\text{def}} = \text{sHML} \cup \text{cHML}$ where:
+\[
+\theta, \vartheta \in \text{sHML} ::= \text{tt} \mid \text{ff} \mid [\alpha]\theta \mid \theta \wedge \vartheta \mid \text{max} \, X.\theta \mid X
+\]
+\[
+\pi, \varpi \in \text{cHML} ::= \text{tt} \mid \text{ff} \mid \langle \alpha \rangle \pi \mid \pi \vee \varpi \mid \text{min} \, X.\pi \mid X
+\]
+\end{definition}
+
+While mHML aligns better with process semantics, it suffers from two critical limitations for actor systems: it lacks context-aware evaluation (assuming all observed events are causally related), and it requires manual specification of all possible message interleavings—exactly the exponential complexity problem that makes verification of concurrent systems intractable.
+
+\textbf{The Actor System Challenge}: These specification languages, while sophisticated, fundamentally assume either global state evolution (temporal logics) or complete interleaving specification (process logics). Actor systems need properties that span multiple locality levels—local actor state, actor-to-actor relationships, and system-wide invariants—while automatically handling causal contexts and asynchronous interactions. This gap motivates WALTZ's design as a domain-specific language that aligns with actor system semantics.
+
+\section{Runtime Verification Tools}
+\label{sec:rv_tools}
+
+We examine RV tools by their monitoring approach, progressing from offline analysis to actor-aware online verification. This progression highlights how each approach handles the fundamental challenges of concurrent system monitoring.
+
+\subsection{Offline Analysis Tools}
+\label{sub_sec:offline_tools}
+
+\textbf{MonPoly}~\cite{basin2017monpoly} analyses traces using MFOTL properties, computing sets of satisfying variable assignments rather than simple boolean verdicts. This provides rich diagnostic information about violations. However, MonPoly operates on predetermined log files with system-specific grammar, preventing real-time analysis of running systems. Even though the algorithm processes traces incrementally, the fundamental limitation remains: traces must be manually created beforehand rather than extracted from live system execution.
+
+\textbf{WHYMON}~\cite{limawhymon} extends MonPoly's approach with full MFOTL support and explainable verdicts through partitioned decision trees. These trees explain why formulas are satisfied or violated, significantly enhancing debuggability. However, WHYMON shares MonPoly's core limitation: dependence on manually created traces using specific grammar, making it unsuitable for monitoring actual running systems. While more informative than MonPoly, WHYMON requires substantially more processing time for the same analysis.
+
+Both tools provide sophisticated analysis capabilities but address a fundamentally different problem than runtime verification of live systems. They excel at post-hoc analysis but cannot provide the real-time feedback necessary for preventing system failures or understanding dynamic behaviour.
+
+\subsection{General Online RV Tools}
+\label{sub_sec:general_online}
+
+Several tools attempt online monitoring but lack actor-specific concurrency support.
+
+\textbf{JavaMOP and Parametric Trace Slicing}: JavaMOP~\cite{javamop} uses parametric trace slicing to handle multiple object instances, creating separate propositional subtraces based on data values. For example, the property $(open(f).close(f))^*$ slices trace $open("f1").open("f2").close("f1")$ into subtraces $open.close$ and $open$ for files "f1" and "f2" respectively.
+
+However, parametric trace slicing suffers from three fundamental limitations: (1) events cannot be associated with different parameter lists, (2) all parameters must participate in slicing with fixed bindings, and (3) it assumes universal quantification. These restrictions make it inadequate for actor systems where message parameters have complex relationships and binding requirements.
+
+\textbf{Quantified Event Automata (QEA)} and \textbf{MarQ}~\cite{qea} address some parametric slicing limitations through explicit quantification and free variables. However, they still target object-oriented systems and require manual instrumentation through AspectJ, making them unsuitable for actor-based architectures.
+
+These tools demonstrate the challenges of adapting general RV approaches to concurrent systems—they require extensive manual instrumentation and cannot naturally handle actor-specific interaction patterns.
+
+\subsection{Actor-Specific RV Tools}
+\label{sub_sec:actor_tools}
+
+\subsubsection{ELARVA}
+\label{sub_sub_sec:elarva}
+
+ELARVA~\cite{elarva} extends LARVA to Erlang systems using Dynamic Automata with Timers and Events (DATE). It performs completely asynchronous monitoring by leveraging Erlang's native tracing mechanism, avoiding instrumentation overhead. However, ELARVA only supports single-component properties, preventing specification of multi-actor interactions. Its centralized tracer creates potential bottlenecks and single points of failure, contrasting with truly distributed monitoring approaches.
+
+\subsubsection{Multiparty Session Types}
+\label{sub_sub_sec:session_types}
+
+Fowler's work~\cite{frowler} applies multiparty session types to Erlang OTP applications, using session IDs and roles to correlate messages across actors. Each actor maintains hashtables mapping sessions to monitors, checking transitions when messages arrive. While this approach handles multi-actor properties, it requires extensive manual instrumentation—programmers must implement specific callbacks for session initialization, joining, and message handling. This contrasts sharply with automatic instrumentation approaches that minimize developer burden.
+
+\subsubsection{detectEr: The Closest Approach}
+\label{sub_sub_sec:detecter}
+
+\texttt{detectEr}~\cite{attard2017runtime} represents the most sophisticated existing approach to actor-based runtime verification. It leverages Erlang's native tracing mechanisms and uses the monitorable fragment of $\mu$HML to specify safety properties, automatically generating monitors that run alongside target systems.
+
+\textbf{detectEr's Contributions}: The tool pioneered several important concepts: automatic monitor synthesis from formal specifications, leveraging platform-native tracing for minimal overhead, and supporting both inline and outline instrumentation modes. It provides a foundation for practical actor-based RV and demonstrates the feasibility of formal verification in concurrent systems.
+
+\textbf{Fundamental Limitations}: However, detectEr suffers from three critical limitations that severely constrain its real-world applicability:
+
+\textit{1. Single-Process Restriction}: detectEr can only monitor individual processes in isolation, preventing specification of properties spanning multiple actors. This eliminates system-wide invariants and protocols requiring multi-actor coordination—precisely the properties most valuable in distributed systems.
+
+\textit{2. Limited Correlation}: While the underlying specification language theoretically supports cross-actor properties, the implemented fragment restricts correlation to request-response pairs within the same process. Longer message chains or cross-actor variable correlation—common patterns in actor systems—cannot be expressed.
+
+\textit{3. Manual Interleaving Specification}: Due to Erlang's concurrency model, users must manually specify all possible message interleavings. This becomes exponentially complex as concurrent actors increase, placing an unrealistic burden on users and making the approach impractical for real systems.
+
+\textbf{Context-Awareness Gap}: Most critically, detectEr lacks context-aware evaluation. In asynchronous systems, monitors receive causally unrelated events that appear temporally interleaved. Without understanding causal contexts, monitors cannot distinguish between legitimate concurrent executions and actual property violations. This fundamental limitation renders detectEr insufficient for modern distributed applications where concurrent causal chains are the norm rather than the exception.
+
+\section{WALTZ and ACTORCHESTRA: Addressing the Gaps}
+\label{sec:waltz_positioning}
+
+The analysis above reveals a clear gap in the RV landscape: existing approaches either lack actor-specific concurrency support or suffer from fundamental limitations that prevent practical application to real distributed systems. WALTZ and ACTORCHESTRA specifically address these gaps through three key innovations.
+
+\subsection{Context-Aware Verification}
+\label{sub_sec:context_aware}
+
+\textbf{The Problem}: Traditional RV approaches assume that temporally adjacent events in traces are causally related. In actor systems, however, concurrent message processing creates traces where causally unrelated events appear interleaved. This leads to false violations when monitors cannot distinguish between legitimate concurrency and actual property violations.
+
+\textbf{Our Solution}: WALTZ embeds context-awareness directly into its semantics, automatically managing causal relationships between messages. The language semantics track causal contexts and ensure that property evaluation only considers causally related events. This eliminates the need for manual interleaving specification while enabling correct verification in highly concurrent scenarios.
+
+Unlike detectEr's process-centric view or MFOTL's global state assumptions, WALTZ recognizes that actor systems require evaluation within causal contexts to distinguish concurrency from incorrectness.
+
+\subsection{Intra-Actor Message Correlation}
+\label{sub_sec:message_correlation}
+
+\textbf{The Problem}: Real actor systems require properties that span chains of interactions across multiple processes. Existing tools either restrict to single-process monitoring (detectEr) or require complex manual correlation mechanisms (session types).
+
+\textbf{Our Solution}: WALTZ enables natural specification of properties spanning entire interaction chains while automatically maintaining causal relationships. Variables can be correlated across different actors and interaction steps, enabling expression of complex distributed protocols without manual correlation management.
+
+This capability opens new possibilities for expressing system-wide invariants that were previously intractable, such as end-to-end request processing guarantees or multi-actor coordination protocols.
+
+\subsection{Real-Time System Integration}
+\label{sub_sec:realtime_integration}
+
+\textbf{The Problem}: Many sophisticated RV tools operate on predetermined log files (MonPoly, WHYMON), limiting their applicability to post-hoc analysis rather than runtime failure prevention.
+
+\textbf{Our Solution}: ACTORCHESTRA integrates directly with running actor systems, extracting traces in real-time and providing immediate feedback. The framework automatically injects necessary instrumentation code, minimizing developer burden while enabling practical deployment in production systems.
+
+This real-time capability transforms runtime verification from a debugging aid to a proactive system reliability mechanism.
+
+\subsection{Comparative Expressiveness}
+\label{sub_sec:expressiveness}
+
+Table~\ref{tab:tool_comparison} summarizes how WALTZ/ACTORCHESTRA compares to existing approaches across key dimensions:
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Tool} & \textbf{Real-time} & \textbf{Multi-actor} & \textbf{Context-aware} & \textbf{Auto-instrumentation} \\
+\hline
+MonPoly & No & Yes & No & N/A \\
+WHYMON & No & Yes & No & N/A \\
+detectEr & Yes & No & No & Yes \\
+ELARVA & Yes & No & No & Yes \\
+Session Types & Yes & Yes & Limited & No \\
+\textbf{WALTZ/ACTORCHESTRA} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} \\
+\hline
+\end{tabular}
+\caption{Comparison of RV approaches for actor systems}
+\label{tab:tool_comparison}
+\end{table}
+
+\section{Summary and Positioning}
+\label{sec:summary}
+
+The runtime verification landscape reveals a clear evolution from general temporal logics toward domain-specific approaches that better align with target computational models. However, existing work falls short of addressing the fundamental challenges of monitoring concurrent actor systems: context-aware evaluation, multi-actor property correlation, and real-time integration with running systems.
+
+WALTZ represents a significant step forward by embedding context-awareness directly into the specification language semantics, automatically managing the complexities that make concurrent system verification intractable with existing approaches. ACTORCHESTRA complements this with practical real-time monitoring capabilities that enable deployment in production actor systems.
+
+While tools like detectEr pioneered actor-based RV and demonstrated its feasibility, WALTZ addresses its fundamental limitations through context-aware verification and intra-actor message correlation. This positions our work not as an incremental improvement, but as addressing qualitatively different classes of properties that enable practical verification of modern distributed systems.
+
+The combination of domain-specific language design, context-aware semantics, and real-time system integration creates new possibilities for ensuring correctness in concurrent actor systems—possibilities that were previously either theoretically intractable or practically infeasible with existing approaches.
+\fi

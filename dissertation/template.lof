@@ -1,0 +1,62 @@
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {portuguese}{}\relax 
+\babel@toc {english}{}\relax 
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces A basic RV setup}}{7}{figure.caption.10}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Chat room automata}}{8}{figure.caption.11}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Specification of a property in LTL and in a regular expression}}{10}{figure.caption.12}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Illustration of several property satisfactions}}{14}{figure.caption.13}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Diagram illustrating the algorithm of generating a monitor}}{18}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces The resulting Moore Machine for $\varphi = \neg \texttt {post} \mathcal {U} \texttt {enter}$}}{19}{figure.caption.15}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces The resulting Moore Machine for $\varphi =(a \land \lozenge b) \lor (c \land \square \lozenge d)$}}{22}{figure.caption.16}%
+\contentsline {figure}{\numberline {2.8}{\ignorespaces The resulting Moore Machine for $\varphi = \lozenge a$}}{22}{figure.caption.17}%
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Offline monitoring}}{24}{figure.caption.18}%
+\contentsline {figure}{\numberline {2.10}{\ignorespaces Actor-based model}}{29}{figure.caption.19}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Multiplying number in request by 2}}{39}{figure.caption.21}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Context tree of the trace $\sigma $ given by $\mathcal {C}$ }}{40}{figure.caption.22}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Evolution of the context tree showing the dynamic construction process}}{41}{figure.caption.23}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Actor-based system that operates over a list}}{42}{figure.caption.24}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Context tree of the trace $\sigma _2$ given by $\mathcal {C}$ }}{44}{figure.caption.25}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces The monitor structure for property $\varphi _2$}}{44}{figure.caption.26}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Context tree example}}{46}{figure.caption.27}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Inconclusive verdict for $\Theta $}}{46}{figure.caption.28}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Conclusive verdict for $\Theta $}}{46}{figure.caption.29}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Inconclusive verdict for $\Omega $}}{48}{figure.caption.30}%
+\contentsline {figure}{\numberline {3.11}{\ignorespaces Conclusive verdict for $\Omega $}}{48}{figure.caption.31}%
+\contentsline {figure}{\numberline {3.12}{\ignorespaces The contexts of the trace $\sigma $}}{50}{figure.caption.32}%
+\contentsline {figure}{\numberline {3.13}{\ignorespaces Context tree example and trace fed into monitor}}{53}{figure.caption.33}%
+\contentsline {figure}{\numberline {3.14}{\ignorespaces Monitor focus}}{54}{figure.caption.34}%
+\contentsline {figure}{\numberline {3.15}{\ignorespaces Under the eye of the monitor}}{54}{figure.caption.35}%
+\contentsline {figure}{\numberline {3.16}{\ignorespaces Message pipelining into contexts}}{55}{figure.caption.36}%
+\contentsline {figure}{\numberline {3.17}{\ignorespaces The monitor message flow for property $\varphi _2$}}{62}{figure.caption.40}%
+\contentsline {figure}{\numberline {3.18}{\ignorespaces System behaviour for post action}}{67}{figure.caption.41}%
+\contentsline {figure}{\numberline {3.19}{\ignorespaces System behaviour for login action}}{67}{figure.caption.42}%
+\contentsline {figure}{\numberline {3.20}{\ignorespaces System behaviour for enter actions}}{67}{figure.caption.43}%
+\contentsline {figure}{\numberline {3.21}{\ignorespaces Monitor organization for $\varphi _1$}}{70}{figure.caption.44}%
+\contentsline {figure}{\numberline {3.22}{\ignorespaces Non-monitorable structure for $\varphi _1$}}{71}{figure.caption.45}%
+\contentsline {figure}{\numberline {3.23}{\ignorespaces Non-monitorable structure for $\varphi _2$}}{71}{figure.caption.46}%
+\contentsline {figure}{\numberline {3.24}{\ignorespaces Monitorable property}}{72}{figure.caption.47}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Instrumentation pipeline of \texttt {ACTORCHESTRA}}}{84}{figure.caption.49}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Addition and multiplication system}}{96}{figure.caption.50}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Conductor as hub routing all messages}}{97}{figure.caption.51}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Single Client Performance - Baseline vs Instrumented}}{98}{figure.caption.52}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Multiple Clients Performance - Baseline vs Instrumented}}{99}{figure.caption.54}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces No-Broadcast System: Message Processing Time}}{100}{figure.caption.56}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces No-Broadcast System: Average Latency Comparison}}{102}{figure.caption.58}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces No-Broadcast System: Throughput Comparison}}{103}{figure.caption.60}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Broadcast System: Message Processing Time}}{104}{figure.caption.62}%
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Instrumentation Overhead: Amortization Analysis}}{104}{figure.caption.64}%
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Broadcast System: Throughput Comparison}}{105}{figure.caption.65}%
+\addvspace {10pt}
+\addvspace {10pt}

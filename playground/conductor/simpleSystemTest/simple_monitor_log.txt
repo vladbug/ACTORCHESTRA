@@ -1,0 +1,40 @@
+=== Simple Monitor Log Started at 2025-08-21 17:54:00 ===
+
+[2025-08-21 17:54:00] Simple Monitor started with PID <0.90.0> (tracking simple add->mul chain)
+[2025-08-21 17:54:00] Monitor received [1/4]: simple_client -> add_server, add_ten(5), Context #Ref<0.4124600339.3760193544.55324>
+[2025-08-21 17:54:00] Monitor received [2/4]: add_server -> mul_server, multiply_two(15), Context #Ref<0.4124600339.3760193544.55324>
+[2025-08-21 17:54:00] Monitor received [3/4]: mul_server -> add_server, result 30, Context #Ref<0.4124600339.3760193544.55324>
+[2025-08-21 17:54:00] Monitor received [4/4]: add_server -> simple_client, result 30, Context #Ref<0.4124600339.3760193544.55324>
+[2025-08-21 17:54:00] === COMPLETE SIMPLE PROCESSING FLOW ===
+[2025-08-21 17:54:00] 1. simple_client -> add_server: add_ten(5) (Context: #Ref<0.4124600339.3760193544.55324>)
+[2025-08-21 17:54:00] 2. add_server -> mul_server: multiply_two(15) (Context: #Ref<0.4124600339.3760193544.55324>)
+[2025-08-21 17:54:00] 3. mul_server -> add_server: result 30 (Context: #Ref<0.4124600339.3760193544.55324>)
+[2025-08-21 17:54:00] 4. add_server -> simple_client: result 30 (Context: #Ref<0.4124600339.3760193544.55324>)
+[2025-08-21 17:54:00]    Simple chain: 5 -> +10 -> 15 -> *2 -> 30
+[2025-08-21 17:54:00] === END SIMPLE PROCESSING FLOW ===
+
+[2025-08-21 17:54:02] Monitor received [1/4]: simple_client -> add_server, add_ten(3), Context #Ref<0.4124600339.3760193544.55507>
+[2025-08-21 17:54:02] Monitor received [2/4]: add_server -> mul_server, multiply_two(13), Context #Ref<0.4124600339.3760193544.55507>
+[2025-08-21 17:54:02] Monitor received [3/4]: mul_server -> add_server, result 26, Context #Ref<0.4124600339.3760193544.55507>
+[2025-08-21 17:54:02] Monitor received [4/4]: add_server -> simple_client, result 26, Context #Ref<0.4124600339.3760193544.55507>
+[2025-08-21 17:54:02] === COMPLETE SIMPLE PROCESSING FLOW ===
+[2025-08-21 17:54:02] 1. simple_client -> add_server: add_ten(3) (Context: #Ref<0.4124600339.3760193544.55507>)
+[2025-08-21 17:54:02] 2. add_server -> mul_server: multiply_two(13) (Context: #Ref<0.4124600339.3760193544.55507>)
+[2025-08-21 17:54:02] 3. mul_server -> add_server: result 26 (Context: #Ref<0.4124600339.3760193544.55507>)
+[2025-08-21 17:54:02] 4. add_server -> simple_client: result 26 (Context: #Ref<0.4124600339.3760193544.55507>)
+[2025-08-21 17:54:02]    Simple chain: 3 -> +10 -> 13 -> *2 -> 26
+[2025-08-21 17:54:02] === END SIMPLE PROCESSING FLOW ===
+
+[2025-08-21 17:54:02] Monitor received [1/4]: simple_client -> add_server, add_ten(7), Context #Ref<0.4124600339.3760193544.55535>
+[2025-08-21 17:54:02] Monitor received [2/4]: add_server -> mul_server, multiply_two(17), Context #Ref<0.4124600339.3760193544.55535>
+[2025-08-21 17:54:02] Monitor received [3/4]: mul_server -> add_server, result 34, Context #Ref<0.4124600339.3760193544.55535>
+[2025-08-21 17:54:02] Monitor received [4/4]: add_server -> simple_client, result 34, Context #Ref<0.4124600339.3760193544.55535>
+[2025-08-21 17:54:02] === COMPLETE SIMPLE PROCESSING FLOW ===
+[2025-08-21 17:54:02] 1. simple_client -> add_server: add_ten(7) (Context: #Ref<0.4124600339.3760193544.55535>)
+[2025-08-21 17:54:02] 2. add_server -> mul_server: multiply_two(17) (Context: #Ref<0.4124600339.3760193544.55535>)
+[2025-08-21 17:54:02] 3. mul_server -> add_server: result 34 (Context: #Ref<0.4124600339.3760193544.55535>)
+[2025-08-21 17:54:02] 4. add_server -> simple_client: result 34 (Context: #Ref<0.4124600339.3760193544.55535>)
+[2025-08-21 17:54:02]    Simple chain: 7 -> +10 -> 17 -> *2 -> 34
+[2025-08-21 17:54:02] === END SIMPLE PROCESSING FLOW ===
+
+[2025-08-21 17:54:05] Simple Monitor stopped~n[2025-08-21 17:54:05] Simple Monitor stopping...

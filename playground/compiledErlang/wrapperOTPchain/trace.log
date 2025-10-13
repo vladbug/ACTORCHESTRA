@@ -1,0 +1,120 @@
+[RECV] <0.102.0> received :: {'$gen_call',
+                                 {<0.85.0>,
+                                  [alias|
+                                   #Ref<0.0.10883.243844564.3952410629.119667>]},
+                                 {process,5}}
+[CALL] <0.102.0> called central:handle_call/3
+[SEND] <0.102.0> -> <0.98.0> :: {'$gen_call',
+                                 {<0.102.0>,
+                                  [alias|
+                                   #Ref<0.0.13059.243844564.3952410629.119669>]},
+                                 {send_with_context,worker_a,
+                                  {process,5},
+                                  #Ref<0.243844564.3952345093.119668>}}
+[RECV] <0.98.0> received :: {'$gen_call',
+                                {<0.102.0>,
+                                 [alias|
+                                  #Ref<0.0.13059.243844564.3952410629.119669>]},
+                                {send_with_context,worker_a,
+                                    {process,5},
+                                    #Ref<0.243844564.3952345093.119668>}}
+[RECV] <0.101.0> received :: {'$gen_call',
+                                 {<0.104.0>,
+                                  [alias|
+                                   #Ref<0.0.13315.243844564.3952410629.119677>]},
+                                 {context,
+                                     #Ref<0.243844564.3952345093.119668>}}
+[CALL] <0.101.0> called worker_a:handle_call/3
+[SEND] <0.101.0> -> <0.70.0> :: {io_request,<0.101.0>,
+                                 #Ref<0.243844564.3952345093.119679>,
+                                 {put_chars,unicode,io_lib,format,
+                                  ["worker_a received context: ~p~n",
+                                   [#Ref<0.243844564.3952345093.119668>]]}}
+[RECV] <0.101.0> received :: {io_reply,#Ref<0.243844564.3952345093.119679>,ok}
+[RET ] <0.101.0> returned from worker_a:handle_call/3 with {reply,ok,
+                                                            {state,
+                                                             #Ref<0.243844564.3952345093.119668>}}
+[SEND] <0.101.0> -> #Ref<0.0.13315.243844564.3952410629.119677> :: {[alias|
+                                                                     #Ref<0.0.13315.243844564.3952410629.119677>],
+                                                                    ok}
+[RECV] <0.101.0> received :: {'$gen_call',
+                                 {<0.104.0>,
+                                  [alias|
+                                   #Ref<0.0.13315.243844564.3952410629.119687>]},
+                                 {process,5}}
+[CALL] <0.101.0> called worker_a:handle_call/3
+[SEND] <0.101.0> -> <0.70.0> :: {io_request,<0.101.0>,
+                                 #Ref<0.243844564.3952345093.119689>,
+                                 {put_chars,unicode,io_lib,format,
+                                  ["worker_a received: ~p, sending: ~p to worker_b~n",
+                                   [5,15]]}}
+[RECV] <0.101.0> received :: {io_reply,#Ref<0.243844564.3952345093.119689>,ok}
+[SEND] <0.101.0> -> <0.70.0> :: {io_request,<0.101.0>,
+                                 #Ref<0.243844564.3952345093.119700>,
+                                 {put_chars,unicode,io_lib,format,
+                                  ["Calling ~p with message ~p and context ~p~n",
+                                   [worker_b,
+                                    {process,15},
+                                    #Ref<0.243844564.3952345093.119668>]]}}
+[RECV] <0.101.0> received :: {io_reply,#Ref<0.243844564.3952345093.119700>,ok}
+[SEND] <0.101.0> -> <0.98.0> :: {'$gen_call',
+                                 {<0.101.0>,
+                                  [alias|
+                                   #Ref<0.0.12931.243844564.3952410629.119714>]},
+                                 {send_with_context,worker_b,
+                                  {process,15},
+                                  #Ref<0.243844564.3952345093.119668>}}
+[RECV] <0.98.0> received :: {'$gen_call',
+                                {<0.101.0>,
+                                 [alias|
+                                  #Ref<0.0.12931.243844564.3952410629.119714>]},
+                                {send_with_context,worker_b,
+                                    {process,15},
+                                    #Ref<0.243844564.3952345093.119668>}}
+[RECV] <0.100.0> received :: {'$gen_call',
+                                 {<0.105.0>,
+                                  [alias|
+                                   #Ref<0.0.13443.243844564.3952410629.119724>]},
+                                 {context,
+                                     #Ref<0.243844564.3952345093.119668>}}
+[CALL] <0.100.0> called worker_b:handle_call/3
+[RET ] <0.100.0> returned from worker_b:handle_call/3 with {reply,ok,
+                                                            {state,
+                                                             #Ref<0.243844564.3952345093.119668>}}
+[SEND] <0.100.0> -> #Ref<0.0.13443.243844564.3952410629.119724> :: {[alias|
+                                                                     #Ref<0.0.13443.243844564.3952410629.119724>],
+                                                                    ok}
+[RECV] <0.100.0> received :: {'$gen_call',
+                                 {<0.105.0>,
+                                  [alias|
+                                   #Ref<0.0.13443.243844564.3952410629.119727>]},
+                                 {process,15}}
+[CALL] <0.100.0> called worker_b:handle_call/3
+[RET ] <0.100.0> returned from worker_b:handle_call/3 with {reply,30,
+                                                            {state,
+                                                             #Ref<0.243844564.3952345093.119668>}}
+[SEND] <0.100.0> -> #Ref<0.0.13443.243844564.3952410629.119727> :: {[alias|
+                                                                     #Ref<0.0.13443.243844564.3952410629.119727>],
+                                                                    30}
+[RECV] <0.101.0> received :: {[alias|
+                               #Ref<0.0.12931.243844564.3952410629.119714>],
+                              30}
+[SEND] <0.101.0> -> <0.70.0> :: {io_request,<0.101.0>,
+                                 #Ref<0.243844564.3952345093.119744>,
+                                 {put_chars,unicode,io_lib,format,
+                                  ["worker_a received reply: ~p~n",[30]]}}
+[RECV] <0.101.0> received :: {io_reply,#Ref<0.243844564.3952345093.119744>,ok}
+[RET ] <0.101.0> returned from worker_a:handle_call/3 with {reply,30,
+                                                            {state,
+                                                             #Ref<0.243844564.3952345093.119668>}}
+[SEND] <0.101.0> -> #Ref<0.0.13315.243844564.3952410629.119687> :: {[alias|
+                                                                     #Ref<0.0.13315.243844564.3952410629.119687>],
+                                                                    30}
+[RECV] <0.102.0> received :: {[alias|
+                               #Ref<0.0.13059.243844564.3952410629.119669>],
+                              30}
+[RET ] <0.102.0> returned from central:handle_call/3 with {reply,30,
+                                                           {state,undefined}}
+[SEND] <0.102.0> -> #Ref<0.0.10883.243844564.3952410629.119667> :: {[alias|
+                                                                     #Ref<0.0.10883.243844564.3952410629.119667>],
+                                                                    30}

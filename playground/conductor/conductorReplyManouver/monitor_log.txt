@@ -1,0 +1,14 @@
+=== Monitor Log Started at 2025-08-28 18:53:11 ===
+
+[2025-08-28 18:53:11] Monitor started with PID <0.95.0> (tracking module-to-module flow)
+[2025-08-28 18:53:11] Monitor received unexpected flow: client -> slow_central_server, message {connect,
+                                                                          <0.97.0>}, Context #Ref<0.1184304280.1573650443.197089>
+[2025-08-28 18:53:11] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.1184304280.1573650443.197089>
+[2025-08-28 18:53:11] Monitor received unexpected flow: client -> slow_central_server, message {connect,
+                                                                          <0.98.0>}, Context #Ref<0.1184304280.1573650443.197145>
+[2025-08-28 18:53:11] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.1184304280.1573650443.197145>
+[2025-08-28 18:53:11] Monitor received [1/4]: client -> slow_central_server, process(<0.97.0>, 5), Context #Ref<0.1184304280.1573650443.197089>
+[2025-08-28 18:53:16] Monitor received unexpected flow: slow_central_server -> client, message {ok,
+                                                                          30}, Context #Ref<0.1184304280.1573650443.197089>
+[2025-08-28 18:53:16] Monitor received [1/4]: client -> slow_central_server, process(<0.98.0>, 2), Context #Ref<0.1184304280.1573650443.197145>
+[2025-08-28 18:53:16] Monitor stopped~n[2025-08-28 18:53:16] Monitor stopping...

@@ -1,0 +1,112 @@
+\typeout{NT FILE chapter9.tex}%
+
+\chapter{Conclusions}
+\label{cha:conclusions}
+
+This chapter finalizes the document with a summary of what this work tackled and providing
+future paths to improvement and extensions to the work.
+
+\section{Summary}
+\label{sec:summary}
+
+We developed a framework for runtime verification of \texttt{Erlang} systems
+that adhere to OTP standards and follow client-server architectures. The effort
+involved studying the theoretical foundations of runtime verification,
+analysing existing tools, particularly those targeting actor-based systems, and
+identifying their capabilities and limitations. Building on this foundation, we
+developed three key components: a specification language for defining
+properties, a compiler that generates running \texttt{Erlang} monitors from
+these specifications, and a causality-tracking entity explicitly designed for
+client-server OTP systems.
+
+WALTZ is a specification language designed explicitly for actor-based systems.
+It allows users to define properties over chains of interactions between
+different processes by capturing the messages deemed relevant. Built with the
+concurrency model of \texttt{Erlang} in mind, WALTZ evaluates properties not
+only over the observed trace but also within the causal context of each
+message. This context-awareness is essential for correctly verifying properties
+in concurrent systems, as it prevents the unintended mixing of messages from
+different causal chains. One of WALTZ’s key strengths is its ability to specify
+properties that span multiple actor interactions, enabling users to define
+comprehensive, system-wide specifications or focus on specific interaction
+patterns. Equally important is its context-aware semantics, which are critical
+for verification in highly concurrent environments.
+
+A central goal of our work was compiling WALTZ properties into running
+monitors. The compilation process leverages the close alignment between WALTZ's
+semantics and the actor-based model. The generated monitors are scalable,
+tracking distinct message chains and evaluating them independently, producing
+verdicts upon detecting either a violation or satisfaction. These monitors
+operate alongside the system in a structured manner, without interfering with
+its execution, acting as oracles that receive only the relevant traces and
+evaluate them against the formally defined properties.
+
+The \texttt{conductor} is the entity responsible for tracking all the
+interaction in the system, and assigning a causal reference, essentially the
+context, to each message that is observed. It is the primary entity that
+enables monitors to receive a trace with the context directly attached to the
+message payload, thereby avoiding concurrency problems on the monitor's side,
+as all important information is sent atomically. The \texttt{conductor} focuses
+on client–server applications built with the OTP standard, enabling context
+injection by providing a well-defined framework to build upon.
+
+Together, these components form \texttt{ACTORCHESTRA}, a comprehensive runtime
+verification framework for verifying context-aware properties in actor-based
+systems, enabling the specification and evaluation of properties that span
+multiple interacting actors.
+
+\section{Future Work}
+\label{sec:future_work}
+
+There are several potential extensions and improvements to our work. For WALTZ,
+one such enhancement would be the ability to capture multiple events
+co-occurring as part of a property. Currently, the language supports only
+ordered chains of messages, but in some scenarios, it may be necessary to
+express properties involving concurrent events. Supporting this would require
+introducing a new operator to the language to handle these simultaneous
+interactions. Additionally, we can introduce logical conjunction and
+disjunction operators to increase the expressiveness of the language. Their
+inclusion requires the compilation of multiple monitors that coordinate and
+interact with one another, such as the handling of nested formulas.
+
+Adding time to properties is also a path to follow, as with time, we will be
+able to escape the non-monitorability issue, since we are setting a beginning
+and an end to our properties. Another interesting extension would be the
+definition of properties that compare or relate two or more different contexts,
+essentially allowing inter-context property definitions to enrich our language.
+Exploring the notions of unbreakability of chains might also be an interesting
+topic, since \texttt{Erlang} is built around a fault-tolerant design, and
+sometimes it is normal for things to fail. In our case, we do not permit
+failures because of the non-breakable chains of messages. An interesting
+direction for future work would be to relax this constraint and define
+properties that tolerate failures, provided that the failed event eventually
+succeeds.
+
+Regarding the \texttt{conductor} and \texttt{ACTORCHESTRA}, our current
+implementation targets a specific system architecture. As a result, certain
+types of systems, such as publish-subscribe architectures, do not fit within
+our existing assumptions. There is significant potential for improvement by
+investigating such systems and developing methods to manage causality
+effectively within them. Given the wide variety of system architectures and
+behaviours, tracking and handling all of them imposes a great challenge. A
+standard reference is necessary, which is why we focused on the specific target
+system used in this work. A natural direction for future work is to extend
+\texttt{ACTORCHESTRA} to support multiple architectures, enabling it to manage
+causality across a broader range of system designs.
+
+
+There is also room for improvement in the generated monitors, as specific
+properties, especially nested properties, could be enhanced to allow for more
+parallelism in verification and verdict notification. Not only improvement in
+the monitor organisation, but also the entire instrumentation pipeline, in
+order to reduce the overhead added to the monitored system.
+
+Finally, given the structure of our specification language and the design of
+the generated monitors, extending the framework to include verdict
+explainability could significantly enhance the utility of the results. Such an
+extension would enable more profound insights into property violations and open
+avenues for research into automated blame assignment.
+
+
+
+

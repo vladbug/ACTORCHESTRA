@@ -1,0 +1,70 @@
+-module(simple_wrapper).
+-behaviour(gen_server).
+-export([start_link/0, call/4]).
+%% gen_server callbacks
+-export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
+
+-record(state, {}).
+
+start_link() ->
+    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+
+init([]) ->
+    {ok, #state{}}.
+
+%% Public API - much simpler now with context injection!
+-spec call(pid() | atom(), term(), reference() | undefined, atom()) -> any().
+call(To, Msg, undefined, Module) ->
+    Context = make_ref(),
+    call(To, Msg, Context, Module);
+call(To, Msg, Context, Module) ->
+    StartTime = erlang:system_time(millisecond),
+    io:format("[~p ms] [WRAPPER] START: ~p->~p, msg=~p, ctx=~p~n", 
+             [StartTime, Module, To, Msg, Context]),
+    
+    %% Send monitor notification
+    ToModule = get_target_module(To),
+    monitor ! {Module, ToModule, Msg, Context},
+    
+    %% Send single atomic message with context embedded
+    CallStartTime = erlang:system_time(millisecond),
+    io:format("[~p ms] [WRAPPER] CALLING: gen_server:call(~p, {with_context, ~p, ~p})~n", 
+             [CallStartTime, To, Context, Msg]),
+    
+    Reply = gen_server:call(To, {with_context, Context, Msg}),
+    
+    EndTime = erlang:system_time(millisecond),
+    Duration = EndTime - StartTime,
+    io:format("[~p ms] [WRAPPER] COMPLETE: ~p->~p reply=~p (took ~p ms, ctx=~p)~n", 
+             [EndTime, ToModule, Module, Reply, Duration, Context]),
+    
+    %% Send response monitor notification
+    monitor ! {ToModule, Module, Reply, Context},
+    
+    Reply.
+
+%% Helper function to determine target module name
+get_target_module(To) when is_atom(To) -> 
+    To;
+get_target_module(To) when is_pid(To) ->
+    case process_info(To, registered_name) of
+        {registered_name, Name} -> Name;
+        [] -> To;
+        undefined -> To
+    end.
+
+%% No longer need complex queue management!
+handle_call(_Req, _From, State) ->
+    {reply, ok, State}.
+
+handle_cast(_Msg, State) ->
+    {noreply, State}.
+
+handle_info(_Info, State) ->
+    {noreply, State}.
+
+terminate(_Reason, _State) ->
+    ok.
+
+code_change(_OldVsn, State, _Extra) ->
+    {ok, State}.

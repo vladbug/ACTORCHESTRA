@@ -1,0 +1,57 @@
+-file("client.erl", 1).
+
+-module(client).
+
+-behaviour(gen_server).
+
+-export([start_link/1]).
+
+-export([init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         terminate/2,
+         code_change/3]).
+
+start_link(Name) ->
+    gen_server:start_link({local, Name}, client, [], []).
+
+init([]) ->
+    {ok, #{}}.
+
+handle_call(connect, _From, State) ->
+    Context = maps:get(context, State, undefined),
+    {Reply, NewContext} =
+        simple_wrapper:call(slow_central_server,
+                            {connect, self()},
+                            Context, client),
+    {reply, Reply, maps:put(context, NewContext, State)};
+handle_call({send_number, Number}, _From, State) ->
+    Context = maps:get(context, State, undefined),
+    {Result, NewContext} =
+        simple_wrapper:call(slow_central_server,
+                            {process, self(), Number},
+                            Context, client),
+    {reply, Result, maps:put(context, NewContext, State)};
+handle_call(disconnect, _From, State) ->
+    Context = maps:get(context, State, undefined),
+    {Reply, NewContext} =
+        simple_wrapper:call(slow_central_server,
+                            {disconnect, self()},
+                            Context, client),
+    {reply, Reply, maps:put(context, NewContext, State)}.
+
+handle_cast(_Msg, State) ->
+    {noreply, State}.
+
+handle_info(_Info, State) ->
+    {noreply, State}.
+
+terminate(_Reason, _State) ->
+    ok.
+
+code_change(_OldVsn, State, _Extra) ->
+    {ok, State}.
+
+
+

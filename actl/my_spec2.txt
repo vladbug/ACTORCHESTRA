@@ -1,0 +1,3 @@
+THETA(send {a -> b} WITH {X,Y, add} : TOP; 
+      THETA(send {b -> c} WITH {Z} : Z == X; 
+            THETA(send {a -> c} WITH {I} : I > 0)))

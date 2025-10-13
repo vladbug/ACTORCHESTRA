@@ -1,0 +1,51 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% abstract-en.tex
+%% NOVA thesis document file
+%%
+%% Abstract in English([^%]*)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE abstract-en.tex}%
+
+Software verification is a key principle for building and deploying reliable
+and correct software. Multiple verification techniques are employed
+successfully nowadays, such as theorem proving, model checking, and testing,
+each with strengths and trade-offs. These methods help ensure that systems
+behave as expected and meet reliability standards.
+
+Runtime Verification is a verification technique that has gained popularity for
+its lightweight and complementary approach to ensuring assurance over a system
+under scrutiny. Unlike the other traditional methods, runtime verification
+leverages the ability to perform checks over the system while it is running,
+enabling the dynamic monitoring of a system's behaviour. It adds the capability
+to verify and alert the system whenever it begins to behave in an unexpected or
+undesirable manner, enhancing the overall reliability and correctness.
+
+In this thesis, we addressed the problem of runtime verification in actor-based
+systems, a programming paradigm employed by languages such as \texttt{Erlang}.
+We define a specification language, WALTZ, that enables the specification of
+properties that span multiple actors and perform causal-aware verification.
+After designing and implementing the compiler for WALTZ by generating
+\texttt{Erlang} monitor executables, we implemented the orchestration needed to
+maintain causal relations between systems that follow the OTP guidelines by
+surgically injecting code into the system. With these two components, we built
+\texttt{ACTORCHESTRA}, a tool that allows users to specify properties and
+automatically monitor them at runtime.
+
+We evaluated two case studies to demonstrate the range of the specification
+language and the tool. We also analysed the overhead introduced by the tool
+compared to the baseline version of the code and explained the trade-offs of
+adding an extra layer of safety to our programs.
+
+% Palavras-chave do resumo em Inglês
+% \begin{keywords}
+% Keyword 1, Keyword 2, Keyword 3, Keyword 4, Keyword 5, Keyword 6, Keyword 7, Keyword 8, Keyword 9
+% \end{keywords}
+\keywords{
+  runtime verification \and
+  monitoring \and
+  actor-based programming model \and
+  property monitoring \and
+  monitorable properties
+}

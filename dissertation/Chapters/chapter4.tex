@@ -1,0 +1,97 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter4.tex
+%% NOVA thesis document file
+%%
+%% Chapter with lots of dummy text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter4.tex}%
+
+\chapter{Elaboration work plan}
+\label{cha:plan}
+
+In this thesis, we propose extending the monitor verdicts beyond simple boolean
+outcomes yielded by current monitors, as those give no insight into how the
+verdict was produced. In order to address this limitation, we will develop a
+blame assignment algorithm to identify the source of the violation in an
+actor-based system, offering aid in further debugging.
+
+The steps of the work plan are described below:
+
+\begin{enumerate}
+  \item \textbf{Exploring the detectEr tool and its limitations.}
+  First, we need to explore the \texttt{detectEr} tool, which uses the security
+  fragment of Hennessy-Milner logic (sHML) as its specification language. The
+  tool extended the specification language to maxHML$^D$, the most expressive
+  fragment of security properties that carry data.
+
+  The tool supports various instrumentation techniques, but some are still
+  under development. Additionally, the specification language allows a user to
+  define a range of properties in the context of an actor-based model. For
+  instance, it is possible to specify the payload of messages exchanged between
+  processes.
+  \item \textbf{In depth exploration of the capabilities of the tracing mechanism of Erlang.} 
+  The \texttt{detectEr} tool uses \texttt{Erlang}'s built-in tracing
+  mechanism to analyze systems implemented in \texttt{Erlang/Elixir}. By
+  leveraging these native capabilities, we can extract valuable information to
+  our advantage and use it as a foundation for developing the blame assignment
+  algorithm.
+
+  \item \textbf{Development of the blame assignment algorithm.}
+  We propose to enhance the verdicts provided by monitors by developing a blame
+  assignment algorithm that identifies the source of violations of specific
+  properties in actor-based systems. We aim to integrate the insights gained
+  from this algorithm into the verdicts, facilitating debugging.
+
+  Previous work, such as \texttt{WHYMON} and a more recent algorithm for
+  actor-based systems~\cite{monitoringLinearTimeExp}, explored how to
+  explain the verdicts of a monitor rather than just providing a simple truth
+  value indicating whether a given property was violated. However, none of
+  these approaches have identified the source of the violation. 
+
+  Building on these foundations, we aim to develop a more sophisticated
+  algorithm for blame assignment, enabling the identification of violation
+  sources. This approach enhances explainability through fault
+  localization and blame assignment, a key area of research in RV~\cite{issues}.
+
+  \item \textbf{Build a case study in Erlang/Elixir.}
+  Build a case study, like the one presented on the running example of this
+  document, to study the impact and reliability of the blame assignment
+  algorithm.
+
+  \item \textbf{Extend the detectEr specification language to MFOTL.}
+  \texttt{detectEr} utilizes a fragment of Hennessy-Milner logic. We aim to
+  investigate the feasibility of adopting the specification language used in
+  the \texttt{WHYMON} tool into an actor-based model. This
+  change could enable the expression of richer properties, but we must
+  carefully evaluate its impact on monitorability.
+
+  \item \textbf{Exploring partial monitorability.}
+  Working with MFOTL raises the problem of non-monitorability. Therefore, we
+  will study the applicability of the partial monitorability algorithm defined
+  in~\cite{ferrando2025towards} to monitor specific properties that, while
+  theoretically non-monitorable, might be worth monitoring in practice.
+ 
+  \item \textbf{Improvement of the detectEr verdicts.}
+  With the information gained from the blame assignment algorithm, we propose
+  to extend the verdicts of the \texttt{detectEr} tool, enabling an improved
+  explainability of such verdicts and easing the debugging process.
+ 
+  \item \textbf{Evaluation.} An evaluation is needed to assess the impact of
+  the blame assignment algorithm and various instrumentation techniques in
+  actor-based systems within real-world tools implemented in \texttt{Erlang}
+  such as \texttt{Cowboy}~\cite{cowboy}.
+ 
+  \item \textbf{Report Writing.}
+\end{enumerate}
+
+\Cref{fig:gantt} depicts a Gantt chart for the planned work schedule. An important note, is that the first step was already
+performed in this preparation phase, therefore it is not mentioned in the Gantt chart.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=1\linewidth]{Chapters/Figures/ganttfinal.pdf}%
+  \caption{Gantt chart of the work plan}
+  \label{fig:gantt}
+\end{figure}

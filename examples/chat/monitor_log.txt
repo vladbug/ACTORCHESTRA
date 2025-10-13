@@ -1,0 +1,1079 @@
+=== ATL Monitor Log Started at 2025-10-13 17:58:17 ===
+=== PROPERTY: Once joined to a room, client can ONLY send messages to that room ===
+
+[2025-10-13 17:58:17] ATL Monitor started with PID <0.90.0> (tracking room exclusivity property)
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {register_client,
+                                                      client_1,<0.95.0>}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.66486> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client -> chat_server, {register_client,client_1,
+                                              <0.95.0>}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client, chat_server, {register_client,
+                                                                                                client_1,
+                                                                                                <0.95.0>}}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client_registry, message {add_client,
+                                                               client_1,
+                                                               <0.95.0>}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.66486> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: chat_server -> client_registry, {add_client,client_1,
+                                                       <0.95.0>}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client_registry, {add_client,
+                                                                                                         client_1,
+                                                                                                         <0.95.0>}}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.66486> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client_registry -> chat_server, ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client_registry, chat_server, ok}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,registered}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.66486> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: chat_server -> client, {ok,registered}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client, {ok,
+                                                                                                registered}}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {join_room,client_1,
+                                                      test_room}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.66486> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client -> chat_server, {join_room,client_1,test_room}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Step 1 MATCHED: Client client_1 requesting to join room test_room, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Step 1 SATISFIED: Constraint passed for client client_1, room test_room, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Waiting for join confirmation for client client_1, room test_room, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Step 2 received: chat_server -> client, {ok,joined}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Step 2 SATISFIED: Join confirmed for client client_1, room test_room, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Both steps satisfied - SPAWNING SUB-MONITOR for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Sub-monitor environment: #{clientname => client_1,roomname1 => test_room}
+[2025-10-13 17:58:23] Client client_1 is now bound exclusively to room test_room
+[2025-10-13 17:58:23] Sub-monitor spawned with PID <0.157.0> for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> chat_server, message {register_room,
+                                                           test_room,
+                                                           <0.122.0>}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> chat_server, message ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.122.0>, message {add_member,client_1,
+                                                         <0.95.0>}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: <0.122.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client_registry, message {join_room,
+                                                               client_1,
+                                                               test_room}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"1",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.122.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"1",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: <0.122.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"2",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.122.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"2",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: <0.122.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"3",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.122.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"3",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: <0.122.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"4",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.122.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"4",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: <0.122.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"5",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.122.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"5",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: <0.122.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {leave_room,client_1,
+                                                      test_room}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.122.0>, message {remove_member,
+                                                         client_1}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: <0.122.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client_registry, message {leave_room,
+                                                               client_1,
+                                                               test_room}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,left}, context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.66486>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {register_client,
+                                                      client_1,<0.249.0>}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.67772> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client -> chat_server, {register_client,client_1,
+                                              <0.249.0>}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client, chat_server, {register_client,
+                                                                                                client_1,
+                                                                                                <0.249.0>}}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client_registry, message {add_client,
+                                                               client_1,
+                                                               <0.249.0>}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.67772> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: chat_server -> client_registry, {add_client,client_1,
+                                                       <0.249.0>}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client_registry, {add_client,
+                                                                                                         client_1,
+                                                                                                         <0.249.0>}}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.67772> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client_registry -> chat_server, ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client_registry, chat_server, ok}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,registered}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.67772> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: chat_server -> client, {ok,registered}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client, {ok,
+                                                                                                registered}}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {register_client,
+                                                      client_2,<0.254.0>}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.67791> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client -> chat_server, {register_client,client_2,
+                                              <0.254.0>}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client, chat_server, {register_client,
+                                                                                                client_2,
+                                                                                                <0.254.0>}}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client_registry, message {add_client,
+                                                               client_2,
+                                                               <0.254.0>}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.67791> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: chat_server -> client_registry, {add_client,client_2,
+                                                       <0.254.0>}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client_registry, {add_client,
+                                                                                                         client_2,
+                                                                                                         <0.254.0>}}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.67791> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client_registry -> chat_server, ok, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client_registry, chat_server, ok}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,registered}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.67791> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: chat_server -> client, {ok,registered}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client, {ok,
+                                                                                                registered}}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {join_room,client_1,
+                                                      test_room}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.67772> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client -> chat_server, {join_room,client_1,test_room}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Step 1 MATCHED: Client client_1 requesting to join room test_room, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Step 1 SATISFIED: Constraint passed for client client_1, room test_room, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Waiting for join confirmation for client client_1, room test_room, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Step 2 received: chat_server -> client, {ok,joined}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Step 2 SATISFIED: Join confirmed for client client_1, room test_room, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Both steps satisfied - SPAWNING SUB-MONITOR for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Sub-monitor environment: #{clientname => client_1,roomname1 => test_room}
+[2025-10-13 17:58:23] Client client_1 is now bound exclusively to room test_room
+[2025-10-13 17:58:23] Sub-monitor spawned with PID <0.360.0> for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> chat_server, message {register_room,
+                                                           test_room,
+                                                           <0.260.0>}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> chat_server, message ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {add_member,client_1,
+                                                         <0.249.0>}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client_registry, message {join_room,
+                                                               client_1,
+                                                               test_room}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {join_room,client_2,
+                                                      test_room}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.67791> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client -> chat_server, {join_room,client_2,test_room}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Step 1 MATCHED: Client client_2 requesting to join room test_room, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Step 1 SATISFIED: Constraint passed for client client_2, room test_room, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Waiting for join confirmation for client client_2, room test_room, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Step 2 received: chat_server -> client, {ok,joined}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Step 2 SATISFIED: Join confirmed for client client_2, room test_room, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Both steps satisfied - SPAWNING SUB-MONITOR for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Sub-monitor environment: #{clientname => client_2,roomname1 => test_room}
+[2025-10-13 17:58:23] Client client_2 is now bound exclusively to room test_room
+[2025-10-13 17:58:23] Sub-monitor spawned with PID <0.387.0> for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {add_member,client_2,
+                                                         <0.254.0>}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client_registry, message {join_room,
+                                                               client_2,
+                                                               test_room}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"1",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_2,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"1",32,102,114,
+                                                       111,109,32,"client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"1",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {broadcast_message,
+                                                         client_2,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"1",32,
+                                                          102,114,111,109,32,
+                                                          "client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"2",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"2",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_2,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"2",32,102,114,
+                                                       111,109,32,"client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {broadcast_message,
+                                                         client_2,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"2",32,
+                                                          102,114,111,109,32,
+                                                          "client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"3",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"3",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_2,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"3",32,102,114,
+                                                       111,109,32,"client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {broadcast_message,
+                                                         client_2,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"3",32,
+                                                          102,114,111,109,32,
+                                                          "client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"4",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"4",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_2,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"4",32,102,114,
+                                                       111,109,32,"client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {broadcast_message,
+                                                         client_2,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"4",32,
+                                                          102,114,111,109,32,
+                                                          "client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"5",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"5",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {send_message,client_2,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"5",32,102,114,
+                                                       111,109,32,"client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {broadcast_message,
+                                                         client_2,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"5",32,
+                                                          102,114,111,109,32,
+                                                          "client_2"]}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {leave_room,client_1,
+                                                      test_room}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {remove_member,
+                                                         client_1}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client_registry, message {leave_room,
+                                                               client_1,
+                                                               test_room}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,left}, context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67772>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {leave_room,client_2,
+                                                      test_room}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> <0.260.0>, message {remove_member,
+                                                         client_2}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: <0.260.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client_registry, message {leave_room,
+                                                               client_2,
+                                                               test_room}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,left}, context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.67791>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {register_client,
+                                                      client_1,<0.549.0>}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.70290> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client -> chat_server, {register_client,client_1,
+                                              <0.549.0>}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client, chat_server, {register_client,
+                                                                                                client_1,
+                                                                                                <0.549.0>}}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client_registry, message {add_client,
+                                                               client_1,
+                                                               <0.549.0>}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.70290> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: chat_server -> client_registry, {add_client,client_1,
+                                                       <0.549.0>}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client_registry, {add_client,
+                                                                                                         client_1,
+                                                                                                         <0.549.0>}}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.70290> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client_registry -> chat_server, ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client_registry, chat_server, ok}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client, message {ok,registered}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.70290> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: chat_server -> client, {ok,registered}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client, {ok,
+                                                                                                registered}}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:23] ATL Monitor received: client -> chat_server, message {register_client,
+                                                      client_2,<0.554.0>}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.70306> detected, starting main loop
+[2025-10-13 17:58:23] Main loop processing: client -> chat_server, {register_client,client_2,
+                                              <0.554.0>}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:23] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client, chat_server, {register_client,
+                                                                                                client_2,
+                                                                                                <0.554.0>}}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:23] ATL Monitor received: chat_server -> client_registry, message {add_client,
+                                                               client_2,
+                                                               <0.554.0>}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:23] New context #Ref<0.430316469.2972188674.70306> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: chat_server -> client_registry, {add_client,client_2,
+                                                       <0.554.0>}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client_registry, {add_client,
+                                                                                                         client_2,
+                                                                                                         <0.554.0>}}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70306> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: client_registry -> chat_server, ok, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client_registry, chat_server, ok}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,registered}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70306> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: chat_server -> client, {ok,registered}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client, {ok,
+                                                                                                registered}}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {register_client,
+                                                      client_3,<0.558.0>}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70320> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: client -> chat_server, {register_client,client_3,
+                                              <0.558.0>}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client, chat_server, {register_client,
+                                                                                                client_3,
+                                                                                                <0.558.0>}}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client_registry, message {add_client,
+                                                               client_3,
+                                                               <0.558.0>}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70320> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: chat_server -> client_registry, {add_client,client_3,
+                                                       <0.558.0>}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client_registry, {add_client,
+                                                                                                         client_3,
+                                                                                                         <0.558.0>}}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70320> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: client_registry -> chat_server, ok, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client_registry, chat_server, ok}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,registered}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70320> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: chat_server -> client, {ok,registered}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client, {ok,
+                                                                                                registered}}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {register_client,
+                                                      client_4,<0.562.0>}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70333> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: client -> chat_server, {register_client,client_4,
+                                              <0.562.0>}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client, chat_server, {register_client,
+                                                                                                client_4,
+                                                                                                <0.562.0>}}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client_registry, message {add_client,
+                                                               client_4,
+                                                               <0.562.0>}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70333> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: chat_server -> client_registry, {add_client,client_4,
+                                                       <0.562.0>}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client_registry, {add_client,
+                                                                                                         client_4,
+                                                                                                         <0.562.0>}}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70333> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: client_registry -> chat_server, ok, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {client_registry, chat_server, ok}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,registered}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70333> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: chat_server -> client, {ok,registered}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] PATTERN MISMATCH: Expected {client, chat_server, {join_room, _, _}}, got {chat_server, client, {ok,
+                                                                                                registered}}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {join_room,client_1,
+                                                      test_room}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70290> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: client -> chat_server, {join_room,client_1,test_room}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Step 1 MATCHED: Client client_1 requesting to join room test_room, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Step 1 SATISFIED: Constraint passed for client client_1, room test_room, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Waiting for join confirmation for client client_1, room test_room, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Step 2 received: chat_server -> client, {ok,joined}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Step 2 SATISFIED: Join confirmed for client client_1, room test_room, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Both steps satisfied - SPAWNING SUB-MONITOR for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Sub-monitor environment: #{clientname => client_1,roomname1 => test_room}
+[2025-10-13 17:58:24] Client client_1 is now bound exclusively to room test_room
+[2025-10-13 17:58:24] Sub-monitor spawned with PID <0.758.0> for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> chat_server, message {register_room,
+                                                           test_room,
+                                                           <0.569.0>}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> chat_server, message ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {add_member,client_1,
+                                                         <0.549.0>}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client_registry, message {join_room,
+                                                               client_1,
+                                                               test_room}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {join_room,client_2,
+                                                      test_room}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70306> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: client -> chat_server, {join_room,client_2,test_room}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Step 1 MATCHED: Client client_2 requesting to join room test_room, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Step 1 SATISFIED: Constraint passed for client client_2, room test_room, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Waiting for join confirmation for client client_2, room test_room, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Step 2 received: chat_server -> client, {ok,joined}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Step 2 SATISFIED: Join confirmed for client client_2, room test_room, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Both steps satisfied - SPAWNING SUB-MONITOR for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Sub-monitor environment: #{clientname => client_2,roomname1 => test_room}
+[2025-10-13 17:58:24] Client client_2 is now bound exclusively to room test_room
+[2025-10-13 17:58:24] Sub-monitor spawned with PID <0.785.0> for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {add_member,client_2,
+                                                         <0.554.0>}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client_registry, message {join_room,
+                                                               client_2,
+                                                               test_room}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {join_room,client_3,
+                                                      test_room}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70320> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: client -> chat_server, {join_room,client_3,test_room}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Step 1 MATCHED: Client client_3 requesting to join room test_room, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Step 1 SATISFIED: Constraint passed for client client_3, room test_room, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Waiting for join confirmation for client client_3, room test_room, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Step 2 received: chat_server -> client, {ok,joined}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Step 2 SATISFIED: Join confirmed for client client_3, room test_room, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Both steps satisfied - SPAWNING SUB-MONITOR for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Sub-monitor environment: #{clientname => client_3,roomname1 => test_room}
+[2025-10-13 17:58:24] Client client_3 is now bound exclusively to room test_room
+[2025-10-13 17:58:24] Sub-monitor spawned with PID <0.808.0> for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {add_member,client_3,
+                                                         <0.558.0>}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client_registry, message {join_room,
+                                                               client_3,
+                                                               test_room}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {join_room,client_4,
+                                                      test_room}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] New context #Ref<0.430316469.2972188674.70333> detected, starting main loop
+[2025-10-13 17:58:24] Main loop processing: client -> chat_server, {join_room,client_4,test_room}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Step 1 MATCHED: Client client_4 requesting to join room test_room, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Step 1 SATISFIED: Constraint passed for client client_4, room test_room, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Waiting for join confirmation for client client_4, room test_room, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Step 2 received: chat_server -> client, {ok,joined}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Step 2 SATISFIED: Join confirmed for client client_4, room test_room, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Both steps satisfied - SPAWNING SUB-MONITOR for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Sub-monitor environment: #{clientname => client_4,roomname1 => test_room}
+[2025-10-13 17:58:24] Client client_4 is now bound exclusively to room test_room
+[2025-10-13 17:58:24] Sub-monitor spawned with PID <0.831.0> for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {add_member,client_4,
+                                                         <0.562.0>}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client_registry, message {join_room,
+                                                               client_4,
+                                                               test_room}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"1",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_2,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"1",32,102,114,
+                                                       111,109,32,"client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_3,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"1",32,102,114,
+                                                       111,109,32,"client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_4,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"1",32,102,114,
+                                                       111,109,32,"client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"1",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_2,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"1",32,
+                                                          102,114,111,109,32,
+                                                          "client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_3,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"1",32,
+                                                          102,114,111,109,32,
+                                                          "client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_4,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"1",32,
+                                                          102,114,111,109,32,
+                                                          "client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"2",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"2",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_2,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"2",32,102,114,
+                                                       111,109,32,"client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_2,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"2",32,
+                                                          102,114,111,109,32,
+                                                          "client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_3,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"2",32,102,114,
+                                                       111,109,32,"client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_3,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"2",32,
+                                                          102,114,111,109,32,
+                                                          "client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_4,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"2",32,102,114,
+                                                       111,109,32,"client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_4,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"2",32,
+                                                          102,114,111,109,32,
+                                                          "client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"3",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"3",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_2,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"3",32,102,114,
+                                                       111,109,32,"client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_2,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"3",32,
+                                                          102,114,111,109,32,
+                                                          "client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_3,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"3",32,102,114,
+                                                       111,109,32,"client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_3,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"3",32,
+                                                          102,114,111,109,32,
+                                                          "client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_4,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"3",32,102,114,
+                                                       111,109,32,"client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_4,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"3",32,
+                                                          102,114,111,109,32,
+                                                          "client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"4",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"4",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_2,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"4",32,102,114,
+                                                       111,109,32,"client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_2,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"4",32,
+                                                          102,114,111,109,32,
+                                                          "client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_3,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"4",32,102,114,
+                                                       111,109,32,"client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_3,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"4",32,
+                                                          102,114,111,109,32,
+                                                          "client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_4,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"4",32,102,114,
+                                                       111,109,32,"client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_4,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"4",32,
+                                                          102,114,111,109,32,
+                                                          "client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_1,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"5",32,102,114,
+                                                       111,109,32,"client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_1,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"5",32,
+                                                          102,114,111,109,32,
+                                                          "client_1"]}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_2,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"5",32,102,114,
+                                                       111,109,32,"client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_2,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"5",32,
+                                                          102,114,111,109,32,
+                                                          "client_2"]}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_3,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"5",32,102,114,
+                                                       111,109,32,"client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_3,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"5",32,
+                                                          102,114,111,109,32,
+                                                          "client_3"]}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {send_message,client_4,
+                                                      test_room,
+                                                      [77,101,115,115,97,103,
+                                                       101,32,"5",32,102,114,
+                                                       111,109,32,"client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {broadcast_message,
+                                                         client_4,
+                                                         [77,101,115,115,97,
+                                                          103,101,32,"5",32,
+                                                          102,114,111,109,32,
+                                                          "client_4"]}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,message_sent}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {leave_room,client_1,
+                                                      test_room}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {remove_member,
+                                                         client_1}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client_registry, message {leave_room,
+                                                               client_1,
+                                                               test_room}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,left}, context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70290>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {leave_room,client_2,
+                                                      test_room}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {remove_member,
+                                                         client_2}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client_registry, message {leave_room,
+                                                               client_2,
+                                                               test_room}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,left}, context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70306>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {leave_room,client_3,
+                                                      test_room}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {remove_member,
+                                                         client_3}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client_registry, message {leave_room,
+                                                               client_3,
+                                                               test_room}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,left}, context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70320>
+[2025-10-13 17:58:24] ATL Monitor received: client -> chat_server, message {leave_room,client_4,
+                                                      test_room}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> <0.569.0>, message {remove_member,
+                                                         client_4}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: <0.569.0> -> chat_server, message ok, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client_registry, message {leave_room,
+                                                               client_4,
+                                                               test_room}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: client_registry -> chat_server, message ok, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] ATL Monitor received: chat_server -> client, message {ok,left}, context #Ref<0.430316469.2972188674.70333>
+[2025-10-13 17:58:24] Forwarding to existing sub-monitor for context #Ref<0.430316469.2972188674.70333>

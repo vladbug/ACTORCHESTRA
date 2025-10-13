@@ -1,0 +1,11 @@
+Clients,Messages_Per_Client,Total_Messages,System_Type,Total_Time_ms,Response_Time_ms,Async_Work_ms,Full_Throughput_per_sec,Full_Overhead_Percent,Response_Overhead_Percent,Async_Ratio
+5,30,150,Baseline,211.2,82.2,122.4,733.8,0.0,0.0,59.8
+5,30,150,Instrumented,260.9,123.1,124.3,609.3,23.51,49.74,50.4
+10,30,300,Baseline,389.8,248.7,126.6,801.2,0.0,0.0,33.8
+10,30,300,Instrumented,491.0,339.5,126.3,645.0,25.94,36.51,27.2
+20,30,600,Baseline,1101.4,935.3,150.0,553.6,0.0,0.0,13.8
+20,30,600,Instrumented,1254.1,1060.6,148.9,496.1,13.87,13.4,12.3
+40,30,1200,Baseline,3785.6,3523.5,237.7,319.1,0.0,0.0,6.3
+40,30,1200,Instrumented,4270.0,3959.3,247.3,285.5,12.8,12.37,5.9
+80,30,2400,Baseline,15564.7,14891.0,637.8,154.6,0.0,0.0,4.1
+80,30,2400,Instrumented,16447.4,15692.4,648.2,146.9,5.67,5.38,4.0

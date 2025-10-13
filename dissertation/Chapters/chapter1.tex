@@ -1,0 +1,262 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter1.tex
+%% NOVA thesis document file
+%%
+%% Chapter with introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\typeout{NT FILE chapter1.tex}%
+
+\chapter{Introduction}
+\label{cha:introduction}
+
+\prependtographicspath{{Chapters/Figures/Covers/}}
+
+% epigraph configuration
+\epigraphfontsize{\small\itshape}
+\setlength\epigraphwidth{12.5cm}
+\setlength\epigraphrule{0pt}
+
+Ensuring the production of correct, reliable and safe software is crucial for
+developing robust and safe software systems. This requirement has become even
+more critical as software increasingly impacts critical areas such as
+healthcare, transportation, and finance. To address the need for thorough
+verification of software behaviour and correctness, formal
+methods~\cite{clarke1996formal} have emerged.
+
+Formally ensuring the correctness of a given piece of software can be performed
+by several techniques adopted, such as \textit{theorem
+proving}~\cite{bertot2013interactive}, \textit{model
+checking}~\cite{clarke1999state}, and \textit{testing}~\cite{myers2011art},
+each with its strengths and trade-offs. Theorem proving is a static formal
+verification technique that uses mathematical logic to rigorously prove the
+correctness of software, ensuring it meets its specifications and is free from
+critical errors. One might use the classical pen-and-paper approach, but
+specialised software has been developed to assist and automate these proofs
+using computational proof assistants; one well-known example is the
+\texttt{Coq}~\cite{bertot2013interactive} proof assistant.
+
+Model checking is an alternative that attempts to automate the process of
+verifying software. It explores the system states for a given model to ensure
+they meet the specified properties, detecting errors early in the development
+process. It is also a static technique, providing the advantage of not adding
+overhead to the system it is analysing.
+
+Testing, in contrast to the previously mentioned methods, is a dynamic approach
+to verifying software correctness. It typically involves selecting a finite set
+of input-output sequences, known as a test
+suite~\cite{10.1145/1353673.1353681}, to exercise the program. By comparing the
+outputs given by the system against the expected outcomes defined in the test
+suite, testing methods determine whether the software behaves as intended.
+
+Theorem proving provides the highest safety assurance, albeit at the cost of
+being time-consuming, cumbersome, and requiring a high level of expertise. By
+contrast, model checking provides an automated way of exploring the state
+space, although it is often constrained by the state explosion
+problem~\cite{leucker2009brief}, limiting its applicability to large-scale
+systems. On the other hand, testing employs diverse methods to check that the
+program's outputs meet the expected results. However, it cannot definitively
+guarantee the absence of errors, as Dijkstra observed, "Testing shows the
+presence of bugs, not their absence".
+
+\section{Motivation}
+\label{sub:motivation}
+To address the limitations of the previously discussed methods, a new technique
+emerged called \textit{runtime
+verification}~\cite{bartocci2018introduction,bauer2011runtime,pnueli2006psl,leucker2009brief}.
+Runtime Verification (RV) studies methods that analyse a computation system's
+dynamic behaviour with several application scenarios. It can complement other
+techniques, providing an extra level of assurance for software, enabling us to
+verify and prevent failures by leveraging its runtime
+benefits~\cite{falcone2012can}. RV can go beyond simple verification and might
+steer the system with corrections when there is unwanted behaviour. Additionally, it can be
+applied to collect information on a given running system for posterior
+analysis~\cite{falcone2021taxonomy}.
+
+At its core, an RV approach begins with a running system and involves defining
+a set of properties that need to be verified. The novel aspect of this approach
+is that it automatically synthesises a monitor from these properties, typically
+expressed in a formal specification language like LTL (Linear Temporal
+Logic)~\cite{pnueli1977temporal}. This monitor operates alongside the system to
+verify whether the specified properties are met or not.
+
+Instrumentation techniques manage the communication logic between the monitor
+and the system, enabling interaction with the system under scrutiny (SUS). By
+analysing the system's behaviour, the monitor determines whether it aligns with
+the defined correctness properties or deviates from them, ultimately delivering
+a verdict based on what the monitor observed from the execution trace produced
+by the SUS.
+
+As a lightweight method that requires low computational resources, RV may serve
+as an alternative to the verification techniques previously discussed. Another
+advantage of RV is its ability to account for specific behaviours that occur
+only during runtime, which can often be unpredictable. Other methods may not
+adequately address this unpredictability.
+
+Since RV examines the current run of a system, it can detect such unexpected
+behaviour in real-time and respond appropriately, either by alerting the system
+that something has gone wrong or applying a more refined corrective measure,
+like guiding the system onto the correct path.
+
+
+The overall aim of RV is to ensure that a system's execution complies with its
+correctness properties as it unfolds through time. Achieving this in practice,
+however, is far from trivial. It requires several interdependent steps:
+systematically observing the system's behaviour, interpreting raw execution
+data, and evaluating it against the specified properties. When violations are
+detected, the monitor must raise timely alerts and support appropriate
+responses, such as triggering safeguards, initiating recovery, or adapting
+future behaviour. Each of these stages introduces its own technical and
+practical challenges, making RV both a powerful and complex verification
+approach.
+
+\section{Challenges}
+\label{sub:proposed_solution}
+
+Numerous works have been developed in the field of RV, covering topics such as
+defining specification languages to express the properties to be monitored,
+developing instrumentation processes that determine how the monitor and the
+system operate together, designing algorithms to generate monitors from given
+specifications, investigating which properties can be monitored, and analysing
+the impact of RV on the system. A key drawback of RV is the potential overhead
+it may impose, which can degrade system performance.
+
+One of the central challenges in RV lies in defining what exactly constitutes a
+trace~\cite{falcone2021taxonomy}. A trace is the raw material from which
+properties are checked. However, its scope and granularity can vary greatly:
+should it capture low-level events, state transitions, or higher-level
+interactions? Most existing RV frameworks resolve this by relying on log files
+with a predefined syntax, which allows them to parse, analyse, and reason about
+system executions. While effective in controlled settings, this approach often
+imposes rigid constraints on how systems must expose their behaviour and can be
+brittle when dealing with highly concurrent or distributed environments.
+
+An alternative perspective emerges from the actor-based
+model~\cite{agha2001actors}, a foundational paradigm followed by languages such
+as \texttt{Erlang}~\cite{virding1996concurrent} and
+\texttt{Elixir}~\cite{elixir}. In this model, computation is structured around
+independent actors, each encapsulating its own state, and communicating solely
+via asynchronous message passing. This communication structure provides a
+natural and semantically rich notion of a trace: the stream of messages
+exchanged between actors. Unlike static logs, these message flows directly
+reflect the causal structure of concurrent executions, making them particularly
+well-suited for RV. By observing interactions at this level, it becomes
+possible not only to reconstruct execution traces more faithfully but also to
+reason about correctness properties over the real execution trace of the system. 
+
+Verifying these concurrent systems for formal correctness with static
+verification techniques, such as model checking, can be challenging due to the
+state explosion problem. RV makes it possible to verify these systems on the
+fly by analysing their current execution.
+
+Nevertheless, applying RV in such asynchronous settings introduces significant
+challenges. A primary challenge is the inherent delay in detecting violations,
+as the monitor operates externally to the system, making it susceptible to
+becoming “out of sync” with ongoing executions. This misalignment is
+particularly problematic when a violated property results in a critical
+failure, where timely intervention is crucial. A second challenge arises when
+scaling beyond a small number of actors. As the number of components grows, so
+too does the complexity of the traces, which must account for a vast space of
+possible interleavings and message orderings. Extracting meaningful information
+from such traces quickly becomes cumbersome, complicating the monitoring
+process. The key question, then, is how to instrument an RV framework in a way
+that minimises detection latency while being able to capture these complex
+interactions on the go.
+
+\section{Contributions}
+\label{sub:contributions}
+The contributions of this dissertation address fundamental challenges in
+applying RV to concurrent, actor-based systems. The first contribution is the
+design of WALTZ, a specification language that aligns directly with the
+semantics of the actor model. WALTZ enables users to define properties over
+chains of interactions between processes, capturing relevant messages and
+correlating them through variables that span entire causal chains. WALTZ allows
+for the specification of complex correctness properties that track how data
+flows and transforms across multiple interactions between actors.
+
+A distinguishing feature of WALTZ is its context-aware semantics, where
+properties are evaluated within the causal context of each message rather than
+a shared global context. This design choice prevents the unintended mixing of
+messages from different causal chains, ensuring that verification occurs in the
+correct context, a critical requirement for concurrent systems. By embedding
+causality directly into the language semantics, WALTZ enables both localised
+behavioural checks and system-wide invariants to be expressed naturally,
+without the user needing to disentangle concurrent execution paths manually.
+
+Building on this foundation, we developed a compiler that translates WALTZ
+specifications into executable \texttt{Erlang} monitors. The compilation
+process leverages the close alignment between WALTZ's semantics and the
+behaviour of the underlying actor system. The generated monitors are scalable,
+capable of tracking distinct message chains independently and evaluating
+properties within their correct causal context. This design ensures that each
+chain is verified without interference from concurrent events, with monitors
+producing verdicts as soon as they detect either a violation or satisfaction of
+the specified property. By leveraging WALTZ's causal semantics and variable
+correlation mechanisms, these monitors can track complex interaction patterns
+across multiple actors while preserving the contextual information required for
+accurate verification.
+
+\iffalse
+Building on this foundation, we developed a compiler that transforms WALTZ
+specifications into executable \texttt{Erlang} monitors. The compilation
+process leverages the close alignment between WALTZ's semantics and the
+behaviour of the underlying actor system. The generated monitors are scalable,
+capable of tracking distinct message chains independently and evaluating
+properties within their correct causal context. This design ensures that each
+chain is verified without interference from concurrent events, with monitors
+producing verdicts as soon as they detect either a violation or satisfaction of
+the specified property. 
+\fi
+
+A further contribution is the design and implementation of the
+\texttt{conductor}, a causality-tracking entity that enriches system traces
+with contextual information before the monitors process them. Given that many
+actor-based systems in practice rely on the Open Telecom Platform
+(OTP)~\cite{erlangBook, erlangBooktwo, hebert2013learn} framework for
+structuring concurrent applications, our entity correlates messages belonging
+to the same causal chain for client-server system architectures following OTP
+conventions. This entity enables seamless property verification by the monitor,
+eliminating the need to consider all possible interleavings that can occur in
+concurrent and asynchronous \texttt{Erlang} systems.
+
+Together, WALTZ and \texttt{ACTORCHESTRA} enhance runtime verification by
+enabling context-aware, multi-actor verification, advancing the state of the
+art in actor-based system verification. The complete framework is publicly
+available online at \href{https://github.com/vladbug/ACTORCHESTRA.git}
+{\texttt{ACTORCHESTRA}}. Finally, the significance of this work has been
+acknowledged by the research community, as evidenced by the acceptance of the
+WALTZ design for publication at the INFOrum 2025 conference.
+
+\iffalse
+Together, WALTZ and \texttt{ACTORCHESTRA} advance runtime verification by
+enabling context-aware, multi-actor verification advancing the state of the art
+on actor-based system verification. Finally, the significance of this work has
+been acknowledged by the research community, with the design of WALTZ accepted
+for publication at the INFOrum 2025 conference.
+\fi
+
+\section{Document Outline}
+\label{sec:outline}
+
+This document begins by introducing the background knowledge of runtime
+verification in \Cref{cha:background}, which will be used as a pedagogical
+chapter to explain our perspective on runtime verification, as there are many
+different interpretations in the literature. We present the global concept of
+runtime verification, along with some of its key steps and challenges that must
+be addressed in general, as well as in our specific case. In the background, we
+also present how \texttt{Erlang} systems behave and the explanation of OTP
+behaviour. The novelty of our work is presented in \Cref{cha:waltz} and
+\Cref{cha:actorchestra}, where we demonstrate our specification language, the
+compilation process, and the distributed management of causality that we have
+developed. In \Cref{cha:evaluation}, we demonstrate the impact of our
+implementation and approach through case studies developed to test the tool's
+usage. Then, in \Cref{cha:related_work}, we compare our specification language
+and tool with other existing work in the literature, showcasing the
+advancements made in the state of the art. Finally, in \Cref{cha:conclusions},
+we present our conclusions and discuss potential paths of further research and
+improvement.
+
+
+
+

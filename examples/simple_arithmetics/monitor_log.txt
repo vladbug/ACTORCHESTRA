@@ -1,0 +1,307 @@
+=== Monitor Log Started at 2025-10-13 17:55:52 ===
+
+[2025-10-13 17:55:52] Monitor started with PID <0.90.0> (tracking module-to-module flow)
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {connect,
+                                                                          <0.104.0>}, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {connect,
+                                                                          <0.105.0>}, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {connect,
+                                                                          <0.106.0>}, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {connect,
+                                                                          <0.107.0>}, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {connect,
+                                                                          <0.108.0>}, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {connect,
+                                                                          <0.109.0>}, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {connect,
+                                                                          <0.110.0>}, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {connect,
+                                                                          <0.111.0>}, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.104.0>, 1), Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 1, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 11, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 22, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 22, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 22, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.104.0>, 1) (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 1 (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 11 (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 22 (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 22 (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 22 (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01]    Processing chain: 1 -> +10 -> 11 -> *2 -> 22
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.105.0>, 1), Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 1, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 11, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 22, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 22, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 22, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.105.0>, 1) (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 1 (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 11 (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 22 (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 22 (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 22 (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01]    Processing chain: 1 -> +10 -> 11 -> *2 -> 22
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.106.0>, 1), Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 1, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 11, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 22, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 22, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 22, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.106.0>, 1) (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 1 (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 11 (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 22 (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 22 (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 22 (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01]    Processing chain: 1 -> +10 -> 11 -> *2 -> 22
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.109.0>, 1), Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 1, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 11, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 22, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 22, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 22, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.109.0>, 1) (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 1 (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 11 (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 22 (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 22 (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 22 (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01]    Processing chain: 1 -> +10 -> 11 -> *2 -> 22
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.108.0>, 1), Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 1, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 11, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 22, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 22, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 22, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.108.0>, 1) (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 1 (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 11 (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 22 (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 22 (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 22 (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01]    Processing chain: 1 -> +10 -> 11 -> *2 -> 22
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.107.0>, 1), Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 1, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 11, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 22, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 22, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 22, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.107.0>, 1) (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 1 (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 11 (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 22 (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 22 (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 22 (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01]    Processing chain: 1 -> +10 -> 11 -> *2 -> 22
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.110.0>, 1), Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 1, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 11, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 22, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 22, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 22, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.110.0>, 1) (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 1 (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 11 (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 22 (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 22 (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 22 (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01]    Processing chain: 1 -> +10 -> 11 -> *2 -> 22
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.111.0>, 1), Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 1, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 11, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 22, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 22, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 22, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.111.0>, 1) (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 1 (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 11 (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 22 (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 22 (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 22 (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01]    Processing chain: 1 -> +10 -> 11 -> *2 -> 22
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.104.0>, 2), Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 2, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 12, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 24, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 24, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 24, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.104.0>, 2) (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 2 (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 12 (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 24 (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 24 (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 24 (Context: #Ref<0.341483819.556793862.233350>)
+[2025-10-13 17:56:01]    Processing chain: 2 -> +10 -> 12 -> *2 -> 24
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.105.0>, 2), Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 2, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 12, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 24, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 24, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 24, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.105.0>, 2) (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 2 (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 12 (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 24 (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 24 (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 24 (Context: #Ref<0.341483819.556793862.233352>)
+[2025-10-13 17:56:01]    Processing chain: 2 -> +10 -> 12 -> *2 -> 24
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.106.0>, 2), Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 2, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 12, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 24, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 24, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 24, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.106.0>, 2) (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 2 (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 12 (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 24 (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 24 (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 24 (Context: #Ref<0.341483819.556793862.233354>)
+[2025-10-13 17:56:01]    Processing chain: 2 -> +10 -> 12 -> *2 -> 24
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.107.0>, 2), Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 2, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 12, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 24, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 24, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 24, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.107.0>, 2) (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 2 (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 12 (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 24 (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 24 (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 24 (Context: #Ref<0.341483819.556793862.233356>)
+[2025-10-13 17:56:01]    Processing chain: 2 -> +10 -> 12 -> *2 -> 24
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.109.0>, 2), Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 2, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 12, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 24, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 24, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 24, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.109.0>, 2) (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 2 (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 12 (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 24 (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 24 (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 24 (Context: #Ref<0.341483819.556793862.233360>)
+[2025-10-13 17:56:01]    Processing chain: 2 -> +10 -> 12 -> *2 -> 24
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.108.0>, 2), Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 2, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 12, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 24, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 24, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 24, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.108.0>, 2) (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 2 (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 12 (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 24 (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 24 (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 24 (Context: #Ref<0.341483819.556793862.233358>)
+[2025-10-13 17:56:01]    Processing chain: 2 -> +10 -> 12 -> *2 -> 24
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.110.0>, 2), Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 2, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 12, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 24, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 24, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 24, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.110.0>, 2) (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 2 (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 12 (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 24 (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 24 (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 24 (Context: #Ref<0.341483819.556793862.233362>)
+[2025-10-13 17:56:01]    Processing chain: 2 -> +10 -> 12 -> *2 -> 24
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received [1/4]: client -> slow_central_server, process(<0.111.0>, 2), Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received [2/4]: slow_central_server -> slow_proc_add10, process 2, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received [3/4]: slow_proc_add10 -> slow_proc_mul2, process 12, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received [4a/5]: slow_proc_mul2 -> slow_proc_add10, result 24, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received [4b/5]: slow_proc_add10 -> slow_central_server, result 24, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received [5/5]: slow_central_server -> client, result 24, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] === COMPLETE MODULE-TO-MODULE PROCESSING FLOW ===
+[2025-10-13 17:56:01] 1. client -> slow_central_server: process(<0.111.0>, 2) (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01] 2. slow_central_server -> slow_proc_add10: process 2 (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01] 3. slow_proc_add10 -> slow_proc_mul2: process 12 (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01] 4. slow_proc_mul2 -> slow_proc_add10: result 24 (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01] 5. slow_proc_add10 -> slow_central_server: result 24 (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01] 6. slow_central_server -> client: result 24 (Context: #Ref<0.341483819.556793862.233364>)
+[2025-10-13 17:56:01]    Processing chain: 2 -> +10 -> 12 -> *2 -> 24
+[2025-10-13 17:56:01] === END PROCESSING FLOW ===
+
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {disconnect,
+                                                                          <0.104.0>}, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {disconnect,
+                                                                          <0.105.0>}, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {disconnect,
+                                                                          <0.106.0>}, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233350>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233352>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {disconnect,
+                                                                          <0.109.0>}, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {disconnect,
+                                                                          <0.107.0>}, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233354>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233360>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233356>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {disconnect,
+                                                                          <0.111.0>}, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233364>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {disconnect,
+                                                                          <0.110.0>}, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233362>
+[2025-10-13 17:56:01] Monitor received unexpected flow: client -> slow_central_server, message {disconnect,
+                                                                          <0.108.0>}, Context #Ref<0.341483819.556793862.233358>
+[2025-10-13 17:56:01] Monitor received unexpected flow: slow_central_server -> client, message ok, Context #Ref<0.341483819.556793862.233358>

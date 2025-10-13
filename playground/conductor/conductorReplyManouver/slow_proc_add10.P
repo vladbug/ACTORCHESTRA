@@ -1,0 +1,139 @@
+-file("slow_proc_add10.erl", 1).
+
+-module(slow_proc_add10).
+
+-behaviour(gen_server).
+
+-export([start_link/0,start_link/1]).
+
+-export([init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         terminate/2,
+         code_change/3]).
+
+start_link() ->
+    gen_server:start_link({local, slow_proc_add10},
+                          slow_proc_add10,
+                          [undefined],
+                          []).
+
+start_link(Mul2Pid) ->
+    gen_server:start_link({local, slow_proc_add10},
+                          slow_proc_add10,
+                          [Mul2Pid],
+                          []).
+
+init([Mul2Pid]) ->
+    {ok, #{mul2_pid => Mul2Pid}}.
+
+handle_call({with_context, Context, Msg}, From, State) ->
+    ReceiveTime = erlang:system_time(millisecond),
+    io:format("[~p ms] [~p] RECEIVED with_context: ctx=~p, msg=~p~n",
+              [ReceiveTime, slow_proc_add10, Context, Msg]),
+    StateWithContext = maps:put(context, Context, State),
+    io:format("[~p ms] [~p] Context ~p injected, delegating message ~p~"
+              "n",
+              [ReceiveTime, slow_proc_add10, Context, Msg]),
+    slow_proc_add10:handle_call(Msg, From, StateWithContext);
+handle_call({process, Number}, From, State) ->
+    Context = maps:get(context, State, undefined),
+    Mul2Pid = maps:get(mul2_pid, State),
+    StartTime = erlang:system_time(millisecond),
+    concurrency_logger:log(slow_proc_add10, Context,
+                           io_lib:format("RECV process request ~p",
+                                         [Number])),
+    spawn(fun() ->
+                 WorkerPid = self(),
+                 concurrency_logger:log(slow_proc_add10, Context,
+                                        io_lib:format("WORKER ~p START "
+                                                      "processing ~p",
+                                                      [WorkerPid,
+                                                       Number])),
+                 Result1 = Number + 10,
+                 AfterAddTime = erlang:system_time(millisecond),
+                 concurrency_logger:log(slow_proc_add10, Context,
+                                        io_lib:format("WORKER ~p CALC: "
+                                                      "~p + 10 = ~p",
+                                                      [WorkerPid,
+                                                       Number, Result1])),
+                 FinalResult =
+                     case Mul2Pid of
+                         undefined ->
+                             concurrency_logger:log(slow_proc_add10,
+                                                    Context,
+                                                    io_lib:format("WORKE"
+                                                                  "R ~p "
+                                                                  "NO MU"
+                                                                  "L2, r"
+                                                                  "eturn"
+                                                                  "ing ~"
+                                                                  "p",
+                                                                  [WorkerPid,
+                                                                   Result1])),
+                             {ok, Result1};
+                         _ ->
+                             try
+                                 concurrency_logger:log(slow_proc_add10,
+                                                        Context,
+                                                        io_lib:format("WORKE"
+                                                                      "R ~p "
+                                                                      "CALLI"
+                                                                      "NG mu"
+                                                                      "l2 wi"
+                                                                      "th ~p",
+                                                                      [WorkerPid,
+                                                                       Result1])),
+                                 simple_wrapper:call(Mul2Pid,
+                                                     {process, Result1},
+                                                     Context,
+                                                     slow_proc_add10)
+                             catch
+                                 Class:Reason:Stacktrace ->
+                                     concurrency_logger:log(slow_proc_add10,
+                                                            Context,
+                                                            io_lib:format("WORKE"
+                                                                          "R ~p "
+                                                                          "ERROR"
+                                                                          ": ~p:"
+                                                                          "~p",
+                                                                          [WorkerPid,
+                                                                           Class,
+                                                                           Reason])),
+                                     {error, mul2_failed}
+                             end
+                     end,
+                 EndTime = erlang:system_time(millisecond),
+                 TotalTime = EndTime - StartTime,
+                 concurrency_logger:log(slow_proc_add10, Context,
+                                        io_lib:format("WORKER ~p COMPLE"
+                                                      "TE got ~p (took "
+                                                      "~p ms)",
+                                                      [WorkerPid,
+                                                       FinalResult,
+                                                       TotalTime])),
+                 gen_server:reply(From, FinalResult)
+          end),
+    concurrency_logger:log(slow_proc_add10, Context,
+                           "SPAWNED async worker, ready for next reques"
+                           "t"),
+    {noreply, State};
+handle_call(_Request, _From, State) ->
+    Context = maps:get(context, State, undefined),
+    {reply, {error, unknown_request}, State}.
+
+handle_cast(_Msg, State) ->
+    {noreply, State}.
+
+handle_info(_Info, State) ->
+    {noreply, State}.
+
+terminate(_Reason, _State) ->
+    ok.
+
+code_change(_OldVsn, State, _Extra) ->
+    {ok, State}.
+
+
+

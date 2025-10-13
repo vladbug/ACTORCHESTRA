@@ -1,0 +1,11 @@
+Test_Type,Clients,Messages_Per_Client,Total_Messages,System,Session_Time_ms,Message_Phase_ms,Join_Phase_ms,Leave_Phase_ms,Message_Throughput_per_sec,Avg_Message_Latency_us,Session_Overhead_Percent,Message_Overhead_Percent,Iterations
+Realistic_Chat,3,5,15,Baseline,5.276,3.725,0.549,1.001,4127.079,715.973,0.0,0.0,5
+Realistic_Chat,3,5,15,Instrumented,12.006,7.653,2.366,1.987,2043.653,1468.547,127.572,105.417,5
+Realistic_Chat,5,8,40,Baseline,18.973,15.865,1.452,1.655,3127.038,1961.635,0.0,0.0,5
+Realistic_Chat,5,8,40,Instrumented,25.213,19.587,2.616,3.010,2152.873,2410.620,32.893,23.459,5
+Realistic_Chat,5,15,75,Baseline,23.910,21.936,0.827,1.148,3500.228,1434.013,0.0,0.0,5
+Realistic_Chat,5,15,75,Instrumented,35.629,31.480,2.176,1.973,2775.451,2059.080,49.013,43.511,5
+Realistic_Chat,8,10,80,Baseline,42.090,37.374,1.261,3.456,2197.620,3698.893,0.0,0.0,5
+Realistic_Chat,8,10,80,Instrumented,51.222,43.424,3.589,4.209,1844.647,4297.677,21.696,16.189,5
+Realistic_Chat,10,12,120,Baseline,67.210,61.714,1.625,3.872,1959.247,5111.587,0.0,0.0,5
+Realistic_Chat,10,12,120,Instrumented,77.971,67.679,4.997,5.294,1787.005,5597.163,16.010,9.667,5

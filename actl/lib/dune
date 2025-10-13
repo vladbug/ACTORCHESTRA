@@ -1,0 +1,9 @@
+(library
+ (name waltz)
+ (modules expressions ast parser lexer))
+
+(ocamllex
+ (modules lexer))
+
+(menhir
+ (modules parser))

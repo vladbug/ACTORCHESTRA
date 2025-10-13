@@ -1,0 +1,117 @@
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {portuguese}{}\relax 
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{List of Figures}{x}{section*.7}%
+\contentsline {chapter}{Listings}{xii}{section*.8}%
+\contentsline {chapter}{\chapternumberline {1}Introduction}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Motivation}{2}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Challenges}{3}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Contributions}{4}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Document Outline}{5}{section.1.4}%
+\contentsline {chapter}{\chapternumberline {2}Background}{6}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Runtime Verification}{6}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Terminology}{7}{subsection.2.1.1}%
+\contentsline {section}{\numberline {2.2}Specification of a System's Behaviour}{8}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Some Specification Language Features}{11}{subsection.2.2.1}%
+\contentsline {section}{\numberline {2.3}Specification Languages}{12}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Linear Temporal Logic}{12}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Satisfiability of LTL}{13}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Automata}{14}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Regular Languages}{14}{subsection.2.3.4}%
+\contentsline {section}{\numberline {2.4}Monitors}{15}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Linear Temporal Logic for Runtime Verification}{15}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Defining a Monitor}{16}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}Monitor Synthesis Algorithm}{17}{subsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.4.4}The Two Maxims}{19}{subsection.2.4.4}%
+\contentsline {section}{\numberline {2.5}Monitorability}{20}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Instrumentation and Deployment}{23}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Online and Offline Monitoring}{24}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Synchronous and Asynchronous Monitoring}{25}{subsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6.3}Inline and Outline Monitoring}{26}{subsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.6.4}Centralised and Decentralised Monitoring}{26}{subsection.2.6.4}%
+\contentsline {subsection}{\numberline {2.6.5}Passive and Active Monitoring}{27}{subsection.2.6.5}%
+\contentsline {subsection}{\numberline {2.6.6}Instrumentation Interference}{27}{subsection.2.6.6}%
+\contentsline {section}{\numberline {2.7}Actor-Based Model}{28}{section.2.7}%
+\contentsline {subsection}{\numberline {2.7.1}\texttt {Erlang} Concurrency}{29}{subsection.2.7.1}%
+\contentsline {section}{\numberline {2.8}The Open Telecom Platform (OTP)}{30}{section.2.8}%
+\contentsline {subsection}{\numberline {2.8.1}Synchronous Calls}{32}{subsection.2.8.1}%
+\contentsline {subsection}{\numberline {2.8.2}Asynchronous Casts}{32}{subsection.2.8.2}%
+\contentsline {chapter}{\chapternumberline {3}WALTZ}{34}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Motivation}{34}{section.3.1}%
+\contentsline {section}{\numberline {3.2}The Language}{35}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Definition}{35}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Semantics}{36}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Monitors}{38}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Chains Of Messages}{38}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Chains in Action}{39}{subsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.2.6}Filtering Chains - Turning Infinity Into Finity}{40}{subsection.3.2.6}%
+\contentsline {subsection}{\numberline {3.2.7}Why Context Matters?}{41}{subsection.3.2.7}%
+\contentsline {section}{\numberline {3.3}The Modal Operators $\Omega $ and $\Theta $}{45}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}The $\Theta $ Operator}{45}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}The $\Omega $ Operator}{47}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Nesting Modal Operators}{49}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Under The Eye Of The Monitor}{52}{section.3.5}%
+\contentsline {section}{\numberline {3.6}The Compilation Process}{56}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Practical Grammar Changes}{57}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3.6.2}The General Monitor Structure}{57}{subsection.3.6.2}%
+\contentsline {subsection}{\numberline {3.6.3}The Preservation of Context}{59}{subsection.3.6.3}%
+\contentsline {subsection}{\numberline {3.6.4}Non Breakable Chains}{60}{subsection.3.6.4}%
+\contentsline {subsection}{\numberline {3.6.5}Compilation of $\Omega $}{61}{subsection.3.6.5}%
+\contentsline {subsection}{\numberline {3.6.6}Compilation of $\Theta $}{62}{subsection.3.6.6}%
+\contentsline {section}{\numberline {3.7}Compilation of Nested Modal Operators}{63}{section.3.7}%
+\contentsline {subsection}{\numberline {3.7.1}Compilation of Different Nested Modal Operators}{66}{subsection.3.7.1}%
+\contentsline {section}{\numberline {3.8}A Monitor On The Go}{67}{section.3.8}%
+\contentsline {subsection}{\numberline {3.8.1}Chat Room System}{67}{subsection.3.8.1}%
+\contentsline {section}{\numberline {3.9}Monitorability of WALTZ}{70}{section.3.9}%
+\contentsline {chapter}{\chapternumberline {4}ACTORCHESTRA}{73}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Instrumentation}{73}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Causality With Contexts}{74}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Developer Management}{74}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}OTP Management}{76}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}No Management, Working With Wrong Programs}{77}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Why OTP Is Not Enough}{79}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Out Take On It}{80}{subsection.4.2.5}%
+\contentsline {section}{\numberline {4.3}Assumptions and Design Principles}{81}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}The Asynchrony Problem and Context Necessity}{81}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}The Context Injection Solution}{82}{subsection.4.3.2}%
+\contentsline {section}{\numberline {4.4}The Conductor}{84}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Redirecting Calls}{84}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Injection Mechanisms}{86}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Forward Propagation}{88}{subsection.4.4.3}%
+\contentsline {subsection}{\numberline {4.4.4}Back-Propagation}{88}{subsection.4.4.4}%
+\contentsline {subsection}{\numberline {4.4.5}Context Assignment}{89}{subsection.4.4.5}%
+\contentsline {subsection}{\numberline {4.4.6}Concurrency and Dead-Locks}{90}{subsection.4.4.6}%
+\contentsline {subsection}{\numberline {4.4.7}New Signatures}{90}{subsection.4.4.7}%
+\contentsline {section}{\numberline {4.5}Conductor re-direction}{91}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Monitor's Melody}{93}{subsection.4.5.1}%
+\contentsline {section}{\numberline {4.6}System Symphony}{93}{section.4.6}%
+\contentsline {chapter}{\chapternumberline {5}Evaluation}{95}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Experimental Set-up}{95}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Addition and Multiplication}{96}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Chat System}{100}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}No Broadcast Version}{100}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Broadcast Version}{103}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}Conclusions}{106}{section.5.4}%
+\contentsline {chapter}{\chapternumberline {6}Related Work}{108}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Runtime Verification Landscape}{108}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Specification Languages}{109}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Linear Temporal Logics}{109}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}$\mu $HML and mHML}{110}{subsection.6.2.2}%
+\contentsline {section}{\numberline {6.3}RV Tools}{111}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}Log Examination Tools}{111}{subsection.6.3.1}%
+\contentsline {section}{\numberline {6.4}RV in Actor-Based Models}{112}{section.6.4}%
+\contentsline {subsection}{\numberline {6.4.1}Elarva}{112}{subsection.6.4.1}%
+\contentsline {subsection}{\numberline {6.4.2}Multiparty Session Types}{113}{subsection.6.4.2}%
+\contentsline {subsection}{\numberline {6.4.3}detectEr}{113}{subsection.6.4.3}%
+\contentsline {section}{\numberline {6.5}WALTZ and ACTORCHESTRA}{114}{section.6.5}%
+\contentsline {chapter}{\chapternumberline {7}Conclusions}{117}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Summary}{117}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Future Work}{118}{section.7.2}%
+\contentsline {chapter}{Bibliography}{120}{section*.69}%

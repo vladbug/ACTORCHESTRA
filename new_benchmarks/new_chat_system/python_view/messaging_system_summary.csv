@@ -1,0 +1,13 @@
+Clients,Messages_Per_Client,Total_Messages,System_Type,Total_Time_ms,Throughput_msg_per_sec,Avg_Latency_us,Overhead_Percent
+5,30,150,Baseline,38.3,4576.2,230.5,0.0
+5,30,150,Instrumented,87.0,1990.2,513.4,127.23
+10,30,300,Baseline,76.1,4337.5,236.5,0.0
+10,30,300,Instrumented,165.7,2046.1,490.9,117.84
+20,30,600,Baseline,145.9,4462.2,228.5,0.0
+20,30,600,Instrumented,333.9,1992.5,504.5,128.83
+50,20,1000,Baseline,225.2,4936.1,204.7,0.0
+100,10,1000,Baseline,245.4,4996.7,201.6,0.0
+50,20,1000,Instrumented,515.2,2207.7,453.5,128.76
+100,10,1000,Instrumented,559.9,2293.1,436.8,128.12
+200,10,2000,Baseline,428.1,5699.4,175.9,0.0
+200,10,2000,Instrumented,1048.4,2432.1,411.2,144.89

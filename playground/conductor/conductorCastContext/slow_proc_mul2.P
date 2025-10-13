@@ -1,0 +1,67 @@
+-file("slow_proc_mul2.erl", 1).
+
+-module(slow_proc_mul2).
+
+-behaviour(gen_server).
+
+-export([start_link/0]).
+
+-export([init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         terminate/2,
+         code_change/3]).
+
+start_link() ->
+    gen_server:start_link({local, slow_proc_mul2},
+                          slow_proc_mul2, [], []).
+
+init([]) ->
+    {ok, #{}}.
+
+handle_call({with_context, Context, Msg}, From, State) ->
+    ReceiveTime = erlang:system_time(millisecond),
+    io:format("[~p ms] [~p] RECEIVED with_context: ctx=~p, msg=~p~n",
+              [ReceiveTime, slow_proc_mul2, Context, Msg]),
+    StateWithContext = maps:put(context, Context, State),
+    io:format("[~p ms] [~p] Context ~p injected, delegating message ~p~"
+              "n",
+              [ReceiveTime, slow_proc_mul2, Context, Msg]),
+    slow_proc_mul2:handle_call(Msg, From, StateWithContext);
+handle_call({process, Number}, _From, State) ->
+    Context = maps:get(context, State, undefined),
+    StartTime = erlang:system_time(millisecond),
+    concurrency_logger:log(slow_proc_mul2, Context,
+                           io_lib:format("RECV process request ~p",
+                                         [Number])),
+    concurrency_logger:log(slow_proc_mul2, Context,
+                           io_lib:format("CALC: ~p * 2", [Number])),
+    Result = Number * 2,
+    EndTime = erlang:system_time(millisecond),
+    TotalTime = EndTime - StartTime,
+    concurrency_logger:log(slow_proc_mul2, Context,
+                           io_lib:format("COMPLETE: ~p * 2 = ~p (took ~"
+                                         "p ms)",
+                                         [Number, Result, TotalTime])),
+    {reply, {ok, Result}, State};
+handle_call(_, _From, State) ->
+    Context = maps:get(context, State, undefined),
+    {reply, {error, bad_request}, State}.
+
+handle_cast({context, Context}, State) ->
+    {noreply, maps:put(context, Context, State)};
+handle_cast(_Msg, State) ->
+    {noreply, State}.
+
+handle_info(_Info, State) ->
+    {noreply, State}.
+
+terminate(_Reason, _State) ->
+    ok.
+
+code_change(_OldVsn, State, _Extra) ->
+    {ok, State}.
+
+
+
