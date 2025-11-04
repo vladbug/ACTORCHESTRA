@@ -646,14 +646,34 @@ let generate_main_monitor modal_type anchor_vars_orig steps sub_module_name =
 
 (* === MAIN COMPILATION === *)
 
-let compile_formula = function
+let rec compile_formula = function
   | Theta(inner) when not (has_immediate_nesting inner) ->
-      let steps = decompose_to_steps inner in
-      [("waltz_monitor.erl", generate_simple_theta_monitor steps)]
+      (* Check if inner is directly a modal operator *)
+      (match inner with
+       | Theta(nested_inner) ->
+           (* THETA(THETA(...)) - simplify to THETA(...) *)
+           compile_formula (Theta(nested_inner))
+       | Omega(_) ->
+           (* THETA(OMEGA(...)) - mixed modal operators *)
+           [("non_monitorable.erl", ["% Mixed modal operators - not monitorable at runtime"])]
+       | _ ->
+           (* No nesting, decompose to steps *)
+           let steps = decompose_to_steps inner in
+           [("waltz_monitor.erl", generate_simple_theta_monitor steps)])
       
   | Omega(inner) when not (has_immediate_nesting inner) ->
-      let steps = decompose_to_steps inner in
-      [("waltz_monitor.erl", generate_simple_omega_monitor steps)]
+      (* Check if inner is directly a modal operator *)
+      (match inner with
+       | Omega(nested_inner) ->
+           (* OMEGA(OMEGA(...)) - simplify to OMEGA(...) *)
+           compile_formula (Omega(nested_inner))
+       | Theta(_) ->
+           (* OMEGA(THETA(...)) - mixed modal operators *)
+           [("non_monitorable.erl", ["% Mixed modal operators - not monitorable at runtime"])]
+       | _ ->
+           (* No nesting, decompose to steps *)
+           let steps = decompose_to_steps inner in
+           [("waltz_monitor.erl", generate_simple_omega_monitor steps)])
       
   | Theta(inner) when has_immediate_nesting inner ->
       if not (check_modal_consistency "THETA" inner) then
