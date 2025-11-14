@@ -107,7 +107,7 @@ not        # Negation (also: ¬)
 ```
 X > 10
 X + Y == 100
-(X > 0 andalso X < 100) orelse Status == active
+(X > 0 AND X < 100) OR (Status == active)
 not (Value =/= 42)
 ```
 
