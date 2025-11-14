@@ -6,8 +6,8 @@ from io import StringIO
 
 # No-broadcast data
 no_broadcast_data_str = """Clients,Messages_Per_Client,Total_Messages,System_Type,Total_Time_ms,Message_Time_ms,Join_Time_ms,Leave_Time_ms,Throughput_msg_per_sec,Avg_Latency_us,Overhead_Percent,CV_Percent,Iterations
-5,30,150,Baseline,33.065,29.450,2.478,1.137,5193.523,969.935,0.0,15.428,10
-5,30,150,Instrumented,87.132,77.179,6.687,3.267,2026.173,2557.133,163.517,22.963,10
+5,30,150,Baseline,33.475,26.706,5.786,0.983,5793.861,876.131,0.0,21.830,10
+5,30,150,Instrumented,76.390,67.533,5.540,3.318,2290.896,2239.415,128.203,20.100,10
 10,30,300,Baseline,68.690,59.781,6.799,2.110,5074.327,1964.646,0.0,14.044,10
 10,30,300,Instrumented,159.518,145.500,8.745,5.273,2082.157,4806.484,132.230,9.827,10
 20,30,600,Baseline,129.403,118.917,6.697,3.789,5176.928,3906.747,0.0,14.865,10
@@ -16,8 +16,8 @@ no_broadcast_data_str = """Clients,Messages_Per_Client,Total_Messages,System_Typ
 50,20,1000,Instrumented,534.313,461.681,43.254,29.378,2180.223,22624.916,137.566,7.105,10
 100,10,1000,Baseline,259.799,212.603,27.300,19.896,4792.175,20428.592,0.0,13.037,10
 100,10,1000,Instrumented,602.706,470.334,72.049,60.324,2136.907,45000.214,131.989,6.074,10
-200,10,2000,Baseline,472.566,383.089,52.572,36.905,5272.320,36624.427,0.0,11.154,10
-200,10,2000,Instrumented,1036.052,812.954,120.494,102.605,2460.715,77762.449,119.240,1.236,10"""
+200,10,2000,Baseline,426.250,353.219,41.257,31.775,5676.481,33666.107,0.0,4.044,10
+200,10,2000,Instrumented,1044.777,811.100,121.917,111.759,2465.962,77428.988,145.109,1.846,10"""
 
 # Broadcast data
 broadcast_data_str = """Clients,Messages_Per_Client,Total_Messages,System_Type,Total_Time_ms,Message_Time_ms,Join_Time_ms,Leave_Time_ms,Throughput_msg_per_sec,Avg_Latency_us,Overhead_Percent,CV_Percent,Iterations

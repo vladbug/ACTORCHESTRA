@@ -49,46 +49,56 @@ handle_call({remove_member, ClientName}, _From, State) ->
 %     %io:format("[ROOM ~p] ~p: ~s~n", [RoomName, FromClient, Message]),
 %     spawn(fun() ->
 %         %% simulate "work": sum numbers 1..1_000_000
-%         Sum = lists:sum(lists:seq(1, 100000)),
-%         io:format("Async sum result: ~p~n", [Sum]),
+%         %%Sum = lists:sum(lists:seq(1, 100000)),
+%         io:format("Echo"),
 %         gen_server:reply(From, ok)
 %     end),
 %     {noreply, State};
 %     %{reply, ok, State};
 
+
 handle_call({broadcast_message, FromClient, Message}, From, State) ->
-    Members = State#state.members,
-    RoomName = State#state.room_name,
-    
-    %% ASYNC: Spawn worker to handle message broadcasting
-    spawn(fun() ->
-        %% IMPORTANT: No verification if FromClient is actually a member
-        %% This intentionally allows violations
-        
-        %% Broadcast message to ALL members EXCEPT the sender using gen_server:call
-        lists:foreach(fun({MemberName, MemberPid}) ->
-            case MemberName of
-                FromClient ->
-                    %% Don't call back to sender (would cause deadlock)
-                    ok;
-                _ ->
-                    try
-                        gen_server:cast(MemberPid, {receive_message, RoomName, FromClient, Message})
-                    catch
-                        _:_ ->
-                            %% Member process might be down, ignore
-                            ok
-                    end
-            end
-        end, Members),
-        
-        %% Log the message for debugging
-        io:format("[ROOM ~p] ~p: ~s~n", [RoomName, FromClient, Message]),
-        
-        gen_server:reply(From, ok)
-    end),
-    
+    %Members = State#state.members,
+    RoomName = State#state.room_name,   
+    %% Log the message for debugging
+    io:format("[ROOM ~p] ~p: ~s~n", [RoomName, FromClient, Message]),  
+    gen_server:reply(From, ok),
     {noreply, State};
+
+
+% handle_call({broadcast_message, FromClient, Message}, From, State) ->
+%     Members = State#state.members,
+%     RoomName = State#state.room_name,
+    
+%     % ASYNC: Spawn worker to handle message broadcasting
+%     spawn(fun() ->
+%         % IMPORTANT: No verification if FromClient is actually a member
+%         % This intentionally allows violations
+        
+%         % Broadcast message to ALL members EXCEPT the sender using gen_server:call
+%         lists:foreach(fun({MemberName, MemberPid}) ->
+%             case MemberName of
+%                 FromClient ->
+%                     % Don't call back to sender (would cause deadlock)
+%                     ok;
+%                 _ ->
+%                     try
+%                         gen_server:cast(MemberPid, {receive_message, RoomName, FromClient, Message})
+%                     catch
+%                         _:_ ->
+%                             % Member process might be down, ignore
+%                             ok
+%                     end
+%             end
+%         end, Members),
+        
+%         % Log the message for debugging
+%         io:format("[ROOM ~p] ~p: ~s~n", [RoomName, FromClient, Message]),
+        
+%         gen_server:reply(From, ok)
+%     end),
+    
+%     {noreply, State};
 
 handle_call(get_members, _From, State) ->
     %% Return list of member names for debugging
