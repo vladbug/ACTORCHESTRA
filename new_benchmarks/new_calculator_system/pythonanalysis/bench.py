@@ -66,7 +66,6 @@ def load_and_process_data():
     df['total_time_ms'] = df['avg_total_time_us'] / 1000  # Convert to milliseconds
     
     return df
-
 def plot_single_client_performance(df):
     """Create Figure 5.3: Single Client Performance - Baseline vs Instrumented"""
     # Filter for single client tests only
@@ -85,17 +84,15 @@ def plot_single_client_performance(df):
     
     plt.xlabel('Number Of Requests', fontsize=12)
     plt.ylabel('Total Time (ms)', fontsize=12)
-    #plt.title('Figure 5.3: Single Client Performance - Baseline vs Instrumented', fontsize=14, pad=20)
     
-    # Set logarithmic scale like in the original
-    plt.yscale('log')
+    # Keep log scale only on X-axis (for requests)
     plt.xscale('log')
     
     # Grid and legend
     plt.grid(True, alpha=0.3)
     plt.legend(fontsize=11)
     
-    # Format axes
+    # Format x-axis
     plt.gca().set_xticks([500, 1000, 2000, 5000, 10000])
     plt.gca().set_xticklabels(['500', '1000', '2000', '5000', '10000'])
     
